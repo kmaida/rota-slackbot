@@ -2,55 +2,42 @@
      UTILITIES
 ------------------*/
 
-const regex = {
-  // <@[BOTID]> setup [rotation]
-  setup: /^<@(U[A-Z0-9]+?)> (setup) ([a-z\-]+?)$/g,
-  // <@[BOTID]> "[rotation]" assign <@[USERID]>
-  rotaAssign: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (assign) <@(U[A-Z0-9]+?)>$/g,
-  // <@[BOTID]> "[rotation]" [command]
-  rotaSimple: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" ([a-z]+?)$/g,
-  // <@[BOTID]> "[rotation]" [message text]
-  rotaMessage: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (.*)$/g,
-  // <@[<BOTID>] [command]
-  simple: /^<@(U[A-Z0-9]+?)> ([a-z]+?)$/g
-}
-
 const utils = {
   commands: {
-    // @rota setup [new-rotation-name]
+    // @rota "[new-rotation-name]" create
     // Create a new rotation
-    setup: {
-      rotaReq: false,
-      params: true,
-      regex: regex.setup
+    create: {
+      rotaReq: true,
+      params: false,
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" create$/g
     },
     // @rota "[rotation]" assign [@username]
     // Assigns a user to the specified rotation
     assign: {
       rotaReq: true,
       params: true,
-      regex: regex.rotaAssign
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (assign) (<@U[A-Z0-9]+?>)$/g
     },
     // @rota "[rotation]" who
     // Responds stating who is on-call for the specified rotation
     who: {
       rotaReq: true,
       params: false,
-      regex: regex.rotaSimple
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (who)$/g
     },
     // @rota "[rotation]" unassign
     // Unassigns rotation
     clear: {
       rotaReq: true,
       params: false,
-      regex: regex.rotaSimple
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (clear)$/g
     },
     // @rota "[rotation]" delete
     // Removes the rotation completely
     delete: {
       rotaReq: true,
       params: false,
-      regex: regex.rotaSimple
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (delete)$/g
     },
     // @rota "[rotation]" any other message
     // Message does not contain a command
@@ -58,14 +45,14 @@ const utils = {
     message: {
       rotaReq: true,
       params: true,
-      regex: regex.rotaMessage
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (.*)$/g
     },
     // @rota help
     // Post help messaging
     help: {
       rotaReq: false,
       params: false,
-      regex: regex.simple
+      regex: /^<@(U[A-Z0-9]+?)> (help)$/g
     }
   },
   /*----
@@ -85,7 +72,7 @@ const utils = {
     const cmdConfig = this.commands[cmd];
     const safeText = e.text.trim();
     // Match text using regex associated with the passed command
-    const res = [...safeText.matchAll(cmdConfig.regex)][0];
+    const res = [...safeText.matchAll(new RegExp(cmdConfig.regex))][0];
     // Regex returned expected match appropriate for the command
     // Command begins with rota bot mention
     if (res && res[1] === ct.botUserId) {
@@ -98,14 +85,14 @@ const utils = {
           params: res[4]
         };
       // Command, rotation
-      // (simple, rotation-specific command like "who" and "clear")
+      // (simple, rotation-specific command like "create", "who", "clear", "delete")
       } else if (cmdConfig.rotaReq && !cmdConfig.params) {
         return {
           rotation: res[2],
           command: res[3]
         };
       // Command, parameters
-      // (simple command with paramters, like "setup", "delete")
+      // (simple command with paramters, like "setup")
       } else if (!cmdConfig.rotaReq && cmdConfig.params) {
         return {
           command: res[2],

@@ -3,11 +3,23 @@
 ------------------*/
 
 const msgText = {
-  assignmentConfirm: (usermention, rotation) => {
+  createConfirm: (rotation) => {
+    return 'The "' + rotation + '" rotation has been created. You can now assign someone to be on-call for this rotation: `@rota "' + rotation + '" assign [@user]`';
+  },
+  createError: (rotation) => {
+    return 'The "' + rotation + '" rotation already exists. You can assign someone to be on-call with `@rota "' + rotation + '" assign [@user]`';
+  },
+  deleteConfirm: (rotation) => {
+    return `The "${rotation}" rotation has been deleted.`;
+  },
+  deleteError: (rotation) => {
+    return `There is no rotation called "${rotation}." Nothing changed.`;
+  },
+  assignConfirm: (usermention, rotation) => {
     return `${usermention} is now on-call for "${rotation}."`;
   },
-  assignmentIncomplete: (rotation) => {
-    return 'I couldn\t complete this assignment because the "' + rotation + '" does not exist yet. To create it, use `@rota setup ' + rotation + '`';
+  assignError: (rotation) => {
+    return ':shrug: I couldn\'t complete this assignment because the "' + rotation + '" rotation does not exist yet. To create it, use `@rota "' + rotation + '" create`';
   },
   whoReport: (usermention, rotation) => {
     return '`' + usermention + '` is on-call for ' + rotation + '. To notify them directly, use: `@rota "' + rotation + ' [message]`';

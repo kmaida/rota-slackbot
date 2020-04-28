@@ -25,7 +25,7 @@ const store = {
     return JSON.parse(fs.readFileSync(storeFilepath));
   },
   /*----
-    Test message to see if its format matches expectations for specific command
+    Save user assignment to rotation store
     @Params: rotation name, usermention to assign
   ----*/
   saveAssignment(rotation, usermention) {
