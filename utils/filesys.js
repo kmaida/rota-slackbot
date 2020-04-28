@@ -20,9 +20,10 @@ const store = {
     return JSON.parse(fs.readFileSync(storeFilepath));
   },
   saveAssignment: (rotation, assigned) => {
-    // Save concierge assignment for rotation
+    // Save assignment for rotation
+    // If rotation doesn't already exists, it is created
     const list = JSON.parse(fs.readFileSync(storeFilepath));
-    list[channel] = assigned;
+    list[rotation] = assigned;
     fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
   },
   getAssignment: (rotation) => {
@@ -31,6 +32,11 @@ const store = {
     return list[rotation];
   },
   clearAssignment: (rotation) => {
+    const list = JSON.parse(fs.readFileSync(storeFilepath));
+    list[rotation] = null;
+    fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
+  },
+  deleteRotation: (rotation) => {
     const list = JSON.parse(fs.readFileSync(storeFilepath));
     delete list[rotation];
     fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
