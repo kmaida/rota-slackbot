@@ -2,11 +2,12 @@
      UTILITIES
 ------------------*/
 
+// (regex is not exported)
 const regex = {
   // <@[BOTID]> setup [rotation]
   setup: /^<@(U[A-Z0-9]+?)> (setup) ([a-z\-]+?)$/g,
   // <@[BOTID]> "[rotation]" assign <@[USERID]>
-  assign: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (assign) <@(U[A-Z0-9]+?)>$/g,
+  rotaAssign: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (assign) <@(U[A-Z0-9]+?)>$/g,
   // <@[BOTID]> "[rotation]" [command]
   rotaSimple: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" ([a-z]+?)$/g,
   // <@[BOTID]> "[rotation]" [message text]
@@ -27,7 +28,7 @@ const utils = {
     assign: {
       rotaReq: true,
       params: true,
-      regex: regex[assign]
+      regex: regex[rotaAssign]
     },
     // @rota "[rotation]" who
     // Responds stating who is on-call for the specified rotation
@@ -59,68 +60,48 @@ const utils = {
       regex: regex[rotaMessage]
     }
   },
-  // Returns true/false if mention text matches the passed simple command (command with no paramters)
-  matchSimpleCommand(cmd, e, ct) {
-    const normalizedText = e.text.toLowerCase().trim();
-    const botUserLower = ct.botUserId.toLowerCase();
-    const cmdInput = cmd.toLowerCase().trim();
-    return (normalizedText === `<@${botUserLower}> ${this.getRotation(e.text)} ${cmdInput}`);
-  },
   /*----
-    Parse commands for specific rotations
-    '@rota "[rotation-name]" [command] [parameters]'
-      - must begin with bot mention <@BOTID>
-      - must have rotation name in "double quotes" (accommodates accidental case changes)
-      - must have command in letters (accommodates accidental case changes)
+    Parse commands
     @Params: command, event, context
-    @Returns: object, or null
+    @Returns: object or null
   ----*/
   parseCmd(cmd, e, ct) {
     const cmdConfig = this.commands[cmd];
     const safeText = e.text.trim();
+    // Match text using regex associated with the passed command
     const res = [...safeText.matchAll(cmdConfig.regex)][0];
-    // Text must start with bot user mention
+    // Regex returned expected match appropriate for the command
+    // Command begins with rota bot mention
     if (res && res[1] === ct.botUserId) {
-      // If command expects a rotation name and parameters
+      // Command, rotation, parameters
+      // (like "assign")
       if (cmdConfig.rotaReq && cmdConfig.params) {
-        const rotation = res[2];
-        const command = res[3];
-        const params = res[4];
-        if (rotation && command && params) {
-          return {
-            rotation: rotation,
-            command: command,
-            params: params.trim()
-          };
-        }
+        return {
+          rotation: res[2],
+          command: res[3],
+          params: res[4]
+        };
+      // Command, rotation
+      // (simple, rotation-specific command like "who" and "clear")
       } else if (cmdConfig.rotaReq && !cmdConfig.params) {
-        const rotation = res[2];
-        const command = res[3];
-        if (rotation && command) {
-          return {
-            rotation: rotation,
-            command: command
-          };
-        }
+        return {
+          rotation: res[2],
+          command: res[3]
+        };
+      // Command, parameters
+      // (simple command without need for rotation user lookup, like "setup", "delete")
       } else if (!cmdConfig.rotaReq && cmdConfig.params) {
-        const command = res[2];
-        const params = res[3]
-        if (command && params) {
-          return {
-            command: command,
-            params: params.trim()
-          }
+        return {
+          command: res[2],
+          params: res[3]
         }
-      } else {
-        const rotation = res[2];
-        const message = res[3];
-        if (rotation && message) {
-          return {
-            command: 'message',
-            rotation: rotation,
-            params: message
-          };
-        }
+      // Command, rotation, message
+      } else if (command === 'message') {
+        return {
+          command: 'message',
+          rotation: res[2],
+          params: res[3]
+        };
       }
     }
     // If not a properly formatted command:
