@@ -22,35 +22,35 @@ const utils = {
     setup: {
       rotaReq: false,
       params: true,
-      regex: regex[setup]
+      regex: regex.setup
     },
     // @rota "[rotation]" assign [@username]
     // Assigns a user to the specified rotation
     assign: {
       rotaReq: true,
       params: true,
-      regex: regex[rotaAssign]
+      regex: regex.rotaAssign
     },
     // @rota "[rotation]" who
     // Responds stating who is on-call for the specified rotation
     who: {
       rotaReq: true,
       params: false,
-      regex: regex[rotaSimple]
+      regex: regex.rotaSimple
     },
     // @rota "[rotation]" unassign
     // Unassigns rotation
     clear: {
       rotaReq: true,
       params: false,
-      regex: regex[rotaSimple]
+      regex: regex.rotaSimple
     },
     // @rota "[rotation]" delete
     // Removes the rotation completely
     delete: {
       rotaReq: true,
       params: false,
-      regex: regex[rotaSimple]
+      regex: regex.rotaSimple
     },
     // @rota "[rotation]" any other message
     // Message does not contain a command
@@ -58,14 +58,14 @@ const utils = {
     message: {
       rotaReq: true,
       params: true,
-      regex: regex[rotaMessage]
+      regex: regex.rotaMessage
     },
     // @rota help
     // Post help messaging
     help: {
       rotaReq: false,
       params: false,
-      regex: regex[simple]
+      regex: regex.simple
     }
   },
   /*----
