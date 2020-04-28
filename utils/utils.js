@@ -106,19 +106,6 @@ const utils = {
     }
     // If not a properly formatted command:
     return null;
-  },
-  // Returns true if mention text matches properly formatted "assign" command
-  isAssign(e, ct) {
-    const normalizedText = e.text.toUpperCase().trim();
-    const assignRegex = /^<@U[A-Z0-9]+?> "[A-Z\-]+?" ASSIGN <@U[A-Z0-9]+?>/g; // Accommodating to extra characters (lopped off later)
-    return (normalizedText.startsWith(`<@${ct.botUserId}>`) && assignRegex.test(normalizedText));
-  },
-  // Returns the first string between double quotes that contains only letters and hyphens
-  getRotation(text) {
-    if (text) {
-      return text.match(/"([a-z\-]+?)"/)[1]; 
-    }
-    return '';
   }
 };
 
