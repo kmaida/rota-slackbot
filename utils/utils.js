@@ -2,7 +2,6 @@
      UTILITIES
 ------------------*/
 
-// (regex is not exported)
 const regex = {
   // <@[BOTID]> setup [rotation]
   setup: /^<@(U[A-Z0-9]+?)> (setup) ([a-z\-]+?)$/g,
@@ -11,7 +10,9 @@ const regex = {
   // <@[BOTID]> "[rotation]" [command]
   rotaSimple: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" ([a-z]+?)$/g,
   // <@[BOTID]> "[rotation]" [message text]
-  rotaMessage: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (.*)$/g
+  rotaMessage: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (.*)$/g,
+  // <@[<BOTID>] [command]
+  simple: /^<@(U[A-Z0-9]+?)> ([a-z]+?)$/g
 }
 
 const utils = {
@@ -58,7 +59,22 @@ const utils = {
       rotaReq: true,
       params: true,
       regex: regex[rotaMessage]
+    },
+    // @rota help
+    // Post help messaging
+    help: {
+      rotaReq: false,
+      params: false,
+      regex: regex[simple]
     }
+  },
+  /*----
+    Test message to see if its format matches expectations for specific command
+    @Params: command, input text
+    @Returns: boolean
+  ----*/
+  isCmd(cmd, input) {
+    return this.commands[cmd].regex.test(input.trim());
   },
   /*----
     Parse commands
@@ -89,12 +105,18 @@ const utils = {
           command: res[3]
         };
       // Command, parameters
-      // (simple command without need for rotation user lookup, like "setup", "delete")
+      // (simple command with paramters, like "setup", "delete")
       } else if (!cmdConfig.rotaReq && cmdConfig.params) {
         return {
           command: res[2],
           params: res[3]
         }
+      // Command
+      // (simple command with no rotation lookup and no parameters, like "help")
+      } else if (!cmdConfig.rotaReq && !cmdConfig.params) {
+        return {
+          command: res[2]
+        };
       // Command, rotation, message
       } else if (command === 'message') {
         return {
@@ -104,7 +126,8 @@ const utils = {
         };
       }
     }
-    // If not a properly formatted command:
+    // If not a properly formatted command, return null
+    // This should trigger (ephemeral?) error messaging
     return null;
   }
 };
