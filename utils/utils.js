@@ -70,11 +70,11 @@ const utils = {
   },
   /*----
     Test message to see if its format matches expectations for specific command
-    @Params: command, input text
+    @Params: command, mention event message
     @Returns: boolean
   ----*/
-  isCmd(cmd, input) {
-    return this.commands[cmd].regex.test(input.trim());
+  isCmd(cmd, msg) {
+    return this.commands[cmd].regex.test(msg.trim());
   },
   /*----
     Parse commands

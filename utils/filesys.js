@@ -2,8 +2,10 @@ const fs = require('fs');
 const storeFilepath = './rota.json';
 
 const store = {
-  initStore: () => {
-    // If store file doesn't exist, create it
+  /*----
+    If store JSON file doesn't exist, create it
+  ----*/
+  initStore() {
     if (fs.existsSync(storeFilepath)) {
       console.log('Local store exists');
     } else {
@@ -16,28 +18,45 @@ const store = {
       });
     }
   },
-  getStoreList: () => {
+  /*----
+    Get contents of store JSON file
+  ----*/
+  getStoreList() {
     return JSON.parse(fs.readFileSync(storeFilepath));
   },
-  saveAssignment: (rotation, assigned) => {
-    // Save assignment for rotation
-    // If rotation doesn't already exists, it is created
-    const list = JSON.parse(fs.readFileSync(storeFilepath));
-    list[rotation] = assigned;
+  /*----
+    Test message to see if its format matches expectations for specific command
+    @Params: rotation name, usermention to assign
+  ----*/
+  saveAssignment(rotation, usermention) {
+    const list = this.getStoreList();
+    list[rotation] = usermention;
     fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
   },
-  getAssignment: (rotation) => {
-    // Get currently assigned person for rotation
-    const list = JSON.parse(fs.readFileSync(storeFilepath));
+  /*----
+    Get assigned user for a specific rotation
+    @Params: rotation
+    @Returns: assigned usermention
+  ----*/
+  getAssignment(rotation) {
+    const list = this.getStoreList();
     return list[rotation];
   },
-  clearAssignment: (rotation) => {
-    const list = JSON.parse(fs.readFileSync(storeFilepath));
+  /*----
+    Clears assigned user for a rotation (rotation value)
+    @Params: rotation
+  ----*/
+  clearAssignment(rotation) {
+    const list = this.getStoreList();
     list[rotation] = null;
     fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
   },
-  deleteRotation: (rotation) => {
-    const list = JSON.parse(fs.readFileSync(storeFilepath));
+  /*----
+    Deletes a rotation entirely
+    @Params: rotation
+  ----*/
+  deleteRotation(rotation) {
+    const list = this.getStoreList();
     delete list[rotation];
     fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
   }

@@ -7,7 +7,7 @@ const utils = require('./utils/utils');
 const store = require('./utils/filesys');
 // Bot responses
 const helpBlocks = require('./bot-response/blocks-help');
-const msgText = require('./bot-response/text-concierge-response');
+const msgText = require('./bot-response/message-text');
 
 // Create Bolt app
 const app = new App({
