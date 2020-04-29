@@ -133,6 +133,18 @@ const utils = {
     // If not a properly formatted command, return null
     // This should trigger (ephemeral?) error messaging
     return null;
+  },
+  /*----
+    Configuration for catch error
+    @Params: botToken, channelID, text
+    @Returns: object
+  ----*/
+  errorMsgObj(botToken, channelID, text) {
+    return {
+      token: botToken,
+      channel: channelID,
+      text: text
+    }
   }
 };
 

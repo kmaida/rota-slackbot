@@ -82,11 +82,9 @@ app.event('app_mention', async({ event, context }) => {
     }
     catch (err) {
       console.error(err);
-      const errResult = await app.client.chat.postMessage({
-        token: botToken,
-        channel: channelID,
-        text: msgText.error(err)
-      });
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
     }
   }
 
@@ -115,11 +113,9 @@ app.event('app_mention', async({ event, context }) => {
     }
     catch (err) {
       console.error(err);
-      const errResult = await app.client.chat.postMessage({
-        token: botToken,
-        channel: channelID,
-        text: msgText.error(err)
-      });
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
     }
   }
 
@@ -148,11 +144,9 @@ app.event('app_mention', async({ event, context }) => {
     }
     catch (err) {
       console.error(err);
-      const errResult = await app.client.chat.postMessage({
-        token: botToken,
-        channel: channelID,
-        text: msgText.error(err)
-      });
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
     }
   }
 
@@ -182,11 +176,9 @@ app.event('app_mention', async({ event, context }) => {
     }
     catch (err) {
       console.error(err);
-      const errResult = await app.client.chat.postMessage({
-        token: botToken,
-        channel: channelID,
-        text: msgText.error(err)
-      });
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
     }
   }
 
@@ -212,11 +204,9 @@ app.event('app_mention', async({ event, context }) => {
     }
     catch (err) {
       console.error(err);
-      const errResult = await app.client.chat.postMessage({
-        token: botToken,
-        channel: channelID,
-        text: msgText.error(err)
-      });
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
     }
   }
 
@@ -231,11 +221,9 @@ app.event('app_mention', async({ event, context }) => {
     }
     catch (err) {
       console.error(err);
-      const errResult = await app.client.chat.postMessage({
-        token: botToken,
-        channel: channelID,
-        text: msgText.error(err)
-      });
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
     }
   }
 
