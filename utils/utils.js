@@ -4,16 +4,18 @@
 
 const utils = {
   commands: {
-    // @rota "[new-rotation-name]" create
+    // @rota "[new-rotation-name]" create [description]
     // Create a new rotation
     create: {
+      command: true,
       rotaReq: true,
-      params: false,
-      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" create$/g
+      params: true,
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (create) (.*)$/g
     },
     // @rota "[rotation]" assign [@username]
     // Assigns a user to the specified rotation
     assign: {
+      command: true,
       rotaReq: true,
       params: true,
       regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (assign) (<@U[A-Z0-9]+?>)$/g
@@ -21,13 +23,23 @@ const utils = {
     // @rota "[rotation]" who
     // Responds stating who is on-call for the specified rotation
     who: {
+      command: true,
       rotaReq: true,
       params: false,
       regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (who)$/g
     },
-    // @rota "[rotation]" unassign
+    // @rota "[rotation]" about
+    // Responds with description and mention of on-call for the specified rotation
+    about: {
+      command: true,
+      rotaReq: true,
+      params: false,
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (about)$/g
+    },
+    // @rota "[rotation]" clear
     // Unassigns rotation
     clear: {
+      command: true,
       rotaReq: true,
       params: false,
       regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (clear)$/g
@@ -35,24 +47,27 @@ const utils = {
     // @rota "[rotation]" delete
     // Removes the rotation completely
     delete: {
+      command: true,
       rotaReq: true,
       params: false,
       regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (delete)$/g
+    },
+    // @rota help
+    // Post help messaging
+    help: {
+      command: true,
+      rotaReq: false,
+      params: false,
+      regex: /^<@(U[A-Z0-9]+?)> (help)$/g
     },
     // @rota "[rotation]" any other message
     // Message does not contain a command
     // Sends message text
     message: {
+      command: false,
       rotaReq: true,
       params: true,
       regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (.*)$/g
-    },
-    // @rota help
-    // Post help messaging
-    help: {
-      rotaReq: false,
-      params: false,
-      regex: /^<@(U[A-Z0-9]+?)> (help)$/g
     }
   },
   /*----
@@ -77,37 +92,31 @@ const utils = {
     // Command begins with rota bot mention
     if (res && res[1] === ct.botUserId) {
       // Command, rotation, parameters
-      // (like "assign")
-      if (cmdConfig.rotaReq && cmdConfig.params) {
+      // "assign", "create"
+      if (cmdConfig.command && cmdConfig.rotaReq && cmdConfig.params) {
         return {
           rotation: res[2],
           command: res[3],
           params: res[4]
         };
       // Command, rotation
-      // (simple, rotation-specific command like "create", "who", "clear", "delete")
-      } else if (cmdConfig.rotaReq && !cmdConfig.params) {
+      // "about", "clear", "delete"
+      } else if (cmdConfig.command && cmdConfig.rotaReq && !cmdConfig.params) {
         return {
           rotation: res[2],
           command: res[3]
         };
-      // Command, parameters
-      // (simple command with paramters, like "setup")
-      } else if (!cmdConfig.rotaReq && cmdConfig.params) {
-        return {
-          command: res[2],
-          params: res[3]
-        }
       // Command
-      // (simple command with no rotation lookup and no parameters, like "help")
-      } else if (!cmdConfig.rotaReq && !cmdConfig.params) {
+      // "help", "list"
+      } else if (cmdConfig.command && !cmdConfig.rotaReq && !cmdConfig.params) {
         return {
           command: res[2]
         };
-      // Command, rotation, message
-      } else if (command === 'message') {
+      // Rotation, message
+      // Command-less freeform message
+      } else if (!cmdConfig.command && cmdConfig.rotaReq && cmdConfig.params) {
         return {
-          command: 'message',
+          command: cmd,
           rotation: res[2],
           params: res[3]
         };
