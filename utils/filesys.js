@@ -64,6 +64,15 @@ const store = {
     fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
   },
   /*----
+    Get rotation object for a specific rotation
+    @Params: rotation
+    @Returns: rotation object
+  ----*/
+  getRotation(rotation) {
+    const list = this.getStoreList();
+    return list[rotation];
+  },
+  /*----
     Deletes a rotation entirely
     @Params: rotation
   ----*/

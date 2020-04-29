@@ -10,7 +10,7 @@ const utils = {
       command: true,
       rotaReq: true,
       params: true,
-      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (create) (.*)$/g
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (create) (.*)$/g
     },
     // @rota "[rotation]" assign [@username]
     // Assigns a user to the specified rotation
@@ -18,7 +18,7 @@ const utils = {
       command: true,
       rotaReq: true,
       params: true,
-      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (assign) (<@U[A-Z0-9]+?>)$/g
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Z0-9]+?>)$/g
     },
     // @rota "[rotation]" who
     // Responds stating who is on-call for the specified rotation
@@ -26,7 +26,7 @@ const utils = {
       command: true,
       rotaReq: true,
       params: false,
-      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (who)$/g
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (who)$/g
     },
     // @rota "[rotation]" about
     // Responds with description and mention of on-call for the specified rotation
@@ -34,7 +34,7 @@ const utils = {
       command: true,
       rotaReq: true,
       params: false,
-      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (about)$/g
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (about)$/g
     },
     // @rota "[rotation]" clear
     // Unassigns rotation
@@ -42,7 +42,7 @@ const utils = {
       command: true,
       rotaReq: true,
       params: false,
-      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (clear)$/g
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (clear)$/g
     },
     // @rota "[rotation]" delete
     // Removes the rotation completely
@@ -50,7 +50,7 @@ const utils = {
       command: true,
       rotaReq: true,
       params: false,
-      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (delete)$/g
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (delete)$/g
     },
     // @rota help
     // Post help messaging
@@ -75,7 +75,7 @@ const utils = {
       command: false,
       rotaReq: true,
       params: true,
-      regex: /^<@(U[A-Z0-9]+?)> "([a-z\-]+?)" (.*)$/g
+      regex: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (.*)$/g
     }
   },
   /*----

@@ -28,9 +28,36 @@ app.event('app_mention', async({ event, context }) => {
   const sentByUserID = event.user;             // ID of user who sent the message
   const channelID = event.channel;             // channel ID
   const botToken = context.botToken;
+  // Decision logic establishing how to respond to mentions
+  const isCreate = utils.isCmd('create', text);
+  const isAssign = utils.isCmd('assign', text);
+  const isWho = utils.isCmd('who', text);
+  const isAbout = utils.isCmd('about', text);
+  const isClear = utils.isCmd('clear', text);
+  const isDelete = utils.isCmd('delete', text);
+  const isHelp = utils.isCmd('help', text);
+  const isList = utils.isCmd('list', text);
+  const isMessage =
+    (utils.isCmd('message', text)) && 
+    !isCreate && 
+    !isAssign && 
+    !isWho && 
+    !isAbout && 
+    !isClear && 
+    !isDelete;
+  const didntUnderstand =
+    !isCreate &&
+    !isAssign &&
+    !isWho &&
+    !isAbout &&
+    !isClear &&
+    !isDelete &&
+    !isHelp &&
+    !isList &&
+    !isMessage;
 
   //-- @rota "[rotation-name]" create [description]
-  if (utils.isCmd('create', text)) {
+  if (isCreate) {
     try {
       const pCmd = utils.parseCmd('create', event, context);
       const rotation = pCmd.rotation;
@@ -64,7 +91,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota "[rotation]" delete
-  else if (utils.isCmd('delete', text)) {
+  if (isDelete) {
     try {
       const pCmd = utils.parseCmd('delete', event, context);
       const rotation = pCmd.rotation;
@@ -96,8 +123,41 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
+  //-- @rota "[rotation]" about
+  if (isAbout) {
+    try {
+      const pCmd = utils.parseCmd('about', event, context);
+      const rotation = pCmd.rotation;
+
+      if (rotation in store.getStoreList()) {
+        // If rotation exists, display its information
+        const rotationObj = store.getRotation(rotation);
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.aboutReport(rotation, rotationObj.description, rotationObj.assigned)
+        });
+      } else {
+        // If rotation doesn't exist, send message saying nothing changed
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.aboutError(rotation)
+        });
+      }
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage({
+        token: botToken,
+        channel: channelID,
+        text: msgText.error(err)
+      });
+    }
+  }
+
   //-- @rota "[rotation]" assign [@user]
-  else if (utils.isCmd('assign', text)) {
+  if (isAssign) {
     try {
       const pCmd = utils.parseCmd('assign', event, context);
       const rotation = pCmd.rotation;
@@ -131,7 +191,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota list
-  else if (utils.isCmd('list', text)) {
+  if (isList) {
     const list = store.getStoreList();
     try {
       // If the store is not empty
@@ -149,6 +209,25 @@ app.event('app_mention', async({ event, context }) => {
           text: msgText.listEmpty()
         });
       }
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage({
+        token: botToken,
+        channel: channelID,
+        text: msgText.error(err)
+      });
+    }
+  }
+
+  //-- @rota didn't understand the message
+  if (didntUnderstand) {
+    try {
+      const result = await app.client.chat.postMessage({
+        token: botToken,
+        channel: channelID,
+        text: msgText.didntUnderstand()
+      });
     }
     catch (err) {
       console.error(err);

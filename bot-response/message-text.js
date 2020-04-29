@@ -15,6 +15,13 @@ const msgText = {
   deleteError: (rotation) => {
     return `There is no rotation called "${rotation}." Nothing changed.`;
   },
+  aboutReport: (rotation, description, assigned) => {
+    const assignment = assigned ? ' (`' + assigned + '`)' : '';
+    return `:information_source: *${rotation}*: ${description}${assignment}`;
+  },
+  aboutError: (rotation) => {
+    return ':shrug: The "' + rotation + '" rotation does not exist yet. To create it, use `@rota "' + rotation + '" create [description]`';
+  },
   assignConfirm: (usermention, rotation) => {
     return `:information_desk_person: ${usermention} is now on-call for the "${rotation}" rotation`;
   },
@@ -63,6 +70,9 @@ const msgText = {
   },
   dmToConcierge: (sentByUserID, channelID, link) => {
     return `Hi there! <@${sentByUserID}> needs your attention in <#${channelID}> (${link}) because you're on-call for *${rotation}*."\n\n`;
+  },
+  didntUnderstand: () => {
+    return ":thinking_face: I'm sorry, I didn't understand that. To see my full capabilities, try typing `@rota help`";
   },
   error: (err) => {
     return "Sorry, I couldn't do that because an error occurred:\n```" + JSON.stringify(err) + "```";
