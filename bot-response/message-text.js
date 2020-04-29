@@ -4,29 +4,29 @@
 
 const msgText = {
   createConfirm: (rotation) => {
-    return 'The "' + rotation + '" rotation has been created. You can now assign someone to be on-call for this rotation: `@rota "' + rotation + '" assign [@user]`.';
+    return ':sparkles: The "' + rotation + '" rotation has been created. You can now assign someone to be on-call for this rotation: `@rota "' + rotation + '" assign [@user]`.';
   },
   createError: (rotation) => {
     return 'The "' + rotation + '" rotation already exists. You can assign someone to be on-call with `@rota "' + rotation + '" assign [@user]`.';
   },
   deleteConfirm: (rotation) => {
-    return `The "${rotation}" rotation has been deleted.`;
+    return `:put_litter_in_its_place: The "${rotation}" rotation has been deleted.`;
   },
   deleteError: (rotation) => {
-    return `There is no rotation called "${rotation}." Nothing changed.`;
+    return `:shrug: There is no rotation called "${rotation}." Nothing changed.`;
   },
   aboutReport: (rotation, description, assigned) => {
     const assignment = assigned ? ' (`' + assigned + '`)' : '';
     return `:information_source: *${rotation}*: ${description}${assignment}`;
   },
   aboutError: (rotation) => {
-    return ':shrug: The "' + rotation + '" rotation does not exist yet. To create it, use `@rota "' + rotation + '" create [description]`.';
+    return ':shrug: The "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`.';
   },
   assignConfirm: (usermention, rotation) => {
     return `:information_desk_person: ${usermention} is now on-call for the "${rotation}" rotation.`;
   },
   assignError: (rotation) => {
-    return ':shrug: I couldn\'t complete this assignment because the "' + rotation + '" rotation does not exist yet. To create it, use `@rota "' + rotation + '" create [description]`.';
+    return ':shrug: I couldn\'t complete this assignment because the "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`.';
   },
   listReport: (list) => {
     let msgStr = '';
@@ -51,7 +51,7 @@ const msgText = {
     return 'Nobody is currently assigned to the "' + rotation + '" rotation. To assign someone, use `@rota "' + rotation + '" assign [@user]`.';
   },
   whoError: (rotation) => {
-    return ':shrug: I couldn\'t find any on-call user because the "' + rotation + '" rotation does not exist yet. To create it, use `@rota "' + rotation + '" create [description]`. You can then assign someone using `@rota "' + rotation + '" assign [@user]`.';
+    return ':shrug: I couldn\'t find any on-call user because the "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`. You can then assign someone using `@rota "' + rotation + '" assign [@user]`.';
   },
   clearConfirm: (rotation) => {
     return `The "${rotation}" rotation has been unassigned. Nobody is on duty.`;
@@ -60,7 +60,7 @@ const msgText = {
     return `There is currently nobody assigned to the "${rotation}" rotation. Nothing changed.`;
   },
   clearError: (rotation) => {
-    return ':shrug: I couldn\'t clear this assignment because the "' + rotation + '" rotation does not exist yet. To create it, use `@rota "' + rotation + '" create [description]`.';
+    return ':shrug: I couldn\'t clear this assignment because the "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`.';
   },
   confirmChannelMsg: (rotation, sentByUserID) => {
     return `:speech_balloon: The on-call user for "${rotation}" has been notified about <@${sentByUserID}>'s message.`;
