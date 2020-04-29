@@ -108,7 +108,7 @@ const utils = {
           params: res[4]
         };
       // Command, rotation
-      // "about", "clear", "delete"
+      // "about", "clear", "delete", "who"
       } else if (cmdConfig.command && cmdConfig.rotaReq && !cmdConfig.params) {
         return {
           rotation: res[2],

@@ -37,8 +37,9 @@ app.event('app_mention', async({ event, context }) => {
   const isDelete = utils.isCmd('delete', text);
   const isHelp = utils.isCmd('help', text);
   const isList = utils.isCmd('list', text);
-  const isMessage =
-    (utils.isCmd('message', text)) && 
+  const testMessage = utils.isCmd('message', text);
+  const isMessage = 
+    testMessage && 
     !isCreate && 
     !isAssign && 
     !isWho && 
@@ -46,6 +47,7 @@ app.event('app_mention', async({ event, context }) => {
     !isClear && 
     !isDelete;
   const didntUnderstand =
+    !testMessage &&
     !isCreate &&
     !isAssign &&
     !isWho &&
@@ -182,6 +184,89 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
+  //-- @rota "[rotation]" who
+  if (isWho) {
+    try {
+      const pCmd = utils.parseCmd('who', event, context);
+      const rotation = pCmd.rotation;
+
+      if (rotation in store.getStoreList()) {
+        // If rotation exists, display its information
+        const rotationObj = store.getRotation(rotation);
+        if (!!rotationObj.assigned) {
+          // If someone is currently assigned, report who
+          const result = await app.client.chat.postMessage({
+            token: botToken,
+            channel: channelID,
+            text: msgText.whoReport(rotationObj.assigned, rotation)
+          });
+        } else {
+          // If nobody is assigned
+          const result = await app.client.chat.postMessage({
+            token: botToken,
+            channel: channelID,
+            text: msgText.whoUnassigned(rotation)
+          });
+        }
+      } else {
+        // If rotation doesn't exist, send message saying nothing changed
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.whoError(rotation)
+        });
+      }
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
+    }
+  }
+
+  //-- @rota "[rotation]" clear
+  if (isClear) {
+    try {
+      const pCmd = utils.parseCmd('clear', event, context);
+      const rotation = pCmd.rotation;
+
+      if (rotation in store.getStoreList()) {
+        const rotationObj = store.getRotation(rotation);
+        // If rotation exists, check if someone is assigned
+        if (!!rotationObj.assigned) {
+          // If someone is currently assigned, clear
+          store.saveAssignment(rotation, null);
+          const result = await app.client.chat.postMessage({
+            token: botToken,
+            channel: channelID,
+            text: msgText.clearConfirm(rotation)
+          });
+        } else {
+          // If nobody is assigned
+          const result = await app.client.chat.postMessage({
+            token: botToken,
+            channel: channelID,
+            text: msgText.clearNoAssignment(rotation)
+          });
+        }
+      } else {
+        // If rotation doesn't exist, send message saying nothing changed
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.clearError(rotation)
+        });
+      }
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
+    }
+  }
+
   //-- @rota list
   if (isList) {
     const list = store.getStoreList();
@@ -201,6 +286,23 @@ app.event('app_mention', async({ event, context }) => {
           text: msgText.listEmpty()
         });
       }
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
+    }
+  }
+
+  //-- @rota help
+  if (isHelp) {
+    try {
+      const result = await app.client.chat.postMessage({
+        token: botToken,
+        channel: channelID,
+        blocks: helpBlocks
+      });
     }
     catch (err) {
       console.error(err);
