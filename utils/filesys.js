@@ -25,12 +25,24 @@ const store = {
     return JSON.parse(fs.readFileSync(storeFilepath));
   },
   /*----
+    Create rotation
+    @Params: rotation name, usermention to assign
+  ----*/
+  createRotation(rotation, description) {
+    const list = this.getStoreList();
+    list[rotation] = {
+      description,
+      assigned: null
+    };
+    fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
+  },
+  /*----
     Save user assignment to rotation store
     @Params: rotation name, usermention to assign
   ----*/
   saveAssignment(rotation, usermention) {
     const list = this.getStoreList();
-    list[rotation] = usermention;
+    list[rotation].assigned = usermention;
     fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
   },
   /*----
@@ -40,7 +52,7 @@ const store = {
   ----*/
   getAssignment(rotation) {
     const list = this.getStoreList();
-    return list[rotation];
+    return list[rotation].assigned;
   },
   /*----
     Clears assigned user for a rotation (rotation value)
@@ -48,7 +60,7 @@ const store = {
   ----*/
   clearAssignment(rotation) {
     const list = this.getStoreList();
-    list[rotation] = null;
+    list[rotation].assigned = null;
     fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
   },
   /*----

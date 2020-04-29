@@ -29,20 +29,23 @@ app.event('app_mention', async({ event, context }) => {
   const channelID = event.channel;             // channel ID
   const botToken = context.botToken;
 
-  //-- @rota setup [rotation-name]
+  //-- @rota "[rotation-name]" create [description]
   if (utils.isCmd('create', text)) {
     try {
       const pCmd = utils.parseCmd('create', event, context);
       const rotation = pCmd.rotation;
+      const description = pCmd.params;
+
       if (rotation in store.getStoreList()) {
+        // Can't create a rotation that already exists
         const result = await app.client.chat.postMessage({
           token: botToken,
           channel: channelID,
           text: msgText.createError(rotation)
         });
       } else {
-        // Initialize a new rotation with no assigned user
-        store.saveAssignment(rotation, null);
+        // Initialize a new rotation with description
+        store.createRotation(rotation, description);
         const result = await app.client.chat.postMessage({
           token: botToken,
           channel: channelID,
@@ -65,9 +68,9 @@ app.event('app_mention', async({ event, context }) => {
     try {
       const pCmd = utils.parseCmd('delete', event, context);
       const rotation = pCmd.rotation;
-      // Does the rotation exist?
+
       if (rotation in store.getStoreList()) {
-        // Delete rotation from store
+        // If rotation exists, delete from store completely
         store.deleteRotation(rotation);
         const result = await app.client.chat.postMessage({
           token: botToken,
@@ -75,6 +78,7 @@ app.event('app_mention', async({ event, context }) => {
           text: msgText.deleteConfirm(rotation)
         });
       } else {
+        // If rotation doesn't exist, send message saying nothing changed
         const result = await app.client.chat.postMessage({
           token: botToken,
           channel: channelID,
@@ -99,8 +103,6 @@ app.event('app_mention', async({ event, context }) => {
       const rotation = pCmd.rotation;
       const usermention = pCmd.params;
 
-      console.log(rotation in store.getStoreList());
-
       if (rotation in store.getStoreList()) {
         // Assign user in store
         store.saveAssignment(rotation, usermention);
@@ -110,10 +112,41 @@ app.event('app_mention', async({ event, context }) => {
           text: msgText.assignConfirm(usermention, rotation)
         });
       } else {
+        // If rotation doesn't exist, send message saying so
         const result = await app.client.chat.postMessage({
           token: botToken,
           channel: channelID,
           text: msgText.assignError(rotation)
+        });
+      }
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage({
+        token: botToken,
+        channel: channelID,
+        text: msgText.error(err)
+      });
+    }
+  }
+
+  //-- @rota list
+  else if (utils.isCmd('list', text)) {
+    const list = store.getStoreList();
+    try {
+      // If the store is not empty
+      if (Object.keys(list).length !== 0 && list.constructor === Object) {
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.listReport(list)
+        });
+      } else {
+        // If store is empty
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.listEmpty()
         });
       }
     }

@@ -60,6 +60,14 @@ const utils = {
       params: false,
       regex: /^<@(U[A-Z0-9]+?)> (help)$/g
     },
+    // @rota list
+    // List all rotations in store
+    list: {
+      command: true,
+      rotaReq: false,
+      params: false,
+      regex: /^<@(U[A-Z0-9]+?)> (list)$/g
+    },
     // @rota "[rotation]" any other message
     // Message does not contain a command
     // Sends message text
