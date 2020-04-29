@@ -23,6 +23,9 @@ store.initStore();
     APP MENTIONS
 ------------------*/
 app.event('app_mention', async({ event, context }) => {
+  // Log useful things
+  console.log('Event: ', event);
+
   // Gather applicable info
   const text = event.text;                     // raw text from the message mentioning @concierge
   const sentByUserID = event.user;             // ID of user who sent the message
@@ -58,7 +61,16 @@ app.event('app_mention', async({ event, context }) => {
     !isList &&
     !isMessage;
 
-  console.log(isCreate, isAssign, isWho, isAbout, isClear, isDelete, isHelp, isList, isMessage);
+  console.log(
+    'isCreate:', isCreate,
+    'isAssign:', isAssign,
+    'isWho:', isWho,
+    'isAbout:', isAbout,
+    'isClear:', isClear,
+    'isDelete:', isDelete,
+    'isHelp:', isHelp,
+    'isList:', isList,
+    'isMessage:', isMessage);
 
   //-- @rota "[rotation-name]" create [description]
   if (isCreate) {
@@ -330,9 +342,6 @@ app.event('app_mention', async({ event, context }) => {
       );
     }
   }
-
-  // Log useful things
-  console.log('Event: ', event);
 });
 
 /*------------------
