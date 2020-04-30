@@ -61,17 +61,6 @@ app.event('app_mention', async({ event, context }) => {
     !isList &&
     !isMessage;
 
-  console.log(
-    'isCreate:', isCreate,
-    'isAssign:', isAssign,
-    'isWho:', isWho,
-    'isAbout:', isAbout,
-    'isClear:', isClear,
-    'isDelete:', isDelete,
-    'isHelp:', isHelp,
-    'isList:', isList,
-    'isMessage:', isMessage);
-
   //-- @rota "[rotation-name]" create [description]
   if (isCreate) {
     try {

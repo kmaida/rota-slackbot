@@ -45,7 +45,7 @@ const msgText = {
     return ':clipboard: There are no rotations saved right now. To create one, tell me `@rota "[rotation-name]" create [description]`.';
   },
   whoReport: (usermention, rotation) => {
-    return ':bust_in_silhouette:` ' + usermention + '` is on duty for the "' + rotation + '" rotation. To notify them directly, use: `@rota "' + rotation + '" [message]`.';
+    return ':bust_in_silhouette: `' + usermention + '` is on duty for the "' + rotation + '" rotation. To notify them directly, use: `@rota "' + rotation + '" [message]`.';
   },
   whoUnassigned: (rotation) => {
     return 'Nobody is currently assigned to the "' + rotation + '" rotation. To assign someone, use `@rota "' + rotation + '" assign [@user]`.';
