@@ -27,7 +27,7 @@ app.event('app_mention', async({ event, context }) => {
   console.log('Event: ', event);
 
   // Gather applicable info
-  const text = event.text;                     // raw text from the message mentioning @concierge
+  const text = event.text;                     // raw text from the mention
   const sentByUserID = event.user;             // ID of user who sent the message
   const channelID = event.channel;             // channel ID
   const botToken = context.botToken;
@@ -50,7 +50,6 @@ app.event('app_mention', async({ event, context }) => {
     !isClear && 
     !isDelete;
   const didntUnderstand =
-    !testMessage &&
     !isCreate &&
     !isAssign &&
     !isWho &&
@@ -61,7 +60,11 @@ app.event('app_mention', async({ event, context }) => {
     !isList &&
     !isMessage;
 
-  //-- @rota "[rotation-name]" create [description]
+  /*--
+    CREATE
+    @rota "[rotation-name]" create [description]
+    Creates a new rotation with description
+  --*/
   if (isCreate) {
     try {
       const pCmd = utils.parseCmd('create', event, context);
@@ -93,7 +96,11 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
-  //-- @rota "[rotation]" delete
+  /*--
+    DELETE
+    @rota "[rotation]" delete
+    Deletes an existing rotation
+  --*/
   else if (isDelete) {
     try {
       const pCmd = utils.parseCmd('delete', event, context);
@@ -124,7 +131,11 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
-  //-- @rota "[rotation]" about
+  /*--
+    ABOUT
+    @rota "[rotation]" about
+    Provides description and assignment for specified rotation
+  --*/
   else if (isAbout) {
     try {
       const pCmd = utils.parseCmd('about', event, context);
@@ -155,7 +166,11 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
-  //-- @rota "[rotation]" assign [@user]
+  /*--
+    ASSIGN
+    @rota "[rotation]" assign [@user]
+    Assigns a user to specified rotation
+  --*/
   else if (isAssign) {
     try {
       const pCmd = utils.parseCmd('assign', event, context);
@@ -187,7 +202,11 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
-  //-- @rota "[rotation]" who
+  /*--
+    WHO
+    @rota "[rotation]" who
+    Reports who the assigned user is for specified rotation
+  --*/
   else if (isWho) {
     try {
       const pCmd = utils.parseCmd('who', event, context);
@@ -228,7 +247,11 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
-  //-- @rota "[rotation]" clear
+  /*--
+    CLEAR
+    @rota "[rotation]" clear
+    Clears the assignment for specified rotation
+  --*/
   else if (isClear) {
     try {
       const pCmd = utils.parseCmd('clear', event, context);
@@ -270,7 +293,11 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
-  //-- @rota list
+  /*--
+    LIST
+    @rota list
+    Lists all rotations, descriptions, and assignments
+  --*/
   else if (isList) {
     const list = store.getStoreList();
     try {
@@ -298,7 +325,11 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
-  //-- @rota help
+  /*--
+    HELP
+    @rota help
+    Provides instructions on how to use Rota
+  --*/
   else if (isHelp) {
     try {
       const result = await app.client.chat.postMessage({
@@ -315,7 +346,32 @@ app.event('app_mention', async({ event, context }) => {
     }
   }
 
-  //-- @rota didn't understand the message
+  /*--
+    (MESSAGE)
+    @rota "[rotation]" clear
+    Clears the assignment for specified rotation
+  --*/
+  else if (isMessage) {
+    try {
+      // @TODO: check if rotation exists
+      // @TODO: check if rotation assigned
+        // @TODO: send ephemeral message regarding availability
+        // @TODO: send DM to assigned concierge
+      // @TODO: error messaging if rotation doesn't exist or isn't assigned
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
+    }
+  }
+
+  /*--
+    (OTHER)
+    @rota [other]
+    Rota didn't recognize the format of the mention
+  --*/
   else if (didntUnderstand) {
     try {
       const result = await app.client.chat.postMessage({

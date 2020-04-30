@@ -31,10 +31,7 @@ const msgText = {
   listReport: (list) => {
     let msgStr = '';
     const assignment = (item) => {
-      if (item.assigned) {
-        return ' (`' + item.assigned + '`)';
-      }
-      return '';
+      return !!item.assigned ? ' (`' + item.assigned + '`)' : ' (_unassigned_)';
     };
     for (const rotation in list) {
       msgStr = msgStr + `• *${rotation}*: ${list[rotation].description}${assignment(list[rotation])}\n`;

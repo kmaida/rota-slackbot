@@ -35,6 +35,7 @@ const utils = {
   },
   /*----
     Test message to see if its format matches expectations for specific command
+    Need to new RegExp to execute on runtime
     @Params: command, mention event message
     @Returns: boolean
   ----*/
