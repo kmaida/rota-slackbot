@@ -84,7 +84,8 @@ const utils = {
     @Returns: boolean
   ----*/
   isCmd(cmd, msg) {
-    return this.commands[cmd].regex.test(msg.trim());
+    const regex = new RegExp(this.commands[cmd].regex);
+    return regex.test(msg.trim());
   },
   /*----
     Parse commands
