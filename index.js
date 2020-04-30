@@ -4,7 +4,7 @@ const { App } = require('@slack/bolt');
 // Utility functions
 const utils = require('./utils/utils');
 // Reading / writing to filesystem store
-const store = require('./utils/filesys');
+const store = require('./utils/store');
 // Bot responses
 const helpBlocks = require('./bot-response/blocks-help');
 const msgText = require('./bot-response/message-text');
