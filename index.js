@@ -105,7 +105,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota "[rotation]" delete
-  if (isDelete) {
+  else if (isDelete) {
     try {
       const pCmd = utils.parseCmd('delete', event, context);
       const rotation = pCmd.rotation;
@@ -136,7 +136,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota "[rotation]" about
-  if (isAbout) {
+  else if (isAbout) {
     try {
       const pCmd = utils.parseCmd('about', event, context);
       const rotation = pCmd.rotation;
@@ -167,7 +167,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota "[rotation]" assign [@user]
-  if (isAssign) {
+  else if (isAssign) {
     try {
       const pCmd = utils.parseCmd('assign', event, context);
       const rotation = pCmd.rotation;
@@ -199,7 +199,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota "[rotation]" who
-  if (isWho) {
+  else if (isWho) {
     try {
       const pCmd = utils.parseCmd('who', event, context);
       const rotation = pCmd.rotation;
@@ -240,7 +240,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota "[rotation]" clear
-  if (isClear) {
+  else if (isClear) {
     try {
       const pCmd = utils.parseCmd('clear', event, context);
       const rotation = pCmd.rotation;
@@ -282,7 +282,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota list
-  if (isList) {
+  else if (isList) {
     const list = store.getStoreList();
     try {
       // If the store is not empty
@@ -310,7 +310,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota help
-  if (isHelp) {
+  else if (isHelp) {
     try {
       const result = await app.client.chat.postMessage({
         token: botToken,
@@ -327,7 +327,7 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   //-- @rota didn't understand the message
-  if (didntUnderstand) {
+  else if (didntUnderstand) {
     try {
       const result = await app.client.chat.postMessage({
         token: botToken,
