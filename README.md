@@ -36,6 +36,8 @@ You can also schedule messages to be delivered later. This works with both the b
 /gator @rota "[rotation]" I need some help with task XYZ please
 ```
 
+**Note:** Keep in mind that if you use `/remind`, the message will come from `@Slackbot`, not from your username. If you need the person on rotation to know the message was from _you_, either include your username in the reminder when you set it up, or use a third-party app that delivers the message on your behalf from your username (e.g., Gator does this).
+
 ## Development
 
 **Prerequisite**: A Slack workspace that you can test in (without disturbing or spamming your coworkers 😛). You can [create a new Slack workspace for free here](https://slack.com/get-started#/create).
