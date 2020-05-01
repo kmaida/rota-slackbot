@@ -27,9 +27,10 @@ app.event('app_mention', async({ event, context }) => {
   console.log('Event: ', event);
 
   // Gather applicable info
-  const text = event.text;                     // raw text from the mention
-  const sentByUserID = event.user;             // ID of user who sent the message
-  const channelID = event.channel;             // channel ID
+  const text = event.text;                      // raw text from the mention
+  const sentByUserID = event.user;              // ID of user who sent the message
+  const channelID = event.channel;              // channel ID
+  const channelMsgFormat = `<#${channelID}>`;   // channel mention
   const botToken = context.botToken;
   // Decision logic establishing how to respond to mentions
   const isCreate = utils.isCmd('create', text);
@@ -353,11 +354,52 @@ app.event('app_mention', async({ event, context }) => {
   --*/
   else if (isMessage) {
     try {
-      // @TODO: check if rotation exists
-      // @TODO: check if rotation assigned
-        // @TODO: send ephemeral message regarding availability
-        // @TODO: send DM to assigned concierge
-      // @TODO: error messaging if rotation doesn't exist or isn't assigned
+      const pCmd = utils.parseCmd('message', event, context);
+      const rotation = pCmd.rotation;
+      // Check if rotation exists
+      if (rotation in store.getStoreList()) {
+        const oncallUser = store.getAssignment(rotation);
+        
+        if (!!oncallUser) {
+          // If someone is assigned to concierge...
+          const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
+          const oncallUserDMChannel = oncallUser.replace('<@', '').replace('>', '');
+          // Send DM to on-call user notifying them of the message that needs their attention
+          const sendDM = await app.client.chat.postMessage({
+            token: botToken,
+            channel: oncallUserDMChannel,
+            text: msgText.dmToAssigned(rotation, sentByUserID, channelID, link)
+          });
+          // Send message to the channel where help was requested notifying that assigned user was contacted
+          const sendChannelMsg = await app.client.chat.postMessage({
+            token: botToken,
+            channel: channelID,
+            text: msgText.confirmChannelMsg(rotation, sentByUserID)
+          });
+          // Send ephemeral message (only visible to sender) telling them what to do if urgent
+          const sendEphemeralMsg = await app.client.chat.postEphemeral({
+            token: botToken,
+            channel: channelID,
+            user: sentByUserID,
+            text: msgText.confirmEphemeralMsg(rotation)
+          });
+
+        } else {
+          // Rotation is not assigned; give instructions how to assign
+          const result = await app.client.chat.postMessage({
+            token: botToken,
+            channel: channelID,
+            text: msgText.nobodyAssigned(rotation)
+          });
+        }
+      } else {
+        // Rotation doesn't exist
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.msgError(rotation)
+        });
+      }
     }
     catch (err) {
       console.error(err);
