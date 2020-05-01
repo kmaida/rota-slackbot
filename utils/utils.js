@@ -6,32 +6,39 @@ const utils = {
   regex: {
     // @rota "[new-rotation-name]" create [description]
     // Create a new rotation
-    create: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (create) (.*)$/g,
+    create: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (create) (.*)$/g,
     // @rota "[rotation]" assign [@username]
-    // Assigns a user to the specified rotation
-    assign: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Z0-9]+?>)(.*)$/g,
+    // Assigns a user to a rotation
+    assign: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (assign) (<@(U[A-Za-z0-9|._\-]+?)>)(.*)$/g,
     // @rota "[rotation]" who
-    // Responds stating who is on-call for the specified rotation
-    who: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (who)$/g,
+    // Responds stating who is on-call for a rotation
+    who: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (who)$/g,
     // @rota "[rotation]" about
-    // Responds with description and mention of on-call for the specified rotation
-    about: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (about)$/g,
+    // Responds with description and mention of on-call for a rotation
+    about: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (about)$/g,
     // @rota "[rotation]" clear
     // Unassigns rotation
-    clear: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (clear)$/g,
+    clear: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (clear)$/g,
     // @rota "[rotation]" delete
     // Removes the rotation completely
-    delete: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (delete)$/g,
+    delete: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (delete)$/g,
     // @rota help
     // Post help messaging
-    help: /^<@(U[A-Z0-9]+?)> (help)$/g,
+    help: /^<@(U[A-Za-z0-9|._\-]+?)> (help)$/g,
     // @rota list
     // List all rotations in store
-    list: /^<@(U[A-Z0-9]+?)> (list)$/g,
+    list: /^<@(U[A-Za-z0-9|._\-]+?)> (list)$/g,
     // @rota "[rotation]" any other message
     // Message does not contain a command
     // Sends message text
-    message: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (.*)$/g
+    message: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (.*)$/g
+  },
+  cleanText(msg) {
+    if (msg.startsWith('Reminder: ')) {
+      return msg.replace('Reminder: ', '').trim();
+    } else {
+      return msg.trim();
+    }
   },
   /*----
     Test message to see if its format matches expectations for specific command
@@ -39,9 +46,10 @@ const utils = {
     @Params: command, mention event message
     @Returns: boolean
   ----*/
-  isCmd(cmd, msg) {
+  isCmd(cmd, input) {
+    const msg = this.cleanText(input);
     const regex = new RegExp(this.regex[cmd]);
-    return regex.test(msg.trim());
+    return regex.test(msg);
   },
   /*----
     Parse commands
@@ -49,12 +57,12 @@ const utils = {
     @Returns: object or null
   ----*/
   parseCmd(cmd, e, ct) {
-    const safeText = e.text.trim();
+    const safeText = this.cleanText(e.text);
     // Match text using regex associated with the passed command
     const res = [...safeText.matchAll(new RegExp(this.regex[cmd]))][0];
     // Regex returned expected match appropriate for the command
     // Command begins with rota bot mention
-    if (res && res[1] === ct.botUserId) {
+    if (res && res[1].includes(ct.botUserId)) {
       // Command, rotation, userID, freeform text
       if (cmd === 'assign') {
         return {
@@ -65,7 +73,7 @@ const utils = {
         }
       }
       // Command, rotation, parameters
-      if (cmd === 'assign' || cmd === 'create') {
+      else if (cmd === 'create') {
         return {
           rotation: res[2],
           command: res[3],
@@ -96,7 +104,7 @@ const utils = {
       }
     }
     // If not a properly formatted command, return null
-    // This should trigger (ephemeral?) error messaging
+    // This should trigger error messaging
     return null;
   },
   /*----

@@ -4,7 +4,7 @@
 
 const msgText = {
   createConfirm: (rotation) => {
-    return ':sparkles: The "' + rotation + '" rotation has been created. You can now assign someone to be on-call for this rotation: `@rota "' + rotation + '" assign [@user]`.';
+    return ':sparkles: The "' + rotation + '" rotation has been created. You can now assign someone to be on-call for this rotation: `@rota "' + rotation + '" assign [@user] [optional handoff message]`.';
   },
   createError: (rotation) => {
     return 'The "' + rotation + '" rotation already exists. You can assign someone to be on-call with `@rota "' + rotation + '" assign [@user]`.';
@@ -51,10 +51,10 @@ const msgText = {
     return ':bust_in_silhouette: `' + usermention + '` is on duty for the "' + rotation + '" rotation. To notify them directly, use: `@rota "' + rotation + '" [message]`.';
   },
   whoUnassigned: (rotation) => {
-    return 'Nobody is currently assigned to the "' + rotation + '" rotation. To assign someone, use `@rota "' + rotation + '" assign [@user]`.';
+    return 'Nobody is currently assigned to the "' + rotation + '" rotation. To assign someone, use `@rota "' + rotation + '" assign [@user] [optional handoff message]`.';
   },
   whoError: (rotation) => {
-    return ':shrug: I couldn\'t find any on-call user because the "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`. You can then assign someone using `@rota "' + rotation + '" assign [@user]`.';
+    return ':shrug: I couldn\'t find any on-call user because the "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`. You can then assign someone using `@rota "' + rotation + '" assign [@user] [optional handoff message]`.';
   },
   clearConfirm: (rotation) => {
     return `The "${rotation}" rotation has been unassigned. Nobody is on duty.`;
@@ -72,7 +72,7 @@ const msgText = {
     return 'The person currently on-call for "' + rotation + '" will respond at their earliest convenience. Keep in mind: they might be busy or outside working hours.\n:rotating_light: If it\'s *very urgent* and nobody replies within 15 minutes, ping the appropriate `[@usergroup]`.';
   },
   nobodyAssigned: (rotation) => {
-    return 'Nobody is currently assigned to the "' + rotation + '" rotation. To assign someone, use `@rota "' + rotation + '" assign [@user]`.';
+    return 'Nobody is currently assigned to the "' + rotation + '" rotation. To assign someone, use `@rota "' + rotation + '" assign [@user] [optional handoff message]`.';
   },
   dmToAssigned: (rotation, sentByUserID, channelID, link) => {
     return `Hi there! <@${sentByUserID}> needs your attention in <#${channelID}> (${link}) because you're on-call for the *${rotation}* rotation.\n\n`;
@@ -84,7 +84,7 @@ const msgText = {
     return ":thinking_face: I'm sorry, I didn't understand that. To see my full capabilities, try typing `@rota help`.";
   },
   error: (err) => {
-    return "Sorry, I couldn't do that because an error occurred:\n```" + JSON.stringify(err) + "```";
+    return "An error occurred:\n```" + JSON.stringify(err) + "```";
   }
 }
 

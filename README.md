@@ -1,33 +1,39 @@
-# Concierge
+# Rota
 
-`concierge` is a Slackbot I wrote for internal team use at [Gatsby](https://gatsbyjs.com). The inspiration was derived from my time working at [Auth0](https://auth0.com) and using [Auth0's extremely useful concierge Slackbot](https://auth0.engineering/education-through-automation-slack-concierge-ab97c03ef794). This app was built from scratch with the [Bolt JavaScript Slack app framework](https://github.com/slackapi/bolt), reproducing and enhancing features of the original concierge bot.
+`rota` is a Slackbot I wrote for internal team use at [Gatsby](https://gatsbyjs.com) to manage team rotations. This app was built with the [Bolt JavaScript Slack app framework](https://github.com/slackapi/bolt).
 
 ## Usage
 
-* `@concierge assign [@user]` assigns someone to concierge for the channel the message was sent in
-* `@concierge clear` removes the current assignment for the channel
-* `@concierge who` reports the name of the assigned concierge in the current channel
-* `@concierge help` shows the list of available commands
-* `@concierge [some other message]` sends a direct message to the concierge for the channel, notifying them that your message needs attention
+* `@rota "[new-rotation-name]" create [desciption]` creates a new rotation; rotation names can contain _only_ lowercase letters, numbers, and hyphens
+* `@rota "[rotation]" assign [@user] [optional handoff message]` assigns someone to the rotation and, optionally, sends a DM to them with handoff information
+* `@rota "[rotation]" who` reports the name of a rotation's assigned user
+* `@rota "[rotation]" about` displays the rotation's description and on-call user
+* `@rota "[rotation]" clear` removes the current user assignment for a rotation
+* `@rota "[rotation]" delete` deletes the rotation completely
+* `@rota "[rotation]" [some other message]` sends a direct message to the on-call user for the rotation, notifying them that your message needs attention
+* `@rota list` displays a list of all currently known rotations
+* `@rota help` shows how to use the bot
 
-Here are some ways you can use the `@concierge` bot in conjunction with other Slack features / third party apps.
+Here are some ways you can use the `@rota` bot in conjunction with other Slack features / third party apps.
 
-### Rotating the Concierge
+### Rotating
 
-If your concierge responsibility rotates through several people, you can set a recurring reminder with Slack's `/remind` slash command to remind the channel concierge to assign the next person in the rotation. E.g.:
+You can manage rotations in whatever way makes the most sense for your needs. You can set a recurring reminder with Slack's `/remind` slash command to remind a rotation's on-call user to assign the next person in the rotation at some regular interval. E.g.:
 
 ```
-/remind [#channel] Assign the next person in the @concierge rotation using `@concierge assign [@user]` every Monday
+(in a #channel)
+/remind [#channel] @rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign [@user] [handoff message]` every Monday at 9am.
 ```
 
-**Note:** You can't directly remind "`@concierge`" to do something. I.e., `/remind @concierge do something` will _not_ work because it will send a direct message to the _bot user_, not any specific channel's _assigned human user_. When using `/remind`, you need to send the reminder in the _channel_ where you want the assigned concierge to receive the message.
+**Note:** You can't directly remind "`@rota`" to do something. I.e., `/remind @rota "[rotation]" some message` will _not_ work because it will try to send a direct message to the _bot user_, not any specific rotation's _assigned human user_. When using `/remind`, you need to send the reminder _in a channel_.
 
 ### Scheduling Messages
 
-You can also schedule messages to be delivered later. This works with both the built-in `/remind` slash task (similar to above), and also with third party Slack apps like [Gator](https://www.gator.works/) and [/schedule](https://slackscheduler.com/). Just schedule the message in the channel whose concierge you'd like to reach. E.g.:
+You can also schedule messages to be delivered later. This works with both the built-in `/remind` slash task (similar to above), and also with third party Slack apps like [Gator](https://www.gator.works/) and [/schedule](https://slackscheduler.com/). Just schedule the message _in a channel_ that the `@rota` bot has been added to. E.g.:
 
 ```
-/gator Hey @concierge I need some help with task XYZ please
+(in a #channel)
+/gator @rota "[rotation]" I need some help with task XYZ please
 ```
 
 ## Development
@@ -36,7 +42,7 @@ You can also schedule messages to be delivered later. This works with both the b
 
 1. [Create a new Slack app](https://api.slack.com/apps/new).
 2. Name your app `concierge` and select your preferred development Slack workspace.
-3. Under **App Home**, make sure your bot and app's name are `concierge`.
+3. Under **App Home**, make sure your bot and app's name are `rota`.
 4. Under **Incoming Webhooks**, click the toggle to turn webhooks `On`.
 5. In the **OAuth & Permissions** section, add Bot Token Scopes for `app_mentions:read`, `chat:write`, and `incoming-webhook`.
 6. Under **Install App**, click the button to install the app to your team workspace. When prompted, choose a channel to install to (it can be any channel.) This will generate a bot user OAuth access token (which you will need to configure your local environment variables).

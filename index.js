@@ -366,7 +366,7 @@ app.event('app_mention', async({ event, context }) => {
 
   /*--
     (MESSAGE)
-    @rota "[rotation]" clear
+    @rota "[rotation]" free form message for on-call user
     Clears the assignment for specified rotation
   --*/
   else if (isMessage) {
@@ -393,14 +393,16 @@ app.event('app_mention', async({ event, context }) => {
             channel: channelID,
             text: msgText.confirmChannelMsg(rotation, sentByUserID)
           });
-          // Send ephemeral message (only visible to sender) telling them what to do if urgent
-          const sendEphemeralMsg = await app.client.chat.postEphemeral({
-            token: botToken,
-            channel: channelID,
-            user: sentByUserID,
-            text: msgText.confirmEphemeralMsg(rotation)
-          });
-
+          if (sentByUserID !== 'USLACKBOT') {
+            // Send ephemeral message (only visible to sender) telling them what to do if urgent
+            // Do nothing if coming from a slackbot
+            const sendEphemeralMsg = await app.client.chat.postEphemeral({
+              token: botToken,
+              channel: channelID,
+              user: sentByUserID,
+              text: msgText.confirmEphemeralMsg(rotation)
+            });
+          }
         } else {
           // Rotation is not assigned; give instructions how to assign
           const result = await app.client.chat.postMessage({
