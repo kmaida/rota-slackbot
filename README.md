@@ -16,12 +16,12 @@
 
 Here are some ways you can use the `@rota` bot in conjunction with other Slack features / third party apps.
 
-### Rotating
+### Rotation Reminders
 
 You can manage rotations in whatever way makes the most sense for your needs. You can set a recurring reminder with Slack's `/remind` slash command to remind a rotation's on-call user to assign the next person in the rotation at some regular interval. E.g.:
 
+_(In a #channel)_
 ```
-(in a #channel)
 /remind [#channel] @rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign [@user] [handoff message]` every Monday at 9am.
 ```
 
@@ -31,8 +31,8 @@ You can manage rotations in whatever way makes the most sense for your needs. Yo
 
 You can also schedule messages to be delivered later. This works with both the built-in `/remind` slash task (similar to above), and also with third party Slack apps like [Gator](https://www.gator.works/) and [/schedule](https://slackscheduler.com/). Just schedule the message _in a channel_ that the `@rota` bot has been added to. E.g.:
 
+_(In a #channel)_
 ```
-(in a #channel)
 /gator @rota "[rotation]" I need some help with task XYZ please
 ```
 
