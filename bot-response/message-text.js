@@ -25,6 +25,12 @@ const msgText = {
   assignConfirm: (usermention, rotation) => {
     return `:information_desk_person: ${usermention} is now on-call for the "${rotation}" rotation.`;
   },
+  assignDMHandoff: (rotation, handoffMsg) => {
+    return `:telephone: You are now on-call for the *${rotation}* rotation and have received the following handoff message:\n>${handoffMsg}`;
+  },
+  assignHandoffConfirm: (usermention, rotation) => {
+    return `Your handoff message for the "${rotation}" rotation has been sent to ${usermention} via DM.`;
+  },
   assignError: (rotation) => {
     return ':shrug: I couldn\'t complete this assignment because the "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`.';
   },

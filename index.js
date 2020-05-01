@@ -30,7 +30,6 @@ app.event('app_mention', async({ event, context }) => {
   const text = event.text;                      // raw text from the mention
   const sentByUserID = event.user;              // ID of user who sent the message
   const channelID = event.channel;              // channel ID
-  const channelMsgFormat = `<#${channelID}>`;   // channel mention
   const botToken = context.botToken;
   // Decision logic establishing how to respond to mentions
   const isCreate = utils.isCmd('create', text);
@@ -169,23 +168,41 @@ app.event('app_mention', async({ event, context }) => {
 
   /*--
     ASSIGN
-    @rota "[rotation]" assign [@user]
+    @rota "[rotation]" assign [@user] [handoff message]
     Assigns a user to specified rotation
   --*/
   else if (isAssign) {
     try {
       const pCmd = utils.parseCmd('assign', event, context);
       const rotation = pCmd.rotation;
-      const usermention = pCmd.params;
+      const usermention = pCmd.user;
+      const handoffMsg = pCmd.handoff;
 
       if (rotation in store.getStoreList()) {
         // Assign user in store
         store.saveAssignment(rotation, usermention);
+        // Confirm assignment in channel
         const result = await app.client.chat.postMessage({
           token: botToken,
           channel: channelID,
           text: msgText.assignConfirm(usermention, rotation)
         });
+        if (!!handoffMsg) {
+          // Send DM to newly assigned user notifying them of the handoff message
+          const oncallUserDMChannel = usermention.replace('<@', '').replace('>', '');
+          const sendDM = await app.client.chat.postMessage({
+            token: botToken,
+            channel: oncallUserDMChannel,
+            text: msgText.assignDMHandoff(rotation, handoffMsg)
+          });
+          // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
+          const result = await app.client.chat.postEphemeral({
+            token: botToken,
+            channel: channelID,
+            user: sentByUserID,
+            text: msgText.assignHandoffConfirm(usermention, rotation)
+          });
+        }
       } else {
         // If rotation doesn't exist, send message saying so
         const result = await app.client.chat.postMessage({

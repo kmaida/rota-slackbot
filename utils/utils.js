@@ -9,7 +9,7 @@ const utils = {
     create: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (create) (.*)$/g,
     // @rota "[rotation]" assign [@username]
     // Assigns a user to the specified rotation
-    assign: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Z0-9]+?>)$/g,
+    assign: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Z0-9]+?>)(.*)$/g,
     // @rota "[rotation]" who
     // Responds stating who is on-call for the specified rotation
     who: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (who)$/g,
@@ -55,6 +55,15 @@ const utils = {
     // Regex returned expected match appropriate for the command
     // Command begins with rota bot mention
     if (res && res[1] === ct.botUserId) {
+      // Command, rotation, userID, freeform text
+      if (cmd === 'assign') {
+        return {
+          rotation: res[2],
+          command: res[3],
+          user: res[4],
+          handoff: res[5].trim()
+        }
+      }
       // Command, rotation, parameters
       if (cmd === 'assign' || cmd === 'create') {
         return {
