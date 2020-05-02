@@ -9,7 +9,7 @@ const utils = {
     create: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (create) (.*)$/g,
     // @rota "[rotation]" assign [@username]
     // Assigns a user to a rotation
-    assign: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (assign) (<@(U[A-Za-z0-9|._\-]+?)>)(.*)$/g,
+    assign: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Za-z0-9|._\-]+?>)(.*)$/g,
     // @rota "[rotation]" who
     // Responds stating who is on-call for a rotation
     who: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (who)$/g,

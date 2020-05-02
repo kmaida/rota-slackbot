@@ -455,5 +455,5 @@ app.event('app_mention', async({ event, context }) => {
 ------------------*/
 (async () => {
   await app.start(port);
-  console.log(`⚡️ Concierge is running on ${port}!`);
+  console.log(`⚡️ Rota is running on ${port}!`);
 })();
