@@ -48,7 +48,7 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ':busts_in_silhouette: `@rota "[rotation-name]" staff [@user1 @user2 @user3]` *saves a staff list* for a rotation. It expects a space-separated list of user mentions in the order you want assignments to rotate. You can then use `@rota "[rotation-name]" assign next` to assign the next person in the staff list. Duplicates will be removed, so if you want someone to pull double duty, you\'ll have to do that assignment by username.'
+      "text": ':busts_in_silhouette: `@rota "[rotation-name]" staff [@user1 @user2 @user3]` *saves a staff list* for a rotation. It expects a space-separated list of user mentions in the order you want assignments to rotate. You can then use `@rota "[rotation-name]" assign next` to assign the next person in the staff list. (Note: Duplicates will be removed, so if you want someone to pull double duty, you\'ll have to do that assignment by username.)'
     }
   },
   {
@@ -62,7 +62,7 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ':information_desk_person: `@rota "[rotation-name]" assign [@user] [optional handoff message]` *assigns someone to a rotation*. Optionally, I can also deliver handoff information at the start of a rotation.'
+      "text": ':information_desk_person: `@rota "[rotation-name]" assign [@user] [optional handoff message]` *assigns a user to a rotation*. Optionally, I can also deliver handoff information at the start of a rotation.'
     }
   },
   {
@@ -83,7 +83,7 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ':eject: `@rota "[rotation-name]" clear` *removes the current assignment* for a rotation.'
+      "text": ':eject: `@rota "[rotation-name]" unassign` *removes the current assignment* for a rotation.'
     }
   },
   {
