@@ -9,11 +9,11 @@ const utils = {
     create: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (create) (.*)$/g,
     // @rota "[rotation]" staff [@username, @username, @username]
     // Accepts a space-separated list of usernames to staff a rotation
-    // (List of mentions has to start with <@U and end with > but can contain spaces and multiple user mentions)
-    staff: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (staff) (<@U[<@>A-Za-z0-9|._\s\-]+?>)$/g,
+    // List of mentions has to start with <@U and end with > but can contain spaces, commas, multiple user mentions
+    staff: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (staff) (<@U[<@>A-Za-z0-9|._,\s\-]+?>)$/g,
     // Test for a single user mention
     // <@U03LKJ> or <@U0345|name>
-    usermention: /^<@(U[A-Za-z0-9|._\-]+?)>$/g,
+    usermention: /^<@U[A-Za-z0-9|._\-]+?>$/g,
     // @rota "[rotation]" assign [@username]
     // Assigns a user to a rotation
     assign: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Za-z0-9|._\-]+?>)(.*)$/g,
@@ -85,14 +85,15 @@ const utils = {
         }
       }
       // Rotation, command, list of space-separated usermentions
+      // Proofed to accommodate use of comma+space separation and minor whitespace typos
       else if (cmd === 'staff') {
         const getStaffArray = (staffStr) => {
-          const arr = staffStr.trim().split(' ');
-          const testValue = (str) => {
-            const regex = new RegExp(this.regex.usermention);
-            return regex.test(str);
-          };
-          return arr.every(testValue) ? arr : [];
+          const cleanStr = staffStr.replace(/,/g, '').trim();
+          const arr = cleanStr.split(' ');
+          const noEmpty = arr.filter(item => !!item !== false);   // Remove falsey values
+          const noDupes = new Set(noEmpty);                       // Remove duplicates
+          const cleanArr = [...noDupes];                          // Convert set back to array
+          return cleanArr || [];
         };
         return {
           rotation: res[2],
@@ -127,7 +128,7 @@ const utils = {
         return {
           command: cmd,
           rotation: res[2],
-          params: res[3]
+          message: res[3]
         };
       }
     }
