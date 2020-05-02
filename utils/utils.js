@@ -11,12 +11,18 @@ const utils = {
     // Accepts a space-separated list of usernames to staff a rotation
     // List of mentions has to start with <@U and end with > but can contain spaces, commas, multiple user mentions
     staff: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (staff) (<@U[<@>A-Za-z0-9|._,\s\-]+?>)$/g,
+    // @rota "[rotation]" reset staff
+    // Removes rotation staff list
+    'reset staff': /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (reset staff)$/g,
     // Test for a single user mention
     // <@U03LKJ> or <@U0345|name>
     usermention: /^<@U[A-Za-z0-9|._\-]+?>$/g,
-    // @rota "[rotation]" assign [@username]
+    // @rota "[rotation]" assign [@username] [optional handoff message]
     // Assigns a user to a rotation
     assign: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Za-z0-9|._\-]+?>)(.*)$/g,
+    // @rota "[rotation]" assign next [optional handoff message]
+    // Assigns a user to a rotation
+    'assign next': /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (assign next)(.*)$/g,
     // @rota "[rotation]" who
     // Responds stating who is on-call for a rotation
     who: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (who)$/g,
@@ -110,7 +116,7 @@ const utils = {
         };
       }
       // Rotation, command
-      else if (cmd === 'about' || cmd === 'clear' || cmd === 'delete' || cmd === 'who') {
+      else if (cmd === 'about' || cmd === 'clear' || cmd === 'delete' || cmd === 'who' || cmd === 'reset staff') {
         return {
           rotation: res[2],
           command: res[3]

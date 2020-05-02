@@ -18,6 +18,12 @@ const msgText = {
   staffError: (rotation) => {
     return ':shrug: I couldn\'t save staff for the "' + rotation + '" rotation because it does not exist. To create this rotation, first tell me `@rota "' + rotation + '" create [description]`, _then_ set up staffing.';
   },
+  resetStaffConfirm: (rotation) => {
+    return `:ghost: The staff list for the "${rotation}" rotation has been reset and is empty.`;
+  },
+  resetStaffError: (rotation) => {
+    return ':shrug: I couldn\'t reset the staff list for the "' + rotation + '" rotation because it does not exist. To create this rotation, first tell me `@rota "' + rotation + '" create [description]`. It will initialize with no staff by default.';
+  },
   deleteConfirm: (rotation) => {
     return `:put_litter_in_its_place: The "${rotation}" rotation has been deleted.`;
   },

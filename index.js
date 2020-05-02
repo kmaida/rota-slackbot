@@ -34,6 +34,7 @@ app.event('app_mention', async({ event, context }) => {
   // Decision logic establishing how to respond to mentions
   const isCreate = utils.isCmd('create', text);
   const isStaff = utils.isCmd('staff', text);
+  const isResetStaff = utils.isCmd('reset staff', text);
   const isAssign = utils.isCmd('assign', text);
   const isWho = utils.isCmd('who', text);
   const isAbout = utils.isCmd('about', text);
@@ -46,6 +47,7 @@ app.event('app_mention', async({ event, context }) => {
     testMessage &&
     !isCreate &&
     !isStaff && !text.includes('" staff <@')  // catch malformed staff commands and don't put them through as messages
+    !isResetStaff &&
     !isAssign &&
     !isWho &&
     !isAbout &&
@@ -54,6 +56,7 @@ app.event('app_mention', async({ event, context }) => {
   const didntUnderstand =
     !isCreate &&
     !isStaff &&
+    !isResetStaff &&
     !isAssign &&
     !isWho &&
     !isAbout &&
@@ -105,7 +108,7 @@ app.event('app_mention', async({ event, context }) => {
     Staffs a rotation by passing a space-separated list of users
     Also catches comma-separated lists
   --*/
-  if (isStaff) {
+  else if (isStaff) {
     try {
       const pCmd = utils.parseCmd('staff', event, context);
       const rotation = pCmd.rotation;
@@ -136,6 +139,42 @@ app.event('app_mention', async({ event, context }) => {
           token: botToken,
           channel: channelID,
           text: msgText.staffError(rotation)
+        });
+      }
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
+    }
+  }
+
+  /*--
+    RESET STAFF
+    @rota "[rotation]" reset staff
+    Removes rotation staff
+  --*/
+  else if (isResetStaff) {
+    try {
+      const pCmd = utils.parseCmd('reset staff', event, context);
+      const rotation = pCmd.rotation;
+
+      if (rotation in store.getStoreList()) {
+        // If rotation exists, set staff to an empty array
+        store.saveStaff(rotation, []);
+        // Send message to confirm staff has been reset
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.resetStaffConfirm(rotation)
+        });
+      } else {
+        // If rotation doesn't exist, send message saying nothing changed
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.resetStaffError(rotation)
         });
       }
     }

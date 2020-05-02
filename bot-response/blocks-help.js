@@ -17,7 +17,7 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ':speech_balloon: *If you need help with a specific rotation, post a message to any channel I\'ve been added to and mention `@rota "[rotation-name]" [your message]`*. The person on duty for the rotation will be notified!'
+      "text": ':speech_balloon: *If you need help with a rotation, post a message to any channel I\'ve been added to and mention `@rota "[rotation-name]" [your message]`*. The person on duty for the rotation will be notified!'
     }
   },
   {
@@ -48,7 +48,21 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
+      "text": ':busts_in_silhouette: `@rota "[rotation-name]" staff [@user1 @user2 @user3]` saves a staff list for a rotation. It expects a space-separated list of user mentions in the order you want the assignments to rotate. Assignment still needs to be triggered when appropriate, but you can use `@rota "[rotation-name]" assign next` to do so. Duplicates will be removed, so if you need someone to pull double duty, you\'ll have to do that assignment by username.'
+    }
+  },
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
       "text": ':information_desk_person: `@rota "[rotation-name]" assign [@user] [optional handoff message]` assigns someone to a rotation. Optionally, I can also deliver any handoff information they should know when starting their rotation.'
+    }
+  },
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": ':arrows_counterclockwise: `@rota "[rotation-name]" assign next [optional handoff message]` assigns the _next person in the staff list_ to a rotation. If there is nobody currently assigned or the current user is not in the staff list, I\'ll start at the beginning of the list. Optionally, I can also deliver any handoff information they should know when starting their rotation.'
     }
   },
   {
