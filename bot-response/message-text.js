@@ -10,10 +10,10 @@ const msgText = {
     return 'The *' + rotation + '* rotation already exists. You can assign someone to be on-call with `@rota "' + rotation + '" assign [@user]`.';
   },
   staffConfirm: (rotation) => {
-    return ':busts_in_silhouette: The *' + rotation + '* rotation staff has been saved! You can now use `@rota "' + rotation + '" assign next` to rotate assignments.\nWhen using `next`, if the currently on-call person is not in the staff list, the assignment will default to the _first person_ in the rotation.\n(Note: I remove duplicates. If you want someone to pull double duty, you\'ll need to do a username assignment.)';
+    return ':busts_in_silhouette: The *' + rotation + '* rotation staff list has been saved! You can now use `@rota "' + rotation + '" assign next` to rotate assignments.\nWhen using `next`, if the currently on-call person is not in the staff list, the assignment will default to the _first person_ in the rotation.\n_(Note: I remove duplicates. If you want someone to pull double duty, you\'ll need to do a username assignment.)_';
   },
   staffEmpty: (rotation) => {
-    return `:disappointed: I didn't understand that staff list. I think it's empty. To save staff, please make sure you pass me a space-separated list of valid usernames. (I can also understand a comma+space separated list, but that's just more typing for you!)`;
+    return `:disappointed: I didn't understand that staff list. I think it's empty. To save staff, please make sure you pass me a space-separated list of valid usernames.\n_(Note: I can also understand a comma+space separated list, but that's just more typing for you!)_`;
   },
   staffError: (rotation) => {
     return ':shrug: I couldn\'t save staff for a "' + rotation + '" rotation because it does not exist. To create this rotation, first tell me `@rota "' + rotation + '" create [description]`, _then_ set up staffing.';

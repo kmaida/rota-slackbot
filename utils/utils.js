@@ -151,11 +151,11 @@ const utils = {
     return null;
   },
   /*----
-    Configuration for catch error
+    Config object for Slack messages
     @Params: botToken, channelID, text
     @Returns: object
   ----*/
-  errorMsgObj(botToken, channelID, text) {
+  msgConfig(botToken, channelID, text) {
     return {
       token: botToken,
       channel: channelID,
