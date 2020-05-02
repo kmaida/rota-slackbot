@@ -33,6 +33,7 @@ app.event('app_mention', async({ event, context }) => {
   const botToken = context.botToken;
   // Decision logic establishing how to respond to mentions
   const isCreate = utils.isCmd('create', text);
+  const isStaff = utils.isCmd('staff', text);
   const isAssign = utils.isCmd('assign', text);
   const isWho = utils.isCmd('who', text);
   const isAbout = utils.isCmd('about', text);
@@ -41,16 +42,18 @@ app.event('app_mention', async({ event, context }) => {
   const isHelp = utils.isCmd('help', text);
   const isList = utils.isCmd('list', text);
   const testMessage = utils.isCmd('message', text);
-  const isMessage = 
-    testMessage && 
-    !isCreate && 
-    !isAssign && 
-    !isWho && 
-    !isAbout && 
-    !isClear && 
+  const isMessage =
+    testMessage &&
+    !isCreate &&
+    !isStaff &&
+    !isAssign &&
+    !isWho &&
+    !isAbout &&
+    !isClear &&
     !isDelete;
   const didntUnderstand =
     !isCreate &&
+    !isStaff &&
     !isAssign &&
     !isWho &&
     !isAbout &&

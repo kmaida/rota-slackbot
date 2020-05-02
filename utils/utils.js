@@ -7,6 +7,13 @@ const utils = {
     // @rota "[new-rotation-name]" create [description]
     // Create a new rotation
     create: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (create) (.*)$/g,
+    // @rota "[rotation]" staff [@username, @username, @username]
+    // Accepts a space-separated list of usernames to staff a rotation
+    // (List of mentions has to start with <@U and end with > but can contain spaces and multiple user mentions)
+    staff: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (staff) (<@U[<@>A-Za-z0-9|._\s\-]+?>)$/g,
+    // Test for a single user mention
+    // <@U03LKJ> or <@U0345|name>
+    usermention: /^<@(U[A-Za-z0-9|._\-]+?)>$/g,
     // @rota "[rotation]" assign [@username]
     // Assigns a user to a rotation
     assign: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Za-z0-9|._\-]+?>)(.*)$/g,
@@ -68,7 +75,7 @@ const utils = {
     // Regex returned expected match appropriate for the command
     // Command begins with rota bot mention
     if (res && res[1].includes(ct.botUserId)) {
-      // Command, rotation, userID, freeform text
+      // Rotation, command, usermention, freeform text
       if (cmd === 'assign') {
         return {
           rotation: res[2],
@@ -77,7 +84,23 @@ const utils = {
           handoff: res[5].trim()
         }
       }
-      // Command, rotation, parameters
+      // Rotation, command, list of space-separated usermentions
+      else if (cmd === 'staff') {
+        const getStaffArray = (staffStr) => {
+          const arr = staffStr.trim().split(' ');
+          const testValue = (str) => {
+            const regex = new RegExp(this.regex.usermention);
+            return regex.test(str);
+          };
+          return arr.every(testValue) ? arr : [];
+        };
+        return {
+          rotation: res[2],
+          command: res[3],
+          staff: getStaffArray(res[4])
+        }
+      }
+      // Rotation, command, parameters
       else if (cmd === 'create') {
         return {
           rotation: res[2],
@@ -85,7 +108,7 @@ const utils = {
           params: res[4]
         };
       }
-      // Command, rotation
+      // Rotation, command
       else if (cmd === 'about' || cmd === 'clear' || cmd === 'delete' || cmd === 'who') {
         return {
           rotation: res[2],
