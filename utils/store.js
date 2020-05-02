@@ -37,6 +37,15 @@ const store = {
     fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
   },
   /*----
+    Save rotation staff to rotation store
+    @Params: rotation name, staff array
+  ----*/
+  saveStaff(rotation, staffArr) {
+    const list = this.getStoreList();
+    list[rotation].staff = staffArr;
+    fs.writeFileSync(storeFilepath, JSON.stringify(list, null, 2));
+  },
+  /*----
     Save user assignment to rotation store
     @Params: rotation name, usermention to assign
   ----*/

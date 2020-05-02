@@ -100,6 +100,42 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   /*--
+    STAFF
+    @rota "[rotation-name]" staff [@user @user @user]
+    Staffs a rotation by passing a space-separated list of users
+  --*/
+  if (isStaff) {
+    try {
+      const pCmd = utils.parseCmd('staff', event, context);
+      const rotation = pCmd.rotation;
+      const staff = pCmd.staff;
+
+      if (rotation in store.getStoreList()) {
+        // If rotation exists, set staff list
+        store.saveStaff(rotation, staff);
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.staffConfirm(rotation)
+        });
+      } else {
+        // Rotation doesn't exist; prompt to create it first
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.staffError(rotation)
+        });
+      }
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
+    }
+  }
+
+  /*--
     DELETE
     @rota "[rotation]" delete
     Deletes an existing rotation

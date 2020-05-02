@@ -9,6 +9,12 @@ const msgText = {
   createError: (rotation) => {
     return 'The "' + rotation + '" rotation already exists. You can assign someone to be on-call with `@rota "' + rotation + '" assign [@user]`.';
   },
+  staffConfirm: (rotation) => {
+    return ':busts_in_silhouette: The "' + rotation + '" rotation staff has been saved! You can now use `@rota "' + rotation + '" assign next` to rotate assignments. If the currently on-call person is not in the staff list, the assignment will default to the _first person_ in the rotation staff list.';
+  },
+  staffError: (rotation) => {
+    return ':shrug: I couldn\'t save staff for the "' + rotation + '" rotation because it does not exist. To create this rotation, first tell me `@rota "' + rotation + '" create [description]`, _then_ set up staffing.';
+  },
   deleteConfirm: (rotation) => {
     return `:put_litter_in_its_place: The "${rotation}" rotation has been deleted.`;
   },
