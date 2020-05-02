@@ -4,7 +4,7 @@
 
 const msgText = {
   createConfirm: (rotation) => {
-    return ':sparkles: The "' + rotation + '" rotation has been created. You can now assign someone to be on-call for this rotation: `@rota "' + rotation + '" assign [@user] [optional handoff message]`.';
+    return ':sparkles: The "' + rotation + '" rotation has been created. You can now assign someone to be on-call for this rotation or add a staff list. Use `@rota help` to learn more.';
   },
   createError: (rotation) => {
     return 'The "' + rotation + '" rotation already exists. You can assign someone to be on-call with `@rota "' + rotation + '" assign [@user]`.';

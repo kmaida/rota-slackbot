@@ -4,7 +4,7 @@
 
 ## Usage
 
-* `@rota "[new-rotation-name]" create [desciption]` creates a new rotation; rotation names can contain _only_ lowercase letters, numbers, and hyphens
+* `@rota "[new-rotation-name]" create [description]` creates a new rotation; rotation names can contain _only_ lowercase letters, numbers, and hyphens
 * `@rota "[rotation]" staff [@user1 @user2 @user3]` adds staff to a rotation; a space-separated list of usernames is expected as a parameter with usernames in the order of desired rotation (rotations with a staff list can be assigned using `assign next`)
 * `@rota "[rotation]" reset staff` clears a rotation's staff list
 * `@rota "[rotation]" assign [@user] [optional handoff message]` assigns someone to the rotation and, optionally, sends a DM to them with handoff information
@@ -25,7 +25,7 @@ You can manage rotations in whatever way makes the most sense for your needs. Yo
 
 _(In a #channel)_
 ```
-/remind [#channel] @rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign [@user] [handoff message]` every Monday at 9am.
+/remind [#channel] @rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign next [handoff message]` every Monday at 9am.
 ```
 
 **Note:** You can't directly remind "`@rota`" to do something. I.e., `/remind @rota "[rotation]" some message` will _not_ work because it will try to send a direct message to the _bot user_, not any specific rotation's _assigned human user_. When using `/remind`, you need to send the reminder _in a channel_.
