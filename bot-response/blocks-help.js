@@ -55,7 +55,7 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ':ghost: `@rota "[rotation-name]" reset staff` *removes all users* from a rotation staff list.'
+      "text": ':ghost: `@rota "[rotation-name]" reset staff` *removes all users* from a rotation staff list. _Use with caution!_'
     }
   },
   {
@@ -69,7 +69,7 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ':arrows_counterclockwise: `@rota "[rotation-name]" assign next [optional handoff message]` *assigns the _next person in the staff list* to a rotation. If there is nobody currently assigned or the current user is not in the staff list, I\'ll start at the beginning of the list. Optionally, I can also deliver handoff information when starting a rotation.'
+      "text": ':arrows_counterclockwise: `@rota "[rotation-name]" assign next [optional handoff message]` *assigns the next person in the staff list* to a rotation. If there is nobody currently assigned or the current user is not in the staff list, I\'ll start at the beginning of the list. Optionally, I can also deliver handoff information when starting a rotation.'
     }
   },
   {
