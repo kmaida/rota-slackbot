@@ -5,12 +5,15 @@
 ## Usage
 
 * `@rota "[new-rotation-name]" create [desciption]` creates a new rotation; rotation names can contain _only_ lowercase letters, numbers, and hyphens
+* `@rota "[rotation]" staff [@user1 @user2 @user3]` adds staff to a rotation; a space-separated list of usernames is expected as a parameter with usernames in the order of desired rotation (rotations with a staff list can be assigned using `assign next`)
+* `@rota "[rotation]" reset staff` clears a rotation's staff list
 * `@rota "[rotation]" assign [@user] [optional handoff message]` assigns someone to the rotation and, optionally, sends a DM to them with handoff information
+* `@rota "[rotation]" assign next [optional handoff message]` assigns the next person in the staff list to a rotation and, optionally, sends a DM to them with handoff information
+* `@rota "[rotation]" unassign` removes the current user assignment for a rotation
 * `@rota "[rotation]" who` reports the name of a rotation's assigned user
 * `@rota "[rotation]" about` displays the rotation's description and on-call user
-* `@rota "[rotation]" clear` removes the current user assignment for a rotation
 * `@rota "[rotation]" delete` deletes the rotation completely
-* `@rota "[rotation]" [some other message]` sends a direct message to the on-call user for the rotation, notifying them that your message needs attention
+* `@rota "[rotation]" [message]` sends a direct message to the on-call user for the rotation, notifying them that your message needs attention
 * `@rota list` displays a list of all currently known rotations
 * `@rota help` shows how to use the bot
 
