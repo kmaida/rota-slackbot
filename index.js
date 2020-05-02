@@ -117,7 +117,7 @@ app.event('app_mention', async({ event, context }) => {
         if (!staff.length) {
           // If staff array is empty, send an error message
           const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.staffEmpty(rotation))
+            utils.msgConfig(botToken, channelID, msgText.staffEmpty())
           );
         } else {
           // Rotation exists and list isn't empty
