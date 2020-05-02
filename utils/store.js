@@ -64,6 +64,15 @@ const store = {
     return list[rotation].assigned;
   },
   /*----
+    Get staff list for a rotation
+    @Params: rotation
+    @Returns: staff list array (or undefined)
+  ----*/
+  getStaffList(rotation) {
+    const list = this.getStoreList();
+    return list[rotation].staff;
+  },
+  /*----
     Clears assigned user for a rotation (rotation value)
     @Params: rotation
   ----*/

@@ -90,6 +90,14 @@ const utils = {
           handoff: res[5].trim()
         }
       }
+      // Rotation, command, freeform text
+      else if (cmd === 'assign next') {
+        return {
+          rotation: res[2],
+          command: res[3],
+          handoff: res[4].trim()
+        }
+      }
       // Rotation, command, list of space-separated usermentions
       // Proofed to accommodate use of comma+space separation and minor whitespace typos
       else if (cmd === 'staff') {

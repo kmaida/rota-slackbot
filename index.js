@@ -36,6 +36,7 @@ app.event('app_mention', async({ event, context }) => {
   const isStaff = utils.isCmd('staff', text);
   const isResetStaff = utils.isCmd('reset staff', text);
   const isAssign = utils.isCmd('assign', text);
+  const isAssignNext = utils.isCmd('assign next', text);
   const isWho = utils.isCmd('who', text);
   const isAbout = utils.isCmd('about', text);
   const isClear = utils.isCmd('clear', text);
@@ -49,6 +50,7 @@ app.event('app_mention', async({ event, context }) => {
     !isStaff && !text.includes('" staff <@')  // catch malformed staff commands and don't put them through as messages
     !isResetStaff &&
     !isAssign &&
+    !isAssignNext &&
     !isWho &&
     !isAbout &&
     !isClear &&
@@ -58,6 +60,7 @@ app.event('app_mention', async({ event, context }) => {
     !isStaff &&
     !isResetStaff &&
     !isAssign &&
+    !isAssignNext &&
     !isWho &&
     !isAbout &&
     !isClear &&
@@ -291,6 +294,73 @@ app.event('app_mention', async({ event, context }) => {
             channel: channelID,
             user: sentByUserID,
             text: msgText.assignHandoffConfirm(usermention, rotation)
+          });
+        }
+      } else {
+        // If rotation doesn't exist, send message saying so
+        const result = await app.client.chat.postMessage({
+          token: botToken,
+          channel: channelID,
+          text: msgText.assignError(rotation)
+        });
+      }
+    }
+    catch (err) {
+      console.error(err);
+      const errResult = await app.client.chat.postMessage(
+        utils.errorMsgObj(botToken, channelID, msgText.error(err))
+      );
+    }
+  }
+
+  /*--
+    ASSIGN NEXT
+    @rota "[rotation]" assign next [handoff message]
+    Assigns next user in staff list to rotation
+  --*/
+  else if (isAssignNext) {
+    try {
+      const pCmd = utils.parseCmd('assign next', event, context);
+      const rotation = pCmd.rotation;
+      const handoffMsg = pCmd.handoff;
+
+      if (rotation in store.getStoreList()) {
+        // Rotation exists
+        const staffList = store.getStaffList(rotation);
+        if (staffList && staffList.length) {
+          // Staff list exists and is not an empty array
+          const lastAssigned = store.getAssignment(rotation);
+          const lastAssignedIndex = staffList.indexOf(lastAssigned);
+          const lastIndex = staffList.length - 1; // last available position in staff list
+          const firstUser = staffList[0];
+          let usermention;
+          if (lastAssigned) {
+            // There's a user currently assigned
+            if (lastAssignedIndex > -1 && lastAssignedIndex < lastIndex) {
+              // The last assigned user is in the staff list and are NOT last in the list
+              // Set assignment to next user in staff list
+              usermention = staffList[lastAssignedIndex + 1];
+            } else {
+              // Either last user isn't in staff list or we're at the end of the list
+              // Assign first
+              usermention = firstUser;
+            }
+          } else {
+            // No previous assignment; start at beginning of staff list
+            usermention = firstUser;
+          }
+          store.saveAssignment(rotation, usermention);
+          const result = await app.client.chat.postMessage({
+            token: botToken,
+            channel: channelID,
+            text: msgText.assignConfirm(usermention, rotation)
+          });
+        } else {
+          // No staff list; cannot use "next"
+          const result = await app.client.chat.postMessage({
+            token: botToken,
+            channel: channelID,
+            text: msgText.assignNextError(rotation)
           });
         }
       } else {

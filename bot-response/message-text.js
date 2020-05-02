@@ -46,6 +46,9 @@ const msgText = {
   assignHandoffConfirm: (usermention, rotation) => {
     return `Your handoff message for the "${rotation}" rotation has been sent to ${usermention} via DM.`;
   },
+  assignNextError: (rotation) => {
+    return ':shrug: I couldn\'t assign the next person in the "' + rotation + '" rotation because there is nobody in the rotation staff list.\nTo set staff, use `@rota "' + rotation + '" staff [@user1 @user2 @user3]`.\nThen you can use `@rota "' + rotation + '" assign next [optional handoff message]` to rotate to the next user on staff.\nIf you don\'t want to use a staff list, assign someone directly by username: `@rota "' + rotation +'" assign [@user] [optional handoff message]`.';
+  },
   assignError: (rotation) => {
     return ':shrug: I couldn\'t complete this assignment because the "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`.';
   },
