@@ -39,7 +39,7 @@ app.event('app_mention', async({ event, context }) => {
   const isAssignNext = utils.isCmd('assign next', text);
   const isWho = utils.isCmd('who', text);
   const isAbout = utils.isCmd('about', text);
-  const isClear = utils.isCmd('clear', text);
+  const isUnassign = utils.isCmd('unassign', text);
   const isDelete = utils.isCmd('delete', text);
   const isHelp = utils.isCmd('help', text);
   const isList = utils.isCmd('list', text);
@@ -53,7 +53,7 @@ app.event('app_mention', async({ event, context }) => {
     !isAssignNext &&
     !isWho &&
     !isAbout &&
-    !isClear &&
+    !isUnassign &&
     !isDelete;
   const didntUnderstand =
     !isCreate &&
@@ -63,7 +63,7 @@ app.event('app_mention', async({ event, context }) => {
     !isAssignNext &&
     !isWho &&
     !isAbout &&
-    !isClear &&
+    !isUnassign &&
     !isDelete &&
     !isHelp &&
     !isList &&
@@ -342,19 +342,36 @@ app.event('app_mention', async({ event, context }) => {
               usermention = staffList[lastAssignedIndex + 1];
             } else {
               // Either last user isn't in staff list or we're at the end of the list
-              // Assign first
               usermention = firstUser;
             }
           } else {
             // No previous assignment; start at beginning of staff list
             usermention = firstUser;
           }
+          // Save assignment
           store.saveAssignment(rotation, usermention);
+          // Send message to the channel about updated assignment
           const result = await app.client.chat.postMessage({
             token: botToken,
             channel: channelID,
             text: msgText.assignConfirm(usermention, rotation)
           });
+          if (!!handoffMsg) {
+            // Send DM to newly assigned user notifying them of the handoff message
+            const oncallUserDMChannel = usermention.replace('<@', '').replace('>', '');
+            const sendDM = await app.client.chat.postMessage({
+              token: botToken,
+              channel: oncallUserDMChannel,
+              text: msgText.assignDMHandoff(rotation, handoffMsg)
+            });
+            // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
+            const result = await app.client.chat.postEphemeral({
+              token: botToken,
+              channel: channelID,
+              user: sentByUserID,
+              text: msgText.assignHandoffConfirm(usermention, rotation)
+            });
+          }
         } else {
           // No staff list; cannot use "next"
           const result = await app.client.chat.postMessage({
@@ -426,13 +443,13 @@ app.event('app_mention', async({ event, context }) => {
   }
 
   /*--
-    CLEAR
-    @rota "[rotation]" clear
+    UNASSIGN
+    @rota "[rotation]" unassign
     Clears the assignment for specified rotation
   --*/
-  else if (isClear) {
+  else if (isUnassign) {
     try {
-      const pCmd = utils.parseCmd('clear', event, context);
+      const pCmd = utils.parseCmd('unassign', event, context);
       const rotation = pCmd.rotation;
 
       if (rotation in store.getStoreList()) {
@@ -444,14 +461,14 @@ app.event('app_mention', async({ event, context }) => {
           const result = await app.client.chat.postMessage({
             token: botToken,
             channel: channelID,
-            text: msgText.clearConfirm(rotation)
+            text: msgText.unassignConfirm(rotation)
           });
         } else {
           // If nobody is assigned
           const result = await app.client.chat.postMessage({
             token: botToken,
             channel: channelID,
-            text: msgText.clearNoAssignment(rotation)
+            text: msgText.unassignNoAssignment(rotation)
           });
         }
       } else {
@@ -459,7 +476,7 @@ app.event('app_mention', async({ event, context }) => {
         const result = await app.client.chat.postMessage({
           token: botToken,
           channel: channelID,
-          text: msgText.clearError(rotation)
+          text: msgText.unassignError(rotation)
         });
       }
     }

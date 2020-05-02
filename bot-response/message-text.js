@@ -10,7 +10,7 @@ const msgText = {
     return 'The "' + rotation + '" rotation already exists. You can assign someone to be on-call with `@rota "' + rotation + '" assign [@user]`.';
   },
   staffConfirm: (rotation) => {
-    return ':busts_in_silhouette: The "' + rotation + '" rotation staff has been saved! You can now use `@rota "' + rotation + '" assign next` to rotate assignments.\nWhen using `next`, if the currently on-call person is not in the staff list, the assignment will default to the _first person_ in the rotation.\n_Note: I remove duplicates. If you want someone to pull double duty, you\'ll need to do a manual assignment._';
+    return ':busts_in_silhouette: The "' + rotation + '" rotation staff has been saved! You can now use `@rota "' + rotation + '" assign next` to rotate assignments.\nWhen using `next`, if the currently on-call person is not in the staff list, the assignment will default to the _first person_ in the rotation.\n_Note: I remove duplicates. If you want someone to pull double duty, you\'ll need to do a username assignment._';
   },
   staffEmpty: (rotation) => {
     return `:disappointed: I didn't understand that staff list. I think it's empty. To save staff, please make sure you pass me a space-separated list of valid usernames. (I can also understand a comma+space separated list, but that's just more typing for you!)`;
@@ -74,13 +74,13 @@ const msgText = {
   whoError: (rotation) => {
     return ':shrug: I couldn\'t find any on-call user because the "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`. You can then assign someone using `@rota "' + rotation + '" assign [@user] [optional handoff message]`.';
   },
-  clearConfirm: (rotation) => {
+  unassignConfirm: (rotation) => {
     return `The "${rotation}" rotation has been unassigned. Nobody is on duty.`;
   },
-  clearNoAssignment: (rotation) => {
+  unassignNoAssignment: (rotation) => {
     return `There is currently nobody assigned to the "${rotation}" rotation. Nothing changed.`;
   },
-  clearError: (rotation) => {
+  unassignError: (rotation) => {
     return ':shrug: I couldn\'t clear this assignment because the "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`.';
   },
   confirmChannelMsg: (rotation, sentByUserID) => {
