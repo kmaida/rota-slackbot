@@ -161,6 +161,19 @@ const utils = {
       channel: channelID,
       text: text
     }
+  },
+  /*----
+    Config object for ephemeral Slack messages
+    @Params: botToken, channelID, user, text
+    @Returns: object
+  ----*/
+  ephMsgConfig(botToken, channelID, user, text) {
+    return {
+      token: botToken,
+      channel: channelID,
+      user: user,
+      text: text
+    }
   }
 };
 

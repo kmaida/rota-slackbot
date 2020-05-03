@@ -1,11 +1,7 @@
 require('dotenv').config();
-// Bolt package (github.com/slackapi/bolt)
 const { App } = require('@slack/bolt');
-// Utility functions
 const utils = require('./utils/utils');
-// Reading / writing to filesystem store
 const store = require('./utils/store');
-// Bot responses
 const helpBlocks = require('./bot-response/blocks-help');
 const msgText = require('./bot-response/message-text');
 
@@ -15,7 +11,6 @@ const app = new App({
   signingSecret: process.env.SLACK_SIGNING_SECRET
 });
 const port = process.env.PORT || 3000;
-
 // Check if store exists; if not, create it
 store.initStore();
 
@@ -263,12 +258,9 @@ app.event('app_mention', async({ event, context }) => {
             utils.msgConfig(botToken, channelID, msgText.assignDMHandoff(rotation, handoffMsg))
           );
           // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
-          const result = await app.client.chat.postEphemeral({
-            token: botToken,
-            channel: channelID,
-            user: sentByUserID,
-            text: msgText.assignHandoffConfirm(usermention, rotation)
-          });
+          const result = await app.client.chat.postEphemeral(
+            utils.ephMsgConfig(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
+          );
         }
       } else {
         // If rotation doesn't exist, send message saying so
@@ -333,12 +325,9 @@ app.event('app_mention', async({ event, context }) => {
               utils.msgConfig(botToken, oncallUserDMChannel, msgText.assignDMHandoff(rotation, handoffMsg))
             );
             // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
-            const result = await app.client.chat.postEphemeral({
-              token: botToken,
-              channel: channelID,
-              user: sentByUserID,
-              text: msgText.assignHandoffConfirm(usermention, rotation)
-            });
+            const result = await app.client.chat.postEphemeral(
+              utils.ephMsgConfig(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
+            );
           }
         } else {
           // No staff list; cannot use "next"
@@ -517,12 +506,9 @@ app.event('app_mention', async({ event, context }) => {
           if (sentByUserID !== 'USLACKBOT') {
             // Send ephemeral message (only visible to sender) telling them what to do if urgent
             // Do nothing if coming from a slackbot
-            const sendEphemeralMsg = await app.client.chat.postEphemeral({
-              token: botToken,
-              channel: channelID,
-              user: sentByUserID,
-              text: msgText.confirmEphemeralMsg(rotation)
-            });
+            const sendEphemeralMsg = await app.client.chat.postEphemeral(
+              utils.ephMsgConfig(botToken, channelID, sentByUserID, msgText.confirmEphemeralMsg(rotation))
+            );
           }
         } else {
           // Rotation is not assigned; give instructions how to assign
