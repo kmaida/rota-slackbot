@@ -30,9 +30,21 @@ const msgText = {
   deleteError: (rotation) => {
     return `:shrug: There is no rotation called "${rotation}." Nothing changed.`;
   },
-  aboutReport: (rotation, description, assigned) => {
-    const assignment = assigned ? ' (`' + assigned + '`)' : '';
-    return `:information_source: *${rotation}*: ${description}${assignment}`;
+  aboutReport: (rotation, rotationObj) => {
+    const assignment = rotationObj.assigned ? ' (`' + rotationObj.assigned + '`)' : '';
+    return `:information_source: *${rotation}*: ${rotationObj.description}${assignment}`;
+  },
+  aboutStaffEph: (rotation, staff) => {
+    if (staff && staff.length) {
+      let str = '';
+      for (const user of staff) {
+        str = str + `• ${user}\n`;
+      }
+      if (str.length) {
+        return `:card_index: The following people are on staff for the *${rotation}* rotation. _To save their notifications, this is only visible to you._\n` + str;
+      }
+    }
+    return '_No staff list saved for this rotation._';
   },
   aboutError: (rotation) => {
     return ':shrug: I couldn\'t get any info about a "' + rotation + '" rotation because it does not exist. To create it, use `@rota "' + rotation + '" create [description]`.';

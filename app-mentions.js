@@ -204,7 +204,11 @@ const app_mentions = (app, store) => {
           // If rotation exists, display its information
           const rotationObj = store.getRotation(rotation);
           const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.aboutReport(rotation, rotationObj.description, rotationObj.assigned))
+            utils.msgConfig(botToken, channelID, msgText.aboutReport(rotation, rotationObj))
+          );
+          // Send ephemeral message with staff (to save notifications)
+          const ephStaffResult = await app.client.chat.postEphemeral(
+            utils.ephMsgConfig(botToken, channelID, sentByUserID, msgText.aboutStaffEph(rotation, rotationObj.staff))
           );
         } else {
           // If rotation doesn't exist, send message saying nothing changed

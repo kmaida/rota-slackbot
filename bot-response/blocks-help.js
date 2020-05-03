@@ -38,7 +38,7 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ':information_source: `@rota "[rotation-name]" about` *displays the description (and currently on-call user)* for a rotation.'
+      "text": ':information_source: `@rota "[rotation-name]" about` *publicly displays the description and currently on-call user* for a rotation. The *staff list* is also displayed, but only to the user who requested info (to avoid unnecessary user notifications).'
     }
   },
   {
