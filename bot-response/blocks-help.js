@@ -24,7 +24,7 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": "*Here's how I work:*"
+      "text": "*How I Work:*"
     }
   },
   {
@@ -108,7 +108,7 @@ const helpBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ":question: `@rota help` shows this *help* message."
+      "text": ":question: `@rota help` shows how to interact with me."
     }
   }
 ];

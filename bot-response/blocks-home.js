@@ -38,14 +38,14 @@ const homeBlocks = (userID) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `*Hi, <@${userID}>!* Important and timely information first:`
+        "text": `*Hi <@${userID}>!* Here are the things you're responsible for:`
       }
     },
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `:bellhop_bell: *Rotations you are currently on call for*:`
+        "text": `:bellhop_bell: *Active On-Call Rotations:*`
       }
     },
     {
@@ -68,7 +68,7 @@ const homeBlocks = (userID) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `:card_index: *Rotations you are on staff for:*`
+        "text": `:card_index: *On Rotation Staff:*`
       }
     },
     {
@@ -76,7 +76,7 @@ const homeBlocks = (userID) => {
       "elements": [
         {
           "type": "mrkdwn",
-          "text": "Being on staff means even if you're not _currently_ on duty, you will be assigned to these rotations at regular intervals."
+          "text": "Being on staff means even if you're not on duty _right now_, you will be assigned to these rotations at regular intervals."
         }
       ]
     },
@@ -100,6 +100,13 @@ const homeBlocks = (userID) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
+        "text": "*Helpful Tips:*"
+      }
+    },
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
         "text": "I do _not_ control things like reminders, automated rotation scheduling, or delayed delivery of messages. However, because I'm a _bot_ and not a slash command, I play well with others! Here are some ways you can use the `@rota` bot with other Slack features and third party apps."
       }
     },
@@ -114,7 +121,7 @@ const homeBlocks = (userID) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "You can manage rotation assignments however you want. For example, you can set a recurring reminder with Slack's `/remind` slash command to prompt a rotation's on-call user to assign the next person on staff at a regular interval. Like so:"
+        "text": "You can manage rotation assignments however you want. For example, you can set a recurring reminder with Slack's `/remind` to prompt a rotation's on-call user to assign the next person on staff at a regular interval. Like so:"
       }
     },
     {
@@ -170,7 +177,7 @@ const homeBlocks = (userID) => {
       "elements": [
         {
           "type": "mrkdwn",
-          "text": ":hammer_and_wrench: This app was built by <https://twitter.com/KimMaida|*@KimMaida*>. The source code can be found on GitHub at <https://github.com/kmaida/rota-slackbot|*rota-slackbot*>."
+          "text": ":hammer_and_wrench: This app was built by <https://twitter.com/KimMaida|@KimMaida>. The source code can be found on GitHub at <https://github.com/kmaida/rota-slackbot|rota-slackbot>."
         }
       ]
     }
