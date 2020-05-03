@@ -101,7 +101,7 @@ const homeBlocks = (userID) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "I do _not_ control things like reminders, automated rotation scheduling, or delayed delivery of messages. However, because I'm a _bot_ and not a slash command, I play well with others! Here are some ways you can use the `@rota` bot with other Slack features and third party apps."
+        "text": "I do _not_ control things like reminders, automated rotation scheduling, or delayed delivery of messages. However, because I'm a _bot_ and not a slash command, I play well with others! Here are some ways you can use the <@rota> bot with other Slack features and third party apps."
       }
     },
     {
