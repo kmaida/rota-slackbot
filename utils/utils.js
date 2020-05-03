@@ -28,6 +28,7 @@ const utils = {
     who: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (who)$/g,
     // @rota "[rotation]" about
     // Responds with description and mention of on-call for a rotation
+    // Sends ephemeral staff list (to save everyone's notifications)
     about: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (about)$/g,
     // @rota "[rotation]" unassign
     // Unassigns rotation
