@@ -1,6 +1,6 @@
-# Rota Slack App
+# rota-slackbot
 
-`rota` is a Slackbot I wrote for internal team use at [Gatsby](https://gatsbyjs.com) to manage team rotations. This app was built with the [Bolt JavaScript Slack app framework](https://github.com/slackapi/bolt).
+`rota` is a Slack app / bot I wrote for internal team use at [Gatsby](https://gatsbyjs.com) to manage team rotations. This app was built with the [Bolt JavaScript Slack app framework](https://github.com/slackapi/bolt).
 
 ## Commands
 
@@ -19,7 +19,7 @@
 
 ## Tips
 
-Rota does _not_ handle message scheduling messages or _automated_ rotation assignments. But don't worry — since `@rota` is a bot and not slash commands, it plays well with others! Here are some ways you can use the `@rota` bot in conjunction with other Slack features / third party apps.
+Rota does **not** handle _message scheduling_ or _automate_ rotation assignments. But don't worry — since `@rota` is a bot and not slash commands, it plays well with others! Here are some ways you can use the `@rota` bot in conjunction with other Slack features / third party apps.
 
 ### Rotation Reminders
 
