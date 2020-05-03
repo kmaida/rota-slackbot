@@ -11,9 +11,6 @@ const helpBlocks = [
     }
   },
   {
-    "type": "divider"
-  },
-  {
     "type": "section",
     "text": {
       "type": "mrkdwn",
