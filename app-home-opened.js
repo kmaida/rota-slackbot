@@ -5,14 +5,11 @@ const homeBlocks = require('./bot-response/blocks-home');
 ------------------*/
 const app_home_opened = (app) => {
   app.event('app_home_opened', async({ event, context }) => {
-    console.log('Event:', event, 'Context:', context);
-
     const userID = event.user;
-    const botToken = context.botToken;
 
     try {
-      const result = await app.client.views.publish({
-        token: botToken,
+      const showHomeView = await app.client.views.publish({
+        token: context.botToken,
         user_id: userID,
         view: {
           "type": "home",

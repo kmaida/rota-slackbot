@@ -1,45 +1,47 @@
-# Rota
+# Rota Slack App
 
 `rota` is a Slackbot I wrote for internal team use at [Gatsby](https://gatsbyjs.com) to manage team rotations. This app was built with the [Bolt JavaScript Slack app framework](https://github.com/slackapi/bolt).
 
-## Usage
+## Commands
 
 * `@rota "[new-rotation-name]" create [description]` creates a new rotation; rotation names can contain _only_ lowercase letters, numbers, and hyphens
 * `@rota "[rotation]" staff [@user1 @user2 @user3]` adds staff to a rotation; a space-separated list of usernames is expected as a parameter with usernames in the order of desired rotation (rotations with a staff list can be assigned using `assign next`)
-* `@rota "[rotation]" reset staff` clears a rotation's staff list
+* `@rota "[rotation]" reset staff` clears a rotation's staff list (use with caution!)
 * `@rota "[rotation]" assign [@user] [optional handoff message]` assigns someone to the rotation and, optionally, sends a DM to them with handoff information
 * `@rota "[rotation]" assign next [optional handoff message]` assigns the next person in the staff list to a rotation and, optionally, sends a DM to them with handoff information
 * `@rota "[rotation]" unassign` removes the current user assignment for a rotation
 * `@rota "[rotation]" who` reports the name of a rotation's assigned user
-* `@rota "[rotation]" about` displays the rotation's description and on-call user
-* `@rota "[rotation]" delete` deletes the rotation completely
+* `@rota "[rotation]" about` displays the rotation's description and on-call user publicly, and displays the staff list only to the user who issued the commend (this is to prevent excessive notifications for everyone on staff)
+* `@rota "[rotation]" delete` deletes the rotation completely (use with caution!)
 * `@rota "[rotation]" [message]` sends a direct message to the on-call user for the rotation, notifying them that your message needs attention
 * `@rota list` displays a list of all currently known rotations
 * `@rota help` shows how to use the bot
 
-Here are some ways you can use the `@rota` bot in conjunction with other Slack features / third party apps.
+## Tips
+
+Rota does _not_ handle message scheduling messages or _automated_ rotation assignments. But don't worry — since `@rota` is a bot and not slash commands, it plays well with others! Here are some ways you can use the `@rota` bot in conjunction with other Slack features / third party apps.
 
 ### Rotation Reminders
 
-You can manage rotations in whatever way makes the most sense for your needs. You can set a recurring reminder with Slack's `/remind` slash command to remind a rotation's on-call user to assign the next person in the rotation at some regular interval. E.g.:
+You can set a recurring reminder with Slack's `/remind` slash command to remind a rotation's on-call user to assign the next person in the rotation at some regular interval. For example:
 
 _(In a #channel)_
 ```
 /remind [#channel] @rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign next` every Monday at 9am
 ```
 
-**Note:** You can't directly remind "`@rota`" to do something. I.e., `/remind @rota "[rotation]" some message` will _not_ work because it will try to send a direct message to the _bot user_, not any specific rotation's _assigned human user_. When using `/remind`, you need to send the reminder _in a channel_.
+**Note:** You can't directly remind "`@rota`" to do something. For instance, `/remind @rota "[rotation]" some message` will _not_ work because it will try to send a direct message to the _bot user_, not a rotation's _assigned human user_. When using `/remind`, you need to send the reminder _in a channel_. Reminders come from Slackbot, and Rota and Slackbot can't talk to each other.
 
 ### Scheduling Messages
 
-You can also schedule messages to be delivered later. This works with both the built-in `/remind` slash task (similar to above), and also with third party Slack apps like [Gator](https://www.gator.works/) and [/schedule](https://slackscheduler.com/). Just schedule the message _in a channel_ that the `@rota` bot has been added to. E.g.:
+You can schedule messages to be delivered later. This is particularly useful in case the on-call user is outside of hours. This works with both the built-in `/remind` slash task (similar to above), and also with third party Slack apps like [Gator](https://www.gator.works/) and [/schedule](https://slackscheduler.com/). Schedule the message _in a channel_ that the `@rota` bot has been added to. Like so:
 
 _(In a #channel)_
 ```
 /gator @rota "[rotation]" I need some help with task XYZ please
 ```
 
-**Note:** Keep in mind that if you use `/remind`, the message will come from `@Slackbot`, not from your username. If you need the person on rotation to know the message was from _you_, either include your username in the reminder when you set it up, or use a third-party app that delivers the message on your behalf from your username (e.g., Gator does this).
+**Note:** Keep in mind that if you use `/remind`, the message will come from `@Slackbot`, _not from your username_. If you need the person on rotation to know the message was from _you_, either include your username in the reminder when you set it up, or use a third-party app that delivers the message later from your account (e.g., Gator does this).
 
 ## Development
 
@@ -69,7 +71,7 @@ The Slack app should be deployed with the following:
 
 * Node server stays running
 * SSL
-* Public URL (you do _not_ need an elegant URL, since the URL is never displayed, it's only for Slack app configuration)
+* Public URL (you do _not_ need an elegant URL, since the URL is never displayed; it's only for Slack app configuration)
 
 If you're very comfortable with Linux devops, Let's Encrypt, and have a domain name, I recommend [DigitalOcean](https://www.digitalocean.com/pricing/). If you want fast, easy deployments with CI/CD features and don't want to deal with devops, domains, or configuring SSL, I recommend a hobby dyno on [Heroku](https://www.heroku.com/pricing) (a free plan on Heroku will not work well because the app will sleep after 30 minutes, and cause long delays responding when it wakes).
 
