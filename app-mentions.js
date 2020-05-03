@@ -460,7 +460,7 @@ const app_mentions = (app, store) => {
         const result = await app.client.chat.postMessage({
           token: botToken,
           channel: channelID,
-          blocks: helpBlocks
+          blocks: helpBlocks()
         });
       }
       catch (err) {

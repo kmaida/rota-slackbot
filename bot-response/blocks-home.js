@@ -1,4 +1,5 @@
-const helpArr = require('./blocks-help');
+const introArr = require('./blocks-intro');
+const commandsArr = require('./blocks-commands');
 const store = require('./../utils/store');
 
 /*------------------
@@ -38,14 +39,7 @@ const homeBlocks = (userID) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `*Hi <@${userID}>!* Here are the things you're responsible for:`
-      }
-    },
-    {
-      "type": "section",
-      "text": {
-        "type": "mrkdwn",
-        "text": `:bellhop_bell: *Active On-Call Rotations:*`
+        "text": `:bellhop_bell: *<@${userID}>'s Active On-Call Rotations:*`
       }
     },
     {
@@ -68,7 +62,7 @@ const homeBlocks = (userID) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `:card_index: *On Rotation Staff:*`
+        "text": `:card_index: *<@${userID}> Is On Rotation Staff:*`
       }
     },
     {
@@ -183,7 +177,7 @@ const homeBlocks = (userID) => {
     }
   ];
 
-  return homeArr.concat(helpArr).concat(tipsArr).concat(footerArr);
+  return introArr.concat(homeArr).concat(commandsArr).concat(tipsArr).concat(footerArr);
 };
 
 module.exports = homeBlocks;

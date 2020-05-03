@@ -111,7 +111,7 @@ const msgText = {
     return ':shrug: I couldn\'t tell anyone about the message because a "' + rotation + '" rotation does not exist. To create it, use `@rota "' + rotation + '" create [description]`.';
   },
   didntUnderstand: () => {
-    return ":thinking_face: I'm sorry, I didn't understand that. To see my full capabilities, try typing `@rota help`.";
+    return ":thinking_face: I'm sorry, I didn't understand that. To see my full capabilities and learn how to format commands, type `@rota help`.";
   },
   error: (err) => {
     return "An error occurred:\n```" + JSON.stringify(err) + "```";
