@@ -2,6 +2,7 @@ require('dotenv').config();
 const { App } = require('@slack/bolt');
 const utils = require('./utils/utils');
 const store = require('./utils/store');
+const homeBlocks = require('./bot-response/blocks-home');
 const helpBlocks = require('./bot-response/blocks-help');
 const msgText = require('./bot-response/message-text');
 
@@ -15,11 +16,35 @@ const port = process.env.PORT || 3000;
 store.initStore();
 
 /*------------------
+  APP HOME OPENED
+------------------*/
+app.event('app_home_opened', async({ event, context }) => {
+  console.log('Event:', event, 'Context:', context);
+
+  const userID = event.user;
+  const botToken = context.botToken;
+
+  try {
+    const result = await app.client.views.publish({
+      token: botToken,
+      user_id: userID,
+      view: {
+        "type": "home",
+        "blocks": homeBlocks(userID)
+      }
+    });
+  }
+  catch (err) {
+    console.error(err);
+  }
+});
+
+/*------------------
     APP MENTIONS
 ------------------*/
 app.event('app_mention', async({ event, context }) => {
   // Log useful things
-  console.log('Event: ', event);
+  // console.log('Event: ', event);
 
   // Gather applicable info
   const text = event.text;                      // raw text from the mention
