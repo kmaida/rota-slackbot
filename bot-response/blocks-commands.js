@@ -28,7 +28,7 @@ const commandsBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ':busts_in_silhouette: `@rota "[rotation-name]" staff [@user1 @user2 @user3]` *saves a staff list* for a rotation. It expects a space-separated list of user mentions in the order you want assignments to rotate. You can then use `@rota "[rotation-name]" assign next` to assign the next person in the staff list. (Note: Duplicates will be removed, so if you want someone to pull double duty, you\'ll have to do that assignment by username.)'
+      "text": ':busts_in_silhouette: `@rota "[rotation-name]" staff [@user1 @user2 @user3]` *saves a staff list* for a rotation. It expects a space-separated list of user mentions in the order you want assignments to rotate. You can then use `@rota "[rotation-name]" assign next` to assign the next person in the staff list. _(Duplicates will be removed, so if you want someone to pull a double shift, you\'ll have to do that assignment by username.)_'
     }
   },
   {
