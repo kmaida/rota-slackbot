@@ -294,7 +294,7 @@ const app_mentions = (app, store) => {
             if (lastAssigned) {
               // There's a user currently assigned
               if (lastAssignedIndex > -1 && lastAssignedIndex < lastIndex) {
-                // The last assigned user is in the staff list and are NOT last in the list
+                // The last assigned user is in the staff list and is NOT last
                 // Set assignment to next user in staff list
                 usermention = staffList[lastAssignedIndex + 1];
               } else {
@@ -312,12 +312,13 @@ const app_mentions = (app, store) => {
               utils.msgConfig(botToken, channelID, msgText.assignConfirm(usermention, rotation))
             );
             if (!!handoffMsg) {
-              // Send DM to newly assigned user notifying them of the handoff message
+              // There is a handoff message
+              // Send DM to newly assigned user notifying them of handoff message
               const oncallUserDMChannel = usermention.replace('<@', '').replace('>', '');
               const sendDM = await app.client.chat.postMessage(
                 utils.msgConfig(botToken, oncallUserDMChannel, msgText.assignDMHandoff(rotation, handoffMsg))
               );
-              // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
+              // Send ephemeral message notifying assigner their handoff message was delivered via DM
               const result = await app.client.chat.postEphemeral(
                 utils.ephMsgConfig(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
               );
@@ -329,7 +330,7 @@ const app_mentions = (app, store) => {
             );
           }
         } else {
-          // If rotation doesn't exist, send message saying so
+          // If rotation doesn't exist, send message in channel
           const result = await app.client.chat.postMessage(
             utils.msgConfig(botToken, channelID, msgText.assignError(rotation))
           );
@@ -346,7 +347,7 @@ const app_mentions = (app, store) => {
     /*--
       WHO
       @rota "[rotation]" who
-      Reports who the assigned user is for specified rotation
+      Reports who the assigned user is for a rotation
     --*/
     else if (isWho) {
       try {
@@ -385,7 +386,7 @@ const app_mentions = (app, store) => {
     /*--
       UNASSIGN
       @rota "[rotation]" unassign
-      Clears the assignment for specified rotation
+      Clears the assignment for a rotation
     --*/
     else if (isUnassign) {
       try {
@@ -474,7 +475,7 @@ const app_mentions = (app, store) => {
     /*--
       (MESSAGE)
       @rota "[rotation]" free form message for on-call user
-      Clears the assignment for specified rotation
+      Send message to on-call user via DM with link to channel
     --*/
     else if (isMessage) {
       try {
@@ -527,7 +528,7 @@ const app_mentions = (app, store) => {
     /*--
       (OTHER)
       @rota [other]
-      Rota didn't recognize the format of the mention
+      Rota didn't recognize the format of the mention text
     --*/
     else if (didntUnderstand) {
       try {
