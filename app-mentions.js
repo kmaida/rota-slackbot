@@ -207,7 +207,7 @@ const app_mentions = (app, store) => {
           );
           // Send ephemeral message with staff (to save notifications)
           const ephStaffResult = await app.client.chat.postEphemeral(
-            utils.ephMsgConfig(botToken, channelID, sentByUserID, msgText.aboutStaffEph(rotation, rotationObj.staff))
+            utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.aboutStaffEph(rotation, rotationObj.staff))
           );
         } else {
           // If rotation doesn't exist, send message saying nothing changed
@@ -245,13 +245,15 @@ const app_mentions = (app, store) => {
           );
           if (!!handoffMsg) {
             // Send DM to newly assigned user notifying them of the handoff message
-            const oncallUserDMChannel = usermention.replace('<@', '').replace('>', '');
+            const oncallUserDMChannel = utils.userDMchannel(usermention);
+            const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
+            // Send DM to on-call user notifying them of the message that needs their attention
             const sendDM = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, oncallUserDMChannel, msgText.assignDMHandoff(rotation, handoffMsg))
+              utils.msgConfigBlocks(botToken, oncallUserDMChannel, msgText.assignDMHandoffBlocks(rotation, link, handoffMsg))
             );
             // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
             const result = await app.client.chat.postEphemeral(
-              utils.ephMsgConfig(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
+              utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
             );
           }
         } else {
@@ -313,13 +315,15 @@ const app_mentions = (app, store) => {
             if (!!handoffMsg) {
               // There is a handoff message
               // Send DM to newly assigned user notifying them of handoff message
-              const oncallUserDMChannel = usermention.replace('<@', '').replace('>', '');
+              const oncallUserDMChannel = utils.userDMchannel(usermention);
+              const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
+              // Send DM to on-call user notifying them of the message that needs their attention
               const sendDM = await app.client.chat.postMessage(
-                utils.msgConfig(botToken, oncallUserDMChannel, msgText.assignDMHandoff(rotation, handoffMsg))
+                utils.msgConfigBlocks(botToken, oncallUserDMChannel, msgText.assignDMHandoffBlocks(rotation, link, handoffMsg))
               );
               // Send ephemeral message notifying assigner their handoff message was delivered via DM
               const result = await app.client.chat.postEphemeral(
-                utils.ephMsgConfig(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
+                utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
               );
             }
           } else {
@@ -487,7 +491,7 @@ const app_mentions = (app, store) => {
           if (!!oncallUser) {
             // If someone is assigned to concierge...
             const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
-            const oncallUserDMChannel = oncallUser.replace('<@', '').replace('>', '');
+            const oncallUserDMChannel = utils.userDMchannel(usermention);
             // Send DM to on-call user notifying them of the message that needs their attention
             const sendDM = await app.client.chat.postMessage(
               utils.msgConfig(botToken, oncallUserDMChannel, msgText.dmToAssigned(rotation, sentByUserID, channelID, link))
@@ -500,7 +504,7 @@ const app_mentions = (app, store) => {
               // Send ephemeral message (only visible to sender) telling them what to do if urgent
               // Do nothing if coming from a slackbot
               const sendEphemeralMsg = await app.client.chat.postEphemeral(
-                utils.ephMsgConfig(botToken, channelID, sentByUserID, msgText.confirmEphemeralMsg(rotation))
+                utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.confirmEphemeralMsg(rotation))
               );
             }
           } else {

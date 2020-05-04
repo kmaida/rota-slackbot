@@ -52,8 +52,32 @@ const msgText = {
   assignConfirm: (usermention, rotation) => {
     return `:information_desk_person: ${usermention} is now on-call for the *${rotation}* rotation.`;
   },
-  assignDMHandoff: (rotation, handoffMsg) => {
-    return `:telephone: You are now on-call for the *${rotation}* rotation and have received the following handoff message:\n>${handoffMsg}`;
+  assignDMHandoffBlocks: (rotation, link, handoffMsg) => {
+    return [
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": `:telephone: You are now on-call for the *${rotation}* rotation and have received the following handoff message:`
+        }
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": `>${handoffMsg}`
+        }
+      },
+      {
+        "type": "context",
+        "elements": [
+          {
+            "type": "mrkdwn",
+            "text": `<${link}|See handoff message in channel>`
+          }
+        ]
+      }
+    ];
   },
   assignHandoffConfirm: (usermention, rotation) => {
     return `Your handoff message for the *${rotation}* rotation has been sent to ${usermention} via direct message.`;

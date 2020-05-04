@@ -172,6 +172,14 @@ const utils = {
     @Params: botToken, channelID, text
     @Returns: object
   ----*/
+  userDMchannel(usermention) {
+    return usermention.replace('<@', '').replace('>', '').split('|')[0];
+  },
+  /*----
+    Config object for Slack messages
+    @Params: botToken, channelID, text
+    @Returns: object
+  ----*/
   msgConfig(botToken, channelID, text) {
     return {
       token: botToken,
@@ -180,11 +188,23 @@ const utils = {
     }
   },
   /*----
+    Config object for Slack messages
+    @Params: botToken, channelID, blocks array
+    @Returns: object
+  ----*/
+  msgConfigBlocks(botToken, channelID, blocks) {
+    return {
+      token: botToken,
+      channel: channelID,
+      blocks: blocks
+    }
+  },
+  /*----
     Config object for ephemeral Slack messages
     @Params: botToken, channelID, user, text
     @Returns: object
   ----*/
-  ephMsgConfig(botToken, channelID, user, text) {
+  msgConfigEph(botToken, channelID, user, text) {
     return {
       token: botToken,
       channel: channelID,
