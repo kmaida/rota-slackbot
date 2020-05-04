@@ -7,9 +7,7 @@ const msgText = require('./bot-response/message-text');
 ------------------*/
 const app_mentions = (app, store) => {
   app.event('app_mention', async({ event, context }) => {
-    // Log useful things
-    // console.log('Event: ', event);
-
+    console.log(event, context);
     // Gather applicable info
     const text = event.text;                      // raw text from the mention
     const sentByUserID = event.user;              // ID of user who sent the message
@@ -100,11 +98,12 @@ const app_mentions = (app, store) => {
         if (rotation in store.getStoreList()) {
           if (!staff.length) {
             // If staff array is empty, send an error message
+            // This is unlikely to happen but possible if there's a really malformed command
             const result = await app.client.chat.postMessage(
               utils.msgConfig(botToken, channelID, msgText.staffEmpty())
             );
           } else {
-            // Rotation exists and list isn't empty
+            // Rotation exists and parameter staff list isn't empty
             // Save to store
             store.saveStaff(rotation, staff);
             // Confirm in channel with message about using assign next
@@ -246,6 +245,7 @@ const app_mentions = (app, store) => {
           );
           if (!!handoffMsg) {
             // Send DM to newly assigned user notifying them of the handoff message
+            console.log(pCmd, usermention);
             const oncallUserDMChannel = usermention.replace('<@', '').replace('>', '');
             const sendDM = await app.client.chat.postMessage(
               utils.msgConfig(botToken, oncallUserDMChannel, msgText.assignDMHandoff(rotation, handoffMsg))
