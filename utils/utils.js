@@ -14,9 +14,9 @@ const utils = {
     // @rota "[rotation]" reset staff
     // Removes rotation staff list
     'reset staff': /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (reset staff)$/g,
-    // Test for a single user mention
+    // Capture user ID only from
     // <@U03LKJ> or <@U0345|name>
-    usermention: /^<@U[A-Za-z0-9|._\-]+?>$/g,
+    userID: /^<@([A-Z0-9]+?)[a-z|._\-]*?>$/g,
     // @rota "[rotation]" assign [@username] [optional handoff message]
     // Assigns a user to a rotation
     assign: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Za-z0-9|._\-]+?>)(.*)$/g,
@@ -60,6 +60,13 @@ const utils = {
     }
   },
   /*----
+    Get user ID from mention
+    Supports <@U324SDF> and <@U0435|some.user>
+  ----*/
+  getUserID(usermention) {
+    return [...usermention.matchAll(new RegExp(this.regex.userID))][0][1];
+  },
+  /*----
     Test message to see if its format matches expectations for specific command
     Need to new RegExp to execute on runtime
     @Params: command, mention event message
@@ -87,7 +94,7 @@ const utils = {
         return {
           rotation: res[2],
           command: res[3],
-          user: res[4],
+          user: `<@${this.getUserID(res[4])}>`,
           handoff: res[5].trim()
         }
       }
@@ -173,7 +180,7 @@ const utils = {
     return {
       token: botToken,
       channel: channelID,
-      user: user,
+      user: user.split('|')[0],
       text: text
     }
   }
