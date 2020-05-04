@@ -89,7 +89,7 @@ Whatever deployment option you choose, once you have a public domain for your Sl
 
 ### Storage of Rotation Data
 
-Rota stores its rotation data in a simple JSON file on its server. You'll need a new deployment of the app for every Slack workspace you want to use Rota in.
+Rota stores its rotation data in a simple JSON file on the server where the app is deployed. You'll need a new deployment of the app for every Slack workspace you want to use Rota in.
 
 ---
 
