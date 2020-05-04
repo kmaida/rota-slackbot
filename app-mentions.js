@@ -62,7 +62,7 @@ const app_mentions = (app, store) => {
       try {
         const pCmd = utils.parseCmd('create', event, context);
         const rotation = pCmd.rotation;
-        const description = pCmd.params;
+        const description = pCmd.description;
 
         if (rotation in store.getStoreList()) {
           // Can't create a rotation that already exists
