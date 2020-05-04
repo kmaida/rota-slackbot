@@ -7,7 +7,7 @@ const msgText = require('./bot-response/message-text');
 ------------------*/
 const app_mentions = (app, store) => {
   app.event('app_mention', async({ event, context }) => {
-    console.log(event, context);
+    console.log('Event:', event);
     // Gather applicable info
     const text = event.text;                      // raw text from the mention
     const sentByUserID = event.user;              // ID of user who sent the message
@@ -245,7 +245,7 @@ const app_mentions = (app, store) => {
           );
           if (!!handoffMsg) {
             // Send DM to newly assigned user notifying them of the handoff message
-            const oncallUserDMChannel = utils.userDMchannel(usermention);
+            const oncallUserDMChannel = utils.getUserID(usermention);
             const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
             // Send DM to on-call user notifying them of the message that needs their attention
             const sendDM = await app.client.chat.postMessage(
@@ -315,7 +315,7 @@ const app_mentions = (app, store) => {
             if (!!handoffMsg) {
               // There is a handoff message
               // Send DM to newly assigned user notifying them of handoff message
-              const oncallUserDMChannel = utils.userDMchannel(usermention);
+              const oncallUserDMChannel = utils.getUserID(usermention);
               const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
               // Send DM to on-call user notifying them of the message that needs their attention
               const sendDM = await app.client.chat.postMessage(
@@ -491,7 +491,7 @@ const app_mentions = (app, store) => {
           if (!!oncallUser) {
             // If someone is assigned to concierge...
             const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
-            const oncallUserDMChannel = utils.userDMchannel(usermention);
+            const oncallUserDMChannel = utils.getUserID(oncallUser);
             // Send DM to on-call user notifying them of the message that needs their attention
             const sendDM = await app.client.chat.postMessage(
               utils.msgConfig(botToken, oncallUserDMChannel, msgText.dmToAssigned(rotation, sentByUserID, channelID, link))

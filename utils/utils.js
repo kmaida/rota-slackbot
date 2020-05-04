@@ -53,11 +53,7 @@ const utils = {
     @Returns: string
   ----*/
   cleanText(msg) {
-    if (msg.startsWith('Reminder: ')) {
-      return msg.replace('Reminder: ', '').trim();
-    } else {
-      return msg.trim();
-    }
+    return msg.replace('Reminder: ', '').replace("_(sent with '/gator')_", '').trim();
   },
   /*----
     Get user ID from mention
@@ -116,7 +112,13 @@ const utils = {
           const noEmpty = arr.filter(item => !!item !== false);   // Remove falsey values
           const noDupes = new Set(noEmpty);                       // Remove duplicates
           const cleanArr = [...noDupes];                          // Convert set back to array
-          return cleanArr || [];
+          // Clean any |user.name out of user staff (this happens when a bot issues the command)
+          const userCleanArr = [];
+          cleanArr.forEach(user => {
+            const cleanUser = user.includes('|') ? `${user.split('|')[0]}>` : user;
+            userCleanArr.push(cleanUser);
+          });
+          return userCleanArr || [];
         };
         return {
           rotation: res[2],
@@ -166,14 +168,6 @@ const utils = {
     // If not a properly formatted command, return null
     // This should trigger error messaging
     return null;
-  },
-  /*----
-    Config object for Slack messages
-    @Params: botToken, channelID, text
-    @Returns: object
-  ----*/
-  userDMchannel(usermention) {
-    return usermention.replace('<@', '').replace('>', '').split('|')[0];
   },
   /*----
     Config object for Slack messages
