@@ -248,7 +248,7 @@ const app_mentions = (app, store) => {
             // Send DM to newly assigned user notifying them of the handoff message
             const oncallUserDMChannel = usermention.replace('<@', '').replace('>', '');
             const sendDM = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.assignDMHandoff(rotation, handoffMsg))
+              utils.msgConfig(botToken, oncallUserDMChannel, msgText.assignDMHandoff(rotation, handoffMsg))
             );
             // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
             const result = await app.client.chat.postEphemeral(
