@@ -63,6 +63,16 @@ const utils = {
   getUserID(usermention) {
     return [...usermention.matchAll(new RegExp(this.regex.userID))][0][1];
   },
+/*----
+  Remove |user.name from mentions
+  When bots like Slackbot or Gator issue commands, this is added :(
+  This was deprecated back in 2017 but apparently is still sticking around in some places
+  @Param: <@U324SDF> or <@U0435|some.user>
+  @Returns: <@U324SDF>
+----*/
+  cleanUser(usermention) {
+    return usermention.includes('|') ? `${usermention.split('|')[0]}>` : usermention;
+  },
   /*----
     Test message to see if its format matches expectations for specific command
     Need to new RegExp to execute on runtime
@@ -91,7 +101,7 @@ const utils = {
         return {
           rotation: res[2],
           command: res[3],
-          user: `<@${this.getUserID(res[4])}>`,
+          user: this.cleanUser(res[4]),
           handoff: res[5].trim()
         }
       }
@@ -114,10 +124,7 @@ const utils = {
           const cleanArr = [...noDupes];                          // Convert set back to array
           // Clean any |user.name out of user staff (this happens when a bot issues the command)
           const userCleanArr = [];
-          cleanArr.forEach(user => {
-            const cleanUser = user.includes('|') ? `${user.split('|')[0]}>` : user;
-            userCleanArr.push(cleanUser);
-          });
+          cleanArr.forEach(user => userCleanArr.push(this.cleanUser(user)));
           return userCleanArr || [];
         };
         return {

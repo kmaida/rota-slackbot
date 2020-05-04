@@ -52,7 +52,7 @@ const msgText = {
   assignConfirm: (usermention, rotation) => {
     return `:information_desk_person: ${usermention} is now on-call for the *${rotation}* rotation.`;
   },
-  assignDMHandoffBlocks: (rotation, link, handoffMsg) => {
+  assignDMHandoffBlocks: (rotation, link, sentByUserID, channelID, handoffMsg) => {
     return [
       {
         "type": "section",
@@ -73,7 +73,7 @@ const msgText = {
         "elements": [
           {
             "type": "mrkdwn",
-            "text": `<${link}|See handoff message in channel>`
+            "text": `<${link}|View handoff message> from <@${sentByUserID}> in <#${channelID}>`
           }
         ]
       }

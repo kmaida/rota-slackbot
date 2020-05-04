@@ -7,7 +7,6 @@ const msgText = require('./bot-response/message-text');
 ------------------*/
 const app_mentions = (app, store) => {
   app.event('app_mention', async({ event, context }) => {
-    console.log('Event:', event);
     // Gather applicable info
     const text = event.text;                      // raw text from the mention
     const sentByUserID = event.user;              // ID of user who sent the message
@@ -205,10 +204,13 @@ const app_mentions = (app, store) => {
           const result = await app.client.chat.postMessage(
             utils.msgConfig(botToken, channelID, msgText.aboutReport(rotation, rotationObj))
           );
-          // Send ephemeral message with staff (to save notifications)
-          const ephStaffResult = await app.client.chat.postEphemeral(
-            utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.aboutStaffEph(rotation, rotationObj.staff))
-          );
+          if (sentByUserID !== 'USLACKBOT') {
+            // Send ephemeral message with staff (to save notifications)
+            // Do nothing if coming from a slackbot
+            const ephStaffResult = await app.client.chat.postEphemeral(
+              utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.aboutStaffEph(rotation, rotationObj.staff))
+            );
+          }
         } else {
           // If rotation doesn't exist, send message saying nothing changed
           const result = await app.client.chat.postMessage(
@@ -249,12 +251,14 @@ const app_mentions = (app, store) => {
             const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
             // Send DM to on-call user notifying them of the message that needs their attention
             const sendDM = await app.client.chat.postMessage(
-              utils.msgConfigBlocks(botToken, oncallUserDMChannel, msgText.assignDMHandoffBlocks(rotation, link, handoffMsg))
+              utils.msgConfigBlocks(botToken, oncallUserDMChannel, msgText.assignDMHandoffBlocks(rotation, link, sentByUserID, channelID, handoffMsg))
             );
-            // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
-            const result = await app.client.chat.postEphemeral(
-              utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
-            );
+            if (sentByUserID !== 'USLACKBOT') {
+              // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
+              const result = await app.client.chat.postEphemeral(
+                utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
+              );
+            }
           }
         } else {
           // If rotation doesn't exist, send message saying so
@@ -319,12 +323,14 @@ const app_mentions = (app, store) => {
               const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
               // Send DM to on-call user notifying them of the message that needs their attention
               const sendDM = await app.client.chat.postMessage(
-                utils.msgConfigBlocks(botToken, oncallUserDMChannel, msgText.assignDMHandoffBlocks(rotation, link, handoffMsg))
+                utils.msgConfigBlocks(botToken, oncallUserDMChannel, msgText.assignDMHandoffBlocks(rotation, link, sentByUserID, channelID, handoffMsg))
               );
-              // Send ephemeral message notifying assigner their handoff message was delivered via DM
-              const result = await app.client.chat.postEphemeral(
-                utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
-              );
+              if (sentByUserID !== 'USLACKBOT') {
+                // Send ephemeral message notifying assigner their handoff message was delivered via DM
+                const result = await app.client.chat.postEphemeral(
+                  utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
+                );
+              }
             }
           } else {
             // No staff list; cannot use "next"
