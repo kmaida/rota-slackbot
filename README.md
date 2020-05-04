@@ -34,7 +34,7 @@ _(In a #channel)_
 
 ### Scheduling Messages
 
-You can schedule messages to be delivered later. This is particularly useful in case the on-call user is outside of hours. This works with both the built-in `/remind` slash task (similar to above), and also with third party Slack apps like [Gator](https://www.gator.works/) and [/schedule](https://slackscheduler.com/). Schedule the message _in a channel_ that the `@rota` bot has been added to. Like so:
+You can schedule messages to be delivered later. This is particularly useful in case the on-call user is outside of hours. This works with both the built-in `/remind` slash task (similar to above), and also with third party Slack apps like [Gator](https://www.gator.works/). Schedule the message _in a channel_ that the `@rota` bot has been added to. Like so:
 
 _(In a #channel)_
 ```
@@ -42,6 +42,8 @@ _(In a #channel)_
 ```
 
 **Note:** Keep in mind that if you use `/remind`, the message will come from `@Slackbot`, _not from your username_. If you need the person on rotation to know the message was from _you_, either include your username in the reminder when you set it up, or use a third-party app that delivers the message later from your account (e.g., Gator does this).
+
+**Caveat:** Because the company I work at uses [Gator](https://www.gator.works/), Rota  has been tested with `/remind` (which is part of Slack's core) and `/gator`. If you use a different third-party scheduling Slack app, keep in mind that its interactions with Rota are _untested_ and I make _no guarantees_ the integrations will work well together. (If you want to submit issues requesting additional third party integration support, you may, but their maintenance will likely be up to the community. Please feel free to fork this repo, add support, and then [submit a PR](https://github.com/kmaida/rota-slackbot/pull/new/master).)
 
 ## Development
 
