@@ -25,10 +25,10 @@ const store = {
     return JSON.parse(fs.readFileSync(storeFilepath));
   },
   /*----
-    Create rotation
-    @Params: rotation name, usermention to assign
+    Create new rotation
+    @Params: rotation name, description
   ----*/
-  createRotation(rotation, description) {
+  newRotation(rotation, description) {
     const list = this.getStoreList();
     list[rotation] = {
       description,

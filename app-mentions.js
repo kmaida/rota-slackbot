@@ -14,7 +14,7 @@ const app_mentions = (app, store) => {
     const channelID = event.channel;              // channel ID
     const botToken = context.botToken;
     // Decision logic establishing how to respond to mentions
-    const isCreate = utils.isCmd('create', text);
+    const isNew = utils.isCmd('new', text);
     const isStaff = utils.isCmd('staff', text);
     const isResetStaff = utils.isCmd('reset staff', text);
     const isAssign = utils.isCmd('assign', text);
@@ -28,7 +28,7 @@ const app_mentions = (app, store) => {
     const testMessage = utils.isCmd('message', text);
     const isMessage =
       testMessage &&
-      !isCreate &&
+      !isNew &&
       !isStaff && !text.includes('" staff <@')  // catch malformed staff commands and don't put them through as messages
       !isResetStaff &&
       !isAssign &&
@@ -38,7 +38,7 @@ const app_mentions = (app, store) => {
       !isUnassign &&
       !isDelete;
     const didntUnderstand =
-      !isCreate &&
+      !isNew &&
       !isStaff &&
       !isResetStaff &&
       !isAssign &&
@@ -52,26 +52,26 @@ const app_mentions = (app, store) => {
       !isMessage;
 
     /*--
-      CREATE
-      @rota "[rotation-name]" create [description]
+      NEW
+      @rota new "[rotation-name]" [optional description]
       Creates a new rotation with description
     --*/
-    if (isCreate) {
+    if (isNew) {
       try {
-        const pCmd = utils.parseCmd('create', event, context);
+        const pCmd = utils.parseCmd('new', event, context);
         const rotation = pCmd.rotation;
         const description = pCmd.description;
 
         if (rotation in store.getStoreList()) {
           // Can't create a rotation that already exists
           const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.createError(rotation))
+            utils.msgConfig(botToken, channelID, msgText.newError(rotation))
           );
         } else {
           // Initialize a new rotation with description
-          store.createRotation(rotation, description);
+          store.newRotation(rotation, description);
           const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.createConfirm(rotation))
+            utils.msgConfig(botToken, channelID, msgText.newConfirm(rotation))
           );
         }
       }
