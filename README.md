@@ -1,21 +1,21 @@
 # rota-slackbot
 
-`rota` is a Slack app / bot I wrote for internal team use at [Gatsby](https://gatsbyjs.com) to manage team rotations. This app was built with the [Bolt JavaScript Slack app framework](https://github.com/slackapi/bolt).
+Rota is a Slack app + bot I wrote for internal team use at [Gatsby](https://gatsbyjs.com) to manage team rotations. This app was built with the [Bolt JavaScript Slack app framework](https://github.com/slackapi/bolt).
 
 ## Commands
 
-* `@rota "[new-rotation-name]" create [description]` creates a new rotation; rotation names can contain _only_ lowercase letters, numbers, and hyphens
-* `@rota "[rotation]" staff [@user1 @user2 @user3]` adds staff to a rotation; a space-separated list of usernames is expected as a parameter with usernames in the order of desired rotation (rotations with a staff list can be assigned using `assign next`)
-* `@rota "[rotation]" reset staff` clears a rotation's staff list (use with caution!)
-* `@rota "[rotation]" assign [@user] [optional handoff message]` assigns someone to the rotation and, optionally, sends a DM to them with handoff information
-* `@rota "[rotation]" assign next [optional handoff message]` assigns the next person in the staff list to a rotation and, optionally, sends a DM to them with handoff information
-* `@rota "[rotation]" unassign` removes the current user assignment for a rotation
-* `@rota "[rotation]" who` reports the name of a rotation's assigned user
-* `@rota "[rotation]" about` displays the rotation's description and on-call user publicly, and displays the staff list only to the user who issued the commend (this is to prevent excessive notifications for everyone on staff)
-* `@rota "[rotation]" delete` deletes the rotation completely (use with caution!)
-* `@rota "[rotation]" [message]` sends a direct message to the on-call user for the rotation, notifying them that your message needs attention
-* `@rota list` displays a list of all currently known rotations
-* `@rota help` shows how to use the bot
+* `@rota new "[new-rotation-name]" [description]` creates a new rotation; rotation names can contain _only_ lowercase letters, numbers, and hyphens. Technically the description is optional, but everyone will benefit if you provide one.
+* `@rota delete "[rotation]"` deletes the rotation completely (use with caution!).
+* `@rota "[rotation]" staff [@user1 @user2 @user3]` adds staff to a rotation; a space-separated list of usernames is expected as a parameter with usernames in the order of desired rotation (rotations with a staff list can be assigned using `assign next`).
+* `@rota "[rotation]" reset staff` clears a rotation's staff list (use with caution!).
+* `@rota "[rotation]" assign [@user] [optional handoff message]` assigns someone to the rotation and, optionally, sends a DM to them with handoff information.
+* `@rota "[rotation]" assign next [optional handoff message]` assigns the next person in the staff list to a rotation and, optionally, sends a DM to them with handoff information.
+* `@rota "[rotation]" unassign` removes the current user assignment for a rotation.
+* `@rota "[rotation]" who` reports the name of a rotation's assigned user.
+* `@rota "[rotation]" about` displays the rotation's description and on-call user publicly, and displays the staff list only to the user who issued the commend (this is to prevent excessive notifications for everyone on staff).
+* `@rota "[rotation]" [message]` sends a direct message to the on-call user for the rotation, notifying them that your message needs attention.
+* `@rota list` displays a list of all currently known rotations.
+* `@rota help` shows how to use the bot.
 
 ## Tips
 
@@ -30,7 +30,7 @@ _(In a #channel)_
 /remind [#channel] @rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign next` every Monday at 9am
 ```
 
-**Note:** You can't directly remind "`@rota`" to do something. For instance, `/remind @rota "[rotation]" some message` will _not_ work because it will try to send a direct message to the _bot user_, not a rotation's _assigned human user_. When using `/remind`, you need to send the reminder _in a channel_. Reminders come from Slackbot, and Rota and Slackbot can't talk to each other.
+**Note:** You _can't_ directly remind the `@rota` bot to do something. For instance, `/remind @rota "[rotation]" some message in 5 minutes` will _not_ work because it will try to send a direct message to the _bot user_, not a rotation's _assigned human user_. When using `/remind`, you need to set the reminder _in a channel_. Reminders come from Slackbot, and Rota and Slackbot can't talk to each other.
 
 ### Scheduling Messages
 
@@ -71,15 +71,23 @@ The Slack app should be deployed with the following:
 
 * Node server stays running
 * SSL
-* Public URL (you do _not_ need an elegant URL, since the URL is never displayed; it's only for Slack app configuration)
+* Public URL (you do _not_ need a pretty URL, since the URL is never displayed; it's only for Slack app configuration)
 
-If you're very comfortable with Linux devops, Let's Encrypt, and have a domain name, I recommend [DigitalOcean](https://www.digitalocean.com/pricing/). If you want fast, easy deployments with CI/CD features and don't want to deal with devops, domains, or configuring SSL, I recommend a hobby dyno on [Heroku](https://www.heroku.com/pricing) (a free plan on Heroku will not work well because the app will sleep after 30 minutes, and cause long delays responding when it wakes).
+If you're very comfortable with Linux devops, Let's Encrypt, and have a domain name, I recommend [DigitalOcean](https://www.digitalocean.com/pricing/) as a VPS if you've got other applications to deploy as well. This will keep costs down, as some providers (such as Heroku) charge per app.
 
-If using DigitalOcean, input your production environment variables in a `.env` file on your server.
+If you want fast, easy deployments with CI/CD features and don't want to deal with devops, domains, or configuring SSL, I recommend a [hobby dyno on Heroku](https://www.heroku.com/pricing).
+
+**Note:** A _free_ dyno on Heroku _will not work well_ because the app will sleep after 30 minutes, which causes long response times when it needs to wake back up.
+
+If using DigitalOcean (or a similar VPS), input your production environment variables in a `.env` file on your server.
 
 If using Heroku, input your production environment variables in your Heroku app settings.
 
 Whatever deployment option you choose, once you have a public domain for your Slack app with SSL, go into your production Slack app settings and update the **Event Subscriptions** Request URL to `https://your-public-url/slack/events`.
+
+### Storage of Rotation Data
+
+Rota stores its rotation data in a simple JSON file on its server. You'll need a new deployment of the app for every Slack workspace you want to use Rota in.
 
 ---
 
