@@ -245,7 +245,6 @@ const app_mentions = (app, store) => {
           );
           if (!!handoffMsg) {
             // Send DM to newly assigned user notifying them of the handoff message
-            console.log(pCmd, usermention);
             const oncallUserDMChannel = usermention.replace('<@', '').replace('>', '');
             const sendDM = await app.client.chat.postMessage(
               utils.msgConfig(botToken, oncallUserDMChannel, msgText.assignDMHandoff(rotation, handoffMsg))
