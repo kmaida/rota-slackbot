@@ -61,7 +61,8 @@ const utils = {
   },
   /*----
     Get user ID from mention
-    Supports <@U324SDF> and <@U0435|some.user>
+    @Param: <@U324SDF> or <@U0435|some.user>
+    @Returns: U324SDF
   ----*/
   getUserID(usermention) {
     return [...usermention.matchAll(new RegExp(this.regex.userID))][0][1];
