@@ -33,9 +33,9 @@ const utils = {
     // @rota "[rotation]" unassign
     // Unassigns rotation
     unassign: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (unassign)$/g,
-    // @rota "[rotation]" delete
+    // @rota delete "[rotation]"
     // Removes the rotation completely
-    delete: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (delete)$/g,
+    delete: /^<@(U[A-Za-z0-9|._\-]+?)> (delete) "([a-z0-9\-]+?)"$/g,
     // @rota help
     // Post help messaging
     help: /^<@(U[A-Za-z0-9|._\-]+?)> (help)$/g,
@@ -133,8 +133,15 @@ const utils = {
           description: description ? description.trim() : '(no description provided)'
         };
       }
+      // Command, rotation
+      else if (cmd === 'delete') {
+        return {
+          rotation: res[3],
+          command: res[2]
+        };
+      }
       // Rotation, command
-      else if (cmd === 'about' || cmd === 'unassign' || cmd === 'delete' || cmd === 'who' || cmd === 'reset staff') {
+      else if (cmd === 'about' || cmd === 'unassign' || cmd === 'who' || cmd === 'reset staff') {
         return {
           rotation: res[2],
           command: res[3]

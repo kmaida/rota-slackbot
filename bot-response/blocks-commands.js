@@ -14,7 +14,14 @@ const commandsBlocks = [
     "type": "section",
     "text": {
       "type": "mrkdwn",
-      "text": ':sparkles: `@rota "[rotation-name]" create [rotation description]` *creates a new rotation*. `rotation-name` can contain _only_ lowercase letters, numbers, and hyphens.'
+      "text": ':sparkles: `@rota new "[rotation-name]" [rotation description]` *creates a new rotation*. `rotation-name` can contain _only_ lowercase letters, numbers, and hyphens.'
+    }
+  },
+  {
+    "type": "section",
+    "text": {
+      "type": "mrkdwn",
+      "text": ':x: `@rota delete "[rotation-name]"` *wipes any record of a rotation\'s existence* from my memory. _Use with caution!_'
     }
   },
   {
@@ -64,13 +71,6 @@ const commandsBlocks = [
     "text": {
       "type": "mrkdwn",
       "text": ':eject: `@rota "[rotation-name]" unassign` *removes the current assignment* for a rotation.'
-    }
-  },
-  {
-    "type": "section",
-    "text": {
-      "type": "mrkdwn",
-      "text": ':x: `@rota "[rotation-name]" delete` *wipes any record of a rotation\'s existence* from my memory. _Use with caution!_'
     }
   },
   {
