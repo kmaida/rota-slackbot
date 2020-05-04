@@ -129,7 +129,7 @@ const homeBlocks = (userID) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": '*Note:* You can\'t _directly_ remind me to do something. For instance: `/remind @rota "[rotation]" some message` will _not_ work because <@slackbot> will try to send a direct message to <@rota> — another _bot user_ — not a rotation\'s _assigned human user_. (Bots aren\'t allowed to talk with each other, so this will fail.) When using `/remind`, you need to send the reminder _to a channel_.'
+        "text": "*Note:* You can't _directly_ remind me to do something. For instance: `/remind @rota \"[rotation]\" message in 5 minutes` will _not_ work because <@slackbot> isn't allowed to send reminders to <@rota> — another _bot user_. When using `/remind`, you need to send the reminder _to a channel_. This ensures the message is delivered to the rotation's _assigned human user_."
       }
     },
     {
@@ -143,21 +143,21 @@ const homeBlocks = (userID) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "You can also schedule messages to be delivered later. This works with both the built-in `/remind` slash command (similar to above), and also with third party Slack apps like <https://www.gator.works/|Gator> and <https://slackscheduler.com/|/schedule>. Just schedule the message _in a channel_ that I've been added to. For example:"
+        "text": "You can schedule messages to be delivered later. This works with both the built-in `/remind` slash command (similar to above), and also with third party Slack apps like <https://www.gator.works/|Gator>. Just schedule the message _in a channel_ that I've been added to. For example:"
       }
     },
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": '```/gator @rota "[rotation]" I need some help with task XYZ please```'
+        "text": '```/gator @rota "[rotation]" I need some help with task XYZ please!```'
       }
     },
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "*Note:* If you use `/remind`, the message will come from <@Slackbot>, _not_ from your username. If you need the person on rotation to know the message was from _you_, either include your username in the reminder message when you set it up, or use a third-party app that delivers the message on your behalf from your username (e.g., Gator does this)."
+        "text": "*Note:* If you use `/remind`, the message will come from <@slackbot>, _not_ from your username."
       }
     }
   ];

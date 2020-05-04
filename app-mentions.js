@@ -7,7 +7,7 @@ const msgText = require('./bot-response/message-text');
 ------------------*/
 const app_mentions = (app, store) => {
   app.event('app_mention', async({ event, context }) => {
-    // Gather applicable info
+    // Gather event and context info
     const text = event.text;                      // raw text from the mention
     const sentByUserID = event.user;              // ID of user who sent the message
     const channelID = event.channel;              // channel ID
@@ -28,7 +28,7 @@ const app_mentions = (app, store) => {
     const isMessage =
       testMessage &&
       !isNew &&
-      !isStaff && !text.includes('" staff <@')  // catch malformed staff commands and don't put them through as messages
+      !isStaff && !text.includes('" staff <@')  // catch malformed staff commands (less robust regex)
       !isResetStaff &&
       !isAssign &&
       !isAssignNext &&
@@ -38,7 +38,7 @@ const app_mentions = (app, store) => {
       !isDelete;
     const didntUnderstand =
       !isNew &&
-      !isStaff &&
+      !isStaff && !text.includes('" staff <@')
       !isResetStaff &&
       !isAssign &&
       !isAssignNext &&
@@ -86,7 +86,7 @@ const app_mentions = (app, store) => {
       STAFF
       @rota "[rotation-name]" staff [@user @user @user]
       Staffs a rotation by passing a space-separated list of users
-      Also catches comma-separated lists
+      Also allows comma-separated lists; fairly robust against extra spaces/commas
     --*/
     else if (isStaff) {
       try {
