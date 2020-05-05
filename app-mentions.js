@@ -1,6 +1,10 @@
 const utils = require('./utils/utils');
 const helpBlocks = require('./bot-response/blocks-help');
 const msgText = require('./bot-response/message-text');
+// Commands
+const cmdNew = require('./app-mentions/new');
+const cmdStaff = require('./app-mentions/staff');
+const cmdResetStaff = require('./app-mentions/reset-staff');
 
 /*------------------
     APP MENTIONS
@@ -67,7 +71,7 @@ const app_mentions = (app, store) => {
       Creates a new rotation with description
     --*/
     if (isNew) {
-      require('./app-mentions/new')(app, event, context, ec, utils, store, msgText);
+      cmdNew(app, event, context, ec, utils, store, msgText);
     }
 
     /*--
@@ -77,7 +81,7 @@ const app_mentions = (app, store) => {
       Also allows comma-separated lists; fairly robust against extra spaces/commas
     --*/
     else if (isStaff) {
-      require('./app-mentions/staff')(app, event, context, ec, utils, store, msgText);
+      cmdStaff(app, event, context, ec, utils, store, msgText);
     }
 
     /*--
@@ -86,30 +90,7 @@ const app_mentions = (app, store) => {
       Removes rotation staff
     --*/
     else if (isResetStaff) {
-      try {
-        const pCmd = utils.parseCmd('reset staff', event, context);
-        const rotation = pCmd.rotation;
-
-        if (utils.rotationInList(rotation, rotaList)) {
-          // If rotation exists, set staff to an empty array
-          const save = await store.saveStaff(rotation, []);
-          // Send message to confirm staff has been reset
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.resetStaffConfirm(rotation))
-          );
-        } else {
-          // If rotation doesn't exist, send message saying nothing changed
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.resetStaffError(rotation))
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      cmdResetStaff(app, event, context, ec, utils, store, msgText);
     }
 
     /*--

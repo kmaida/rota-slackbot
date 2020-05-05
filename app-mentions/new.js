@@ -3,7 +3,6 @@
   @rota new "[rotation-name]" [optional description]
   Creates a new rotation with description
 --*/
-
 module.exports = async (app, event, context, ec, utils, store, msgText) => {
   try {
     const pCmd = utils.parseCmd('new', event, context);
