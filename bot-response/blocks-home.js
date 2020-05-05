@@ -1,38 +1,35 @@
 const introArr = require('./blocks-intro');
 const commandsArr = require('./blocks-commands');
-const store = require('./../utils/store');
 
 /*------------------
     BLOCKS: HOME
 ------------------*/
-// Return an object of staff and assignments
-const staffAssign = (userID) => {
-  const storeList = store.getStoreList();
-  const results = { staff: [], assignments: [] };
-  for (const rotation in storeList) {
-    const thisRota = storeList[rotation];
-    if (thisRota.assigned && thisRota.assigned.includes(userID)) {
-      results.assignments.push(rotation);
+const homeBlocks = (userID, storeList) => {
+  // Return an object of staff and assignments
+  const staffAssign = (userID) => {
+    const results = { staff: [], assignments: [] };
+    for (const rotation in storeList) {
+      const thisRota = storeList[rotation];
+      if (thisRota.assigned && thisRota.assigned.includes(userID)) {
+        results.assignments.push(thisRota.name);
+      }
+      if (thisRota.staff && thisRota.staff.length && thisRota.staff.indexOf(`<@${userID}>`) > -1) {
+        results.staff.push(thisRota.name);
+      }
     }
-    if (thisRota.staff && thisRota.staff.length && thisRota.staff.indexOf(`<@${userID}>`) > -1) {
-      results.staff.push(rotation);
+    return results;
+  }
+  // Take an array and output a text list
+  const mdList = (arr) => {
+    let str = '';
+    for (const item of arr) {
+      str = str + `• ${item}\n`;
     }
+    if (str.length) {
+      return str;
+    }
+    return '_None at the moment!_';
   }
-  return results;
-}
-// Take an array and output a text list
-const mdList = (arr) => {
-  let str = '';
-  for (const item of arr) {
-    str = str + `• ${item}\n`;
-  }
-  if (str.length) {
-    return str;
-  }
-  return '_None at the moment!_';
-}
-
-const homeBlocks = (userID) => {
   const rotaObj = staffAssign(userID);
   const homeArr = [
     {
