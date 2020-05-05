@@ -162,25 +162,7 @@ const app_mentions = (app, store) => {
       Lists all rotations, descriptions, and assignments
     --*/
     else if (isList) {
-      try {
-        // If the store is not empty
-        if (rotaList && rotaList.length) {
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.listReport(rotaList))
-          );
-        } else {
-          // If store is empty
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.listEmpty())
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      cmdList(app, ec, utils, msgText);
     }
 
     /*--
