@@ -4,7 +4,7 @@ const app_home_opened = require('./app-home-opened');
 const app_mentions = require('./app-mentions');
 // MongoDB
 const mongoose = require('mongoose');
-require('./utils/db')(mongoose);
+const store = require('./utils/db');
 
 /*------------------
        ON INIT
