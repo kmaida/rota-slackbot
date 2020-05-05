@@ -52,9 +52,12 @@ _(In a #channel)_
 1. [Create a new Slack app](https://api.slack.com/apps/new).
 2. Name your app `concierge` and select your preferred development Slack workspace.
 3. Under **App Home**, make sure your bot and app's name are `rota`.
+  * Toggle on "Always Show My Bot as Online".
+  * Enable the Home Tab.
+  * Enable the Messages Tab.
 4. Under **Incoming Webhooks**, click the toggle to turn webhooks `On`.
 5. In the **OAuth & Permissions** section, add Bot Token Scopes for `app_mentions:read`, `chat:write`, and `incoming-webhook`.
-6. Under **Install App**, click the button to install the app to your team workspace. When prompted, choose a channel to install to (it can be any channel.) This will generate a bot user OAuth access token (which you will need to configure your local environment variables).
+6. Under **Install App**, click the button to install the app to your team workspace. When prompted, choose a channel to install to (it can be any channel.) This will generate a Bot User OAuth Access Token (which you will need to configure your local environment variables). The token will be displayed after you've installed your app. _Note that if you update any Scopes later, you'll have to reinstall your app._
 7. Clone this repository locally.
 8. Rename the `.env_sample` file to `.env` and add the appropriate configuration from your Slack app settings.
 9. From your cloned directory, run `$ npm install` to install dependencies.
