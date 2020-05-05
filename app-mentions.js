@@ -171,19 +171,7 @@ const app_mentions = (app, store) => {
       Provides instructions on how to use Rota
     --*/
     else if (isHelp) {
-      try {
-        const result = await app.client.chat.postMessage({
-          token: botToken,
-          channel: channelID,
-          blocks: helpBlocks()
-        });
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      cmdHelp(app, ec, utils, helpBlocks, msgText);
     }
 
     /*--
