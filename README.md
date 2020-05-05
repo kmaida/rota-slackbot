@@ -49,24 +49,39 @@ _(In a #channel)_
 
 **Prerequisite**: A Slack workspace that you can test in (without disturbing or spamming your coworkers 😛). You can [create a new Slack workspace for free here](https://slack.com/get-started#/create).
 
+### Slack App Initial Setup
+
 1. [Create a new Slack app](https://api.slack.com/apps/new).
 2. Name your app `concierge` and select your preferred development Slack workspace.
 3. Under **App Home**, make sure your bot and app's name are `rota`.
   * Toggle on "Always Show My Bot as Online".
   * Enable the Home Tab.
   * Enable the Messages Tab.
-4. Under **Incoming Webhooks**, click the toggle to turn webhooks `On`.
-5. In the **OAuth & Permissions** section, add Bot Token Scopes for `app_mentions:read`, `chat:write`, and `incoming-webhook`.
-6. Under **Install App**, click the button to install the app to your team workspace. When prompted, choose a channel to install to (it can be any channel.) This will generate a Bot User OAuth Access Token (which you will need to configure your local environment variables). The token will be displayed after you've installed your app. _Note that if you update any Scopes later, you'll have to reinstall your app._
-7. Clone this repository locally.
-8. Rename the `.env_sample` file to `.env` and add the appropriate configuration from your Slack app settings.
-9. From your cloned directory, run `$ npm install` to install dependencies.
-10. Run `$ npm start` to start the app on the port you specified in your `.env` file.
-11. Download and use [ngrok](https://ngrok.com) to expose a public URL for your local web server.
-12. Once you have ngrok pointing to your Slack app's local development environment and the server is running, enable **Event Subscriptions** for your Slack app in the App settings. For the Request URL, provide `https://your-ngrok-url/slack/events`.
-13. Subscribe to `app_mentions` in the Event Subscriptions Bot Events.
+4. Under **Incoming Webhooks**, click the toggle to switch "Activate Incoming Webhooks" `On`.
+5. In the **OAuth & Permissions** section, add "Bot Token Scopes" for `app_mentions:read`, `chat:write`, and `incoming-webhook`.
+6. Under **Install App**, click the "Install App" button to install to your team workspace. When prompted, choose a channel to install to (it can be any channel.) This will generate a "Bot User OAuth Access Token" (which you will need in order to configure your local environment variables). The token will be displayed after you've installed your app. _Note that if you update any Scopes later, you'll have to reinstall your app._
 
-**Note:** If you change scopes during development, you may need to _reinstall_ the app to your workspace.
+### Database Setup
+
+1. You can use [mongoDB Atlas](https://cloud.mongodb.com/) to persist the rotation data store. [Sign up for an account](https://www.mongodb.com/cloud/atlas/register) and create a FREE cluster.
+2. Select your preferred **Cloud Provider & Region**. You may also give your cluster a name if you like.
+3. Your cluster will take a few minutes to deploy.
+4. Once it's complete, click the **CONNECT** button. This will open a modal where you can set up a connection to your database.
+5. Click **Add a Different IP Address** and enter `0.0.0.0/0`. This allows connections from any IP (keep in mind you should ensure good authentication with this.)
+6. **Create a MongoDB User**. This is a _database user_, and these credentials will be used in your `MONGO_URI`. Enter a Username and use the button to Autogenerate Secure Password. Make note of the username and password, then click "Create MongoDB User" and then proceed to the next step.
+7. In **Choose a Connection Method**, select "Connect your application." Use `Node.js` as the driver with the latest version available. Then copy the "Connection String Only."
+8. In a text file or other secure place (such as a password manager), paste the copied connection string and _modify_ it to replace `<username>` and `<password>` with the credentials you just created in the previous step. Replace the database name (`test`) with a name of your choosing (e.g., `rota`).
+
+### Code and Configuration Setup
+
+1. Clone this repository locally to your desktop.
+2. Rename the `.env_sample` file to `.env` and update the placeholder info with the appropriate configuration from your [Slack app settings](#slack-app-initial-setup) and [MongoDB Atlas connection](#database-setup).
+3. From your cloned directory, run `$ npm install` to install dependencies.
+4. Run `$ npm start` to start the app on the port specified in your `.env` file.
+5. Download and use [ngrok](https://ngrok.com) to expose a public URL for your local web server.
+6. Once you have ngrok pointing to your Slack app's local development environment and the server is running, go to your **Slack App settings** and in the **Event Subscriptions** section, toggle `On` "Enable Events."
+7. For the "Request URL," enter `https://your-ngrok-url/slack/events`.
+8. In "Subscribe to bot events," add `app_mentions` and `app_home_opened`.
 
 ## Deployment
 
@@ -89,12 +104,6 @@ If using DigitalOcean (or a similar VPS), input your production environment vari
 If using Heroku, input your production environment variables in your Heroku app settings.
 
 Whatever deployment option you choose, once you have a public domain for your Slack app with SSL, go into your production Slack app settings and update the **Event Subscriptions** Request URL to `https://your-public-url/slack/events`.
-
-**Important:** Redeploying the app on Heroku _will_ erase the local storage file that contains the rotation data! This won't be the case on a VPS.
-
-### Storage of Rotation Data
-
-Rota stores its rotation data in a simple JSON file on the server where the app is deployed. You'll need a new deployment of the app for every Slack workspace you want to use Rota in.
 
 ---
 

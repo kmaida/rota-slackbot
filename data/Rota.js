@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 /*------------------
-  ROTATION SCHEMA
+    ROTA SCHEMA
 ------------------*/
-const rotationSchema = new Schema({
+const rotaSchema = new Schema({
   name: { type: String, required: true },
   description: String,
   assigned: String,
   staff: [String]
 });
 
-module.exports = mongoose.model('Rotation', rotationSchema);
+module.exports = mongoose.model('Rota', rotaSchema);

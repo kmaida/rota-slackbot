@@ -1,4 +1,4 @@
-const Rotation = require('./Rotation');
+const Rota = require('./Rota');
 
 /*------------------
   DATABASE / STORE
@@ -9,7 +9,7 @@ const store = {
     Get rotations
   ----*/
   async getRotations() {
-    return Rotation.find({}, (err, rotations) => {
+    return Rota.find({}, (err, rotations) => {
       const arr = [];
       if (err) console.error(err.message);
       rotations.forEach(rotation => {
@@ -23,9 +23,9 @@ const store = {
     @Params: rotation name, description
   ----*/
   async newRotation(rotaname, description) {
-    return Rotation.findOne({ name: rotaname }, (err) => {
+    return Rota.findOne({ name: rotaname }, (err) => {
       if (err) console.error(err.message);
-      const rotation = new Rotation({
+      const rotation = new Rota({
         name: rotaname,
         description: description,
         assigned: null
@@ -41,7 +41,7 @@ const store = {
     @Params: rotation name, staff array
   ----*/
   async saveStaff(rotaname, staffArr) {
-    return Rotation.findOne({ name: rotaname }, (err, rotation) => {
+    return Rota.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       rotation.staff = staffArr;
       rotation.save((err) => {
@@ -55,7 +55,7 @@ const store = {
     @Params: rotation name, usermention to assign
   ----*/
   async saveAssignment(rotaname, usermention) {
-    return Rotation.findOne({ name: rotaname }, (err, rotation) => {
+    return Rota.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       rotation.assigned = usermention;
       rotation.save((err) => {
@@ -70,7 +70,7 @@ const store = {
     @Returns: rotation object
   ----*/
   async getRotation(rotaname) {
-    return Rotation.findOne({ name: rotaname }, (err, rotation) => {
+    return Rota.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       return rotation;
     });
@@ -80,7 +80,7 @@ const store = {
     @Params: rotation
   ----*/
   async deleteRotation(rotaname) {
-    return Rotation.findOne({ name: rotaname }, (err, rotation) => {
+    return Rota.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       rotation.remove(err => {
         if (err) console.error(err.message);
