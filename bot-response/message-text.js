@@ -1,7 +1,6 @@
 /*------------------
     MESSAGE TEXT
 ------------------*/
-
 const msgText = {
   newConfirm: (rotation) => {
     return ':sparkles: The *' + rotation + '* rotation has been created. You can now assign someone to be on-call for this rotation or add a staff list. Use `@rota help` to learn more.';

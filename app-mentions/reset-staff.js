@@ -1,8 +1,8 @@
-/*--
+/*------------------
   RESET STAFF
   @rota "[rotation]" reset staff
   Removes rotation staff
---*/
+------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText) => {
   try {
     const pCmd = utils.parseCmd('reset staff', event, context);

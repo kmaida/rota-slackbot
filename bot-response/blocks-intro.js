@@ -1,7 +1,6 @@
 /*------------------
    BLOCKS: INTRO
 ------------------*/
-
 const introBlocks = [
   {
     "type": "section",

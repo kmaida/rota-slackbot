@@ -1,8 +1,8 @@
-/*--
+/*------------------
   HELP
   @rota help
   Provides instructions on how to use Rota
---*/
+------------------*/
 module.exports = async (app, ec, utils, helpBlocks, msgText) => {
   try {
     const result = await app.client.chat.postMessage({

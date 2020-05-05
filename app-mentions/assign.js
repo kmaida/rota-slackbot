@@ -1,8 +1,8 @@
-/*--
+/*------------------
   ASSIGN
   @rota "[rotation]" assign [@user] [handoff message]
   Assigns a user to specified rotation
---*/
+------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText) => {
   try {
     const pCmd = utils.parseCmd('assign', event, context);

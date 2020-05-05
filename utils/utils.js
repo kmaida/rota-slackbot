@@ -1,7 +1,6 @@
 /*------------------
      UTILITIES
 ------------------*/
-
 const utils = {
   regex: {
     // @rota new "[new-rotation-name]" [optional description]
@@ -56,14 +55,6 @@ const utils = {
     return msg.replace('Reminder: ', '').replace("_(sent with '/gator')_", '').trim();
   },
   /*----
-    Get user ID from mention
-    @Param: <@U324SDF> or <@U0435|some.user>
-    @Returns: U324SDF
-  ----*/
-  getUserID(usermention) {
-    return [...usermention.matchAll(new RegExp(this.regex.userID))][0][1];
-  },
-  /*----
     Remove |user.name from mentions
     When bots like Slackbot or Gator issue commands, this is added :(
     This was deprecated back in 2017 but apparently is still sticking around in some places
@@ -72,6 +63,14 @@ const utils = {
   ----*/
   cleanUser(usermention) {
     return usermention.includes('|') ? `${usermention.split('|')[0]}>` : usermention;
+  },
+  /*----
+    Get user ID from mention
+    @Param: <@U324SDF> or <@U0435|some.user>
+    @Returns: U324SDF
+  ----*/
+  getUserID(usermention) {
+    return [...usermention.matchAll(new RegExp(this.regex.userID))][0][1];
   },
   /*----
     See if a rotation exists (by name)

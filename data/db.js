@@ -3,7 +3,6 @@ const Rota = require('./Rota');
 /*------------------
   DATABASE / STORE
 ------------------*/
-
 const store = {
   /*----
     Get rotations

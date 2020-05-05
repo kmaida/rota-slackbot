@@ -1,8 +1,8 @@
-/*--
+/*------------------
   ASSIGN NEXT
   @rota "[rotation]" assign next [handoff message]
   Assigns next user in staff list to rotation
---*/
+------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText) => {
   try {
     const pCmd = utils.parseCmd('assign next', event, context);

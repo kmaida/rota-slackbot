@@ -1,7 +1,6 @@
 /*------------------
   BLOCKS: COMMANDS
 ------------------*/
-
 const commandsBlocks = [
   {
     "type": "section",

@@ -8,7 +8,6 @@ const app_home_opened = (app) => {
   app.event('app_home_opened', async({ event, context }) => {
     const userID = event.user;
     const storeList = await store.getRotations();
-
     try {
       const showHomeView = await app.client.views.publish({
         token: context.botToken,

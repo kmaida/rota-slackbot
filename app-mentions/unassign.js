@@ -1,8 +1,8 @@
-/*--
+/*------------------
   UNASSIGN
   @rota "[rotation]" unassign
   Clears the assignment for a rotation
---*/
+------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText) => {
   try {
     const pCmd = utils.parseCmd('unassign', event, context);

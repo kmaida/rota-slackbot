@@ -1,8 +1,8 @@
-/*--
+/*------------------
   (MESSAGE)
   @rota "[rotation]" free form message for on-call user
   Send message to on-call user via DM with link to channel
---*/
+------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText) => {
   try {
     const pCmd = utils.parseCmd('message', event, context);

@@ -1,8 +1,8 @@
-/*--
+/*------------------
   ABOUT
   @rota "[rotation]" about
   Provides description and assignment for specified rotation
---*/
+------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText) => {
   try {
     const pCmd = utils.parseCmd('about', event, context);

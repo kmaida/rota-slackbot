@@ -1,8 +1,8 @@
-/*--
+/*------------------
   DELETE
   @rota "[rotation]" delete
   Deletes an existing rotation
---*/
+------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText) => {
   try {
     const pCmd = utils.parseCmd('delete', event, context);
