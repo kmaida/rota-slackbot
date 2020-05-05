@@ -1,4 +1,4 @@
-const Rotation = require('./../schema/Rotation');
+const Rotation = require('./Rotation');
 
 /*------------------
   DATABASE / STORE
@@ -84,20 +84,6 @@ const store = {
     return Rotation.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       return rotation.staff;
-    });
-  },
-  /*----
-    Clears assigned user for a rotation (rotation value)
-    @Params: rotation
-  ----*/
-  async clearAssignment(rotaname) {
-    return Rotation.findOne({ name: rotaname }, (err, rotation) => {
-      if (err) console.error(err.message);
-      rotation.assigned = null;
-      rotation.save((err) => {
-        if (err) console.error(err.message);
-        return rotation;
-      });
     });
   },
   /*----

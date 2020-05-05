@@ -70,7 +70,7 @@ const app_mentions = (app, store) => {
           );
         } else {
           // Initialize a new rotation with description
-          store.newRotation(rotation, description);
+          const save = await store.newRotation(rotation, description);
           const result = await app.client.chat.postMessage(
             utils.msgConfig(botToken, channelID, msgText.newConfirm(rotation))
           );
@@ -106,7 +106,7 @@ const app_mentions = (app, store) => {
           } else {
             // Rotation exists and parameter staff list isn't empty
             // Save to store
-            store.saveStaff(rotation, staff);
+            const save = await store.saveStaff(rotation, staff);
             // Confirm in channel with message about using assign next
             const result = await app.client.chat.postMessage(
               utils.msgConfig(botToken, channelID, msgText.staffConfirm(rotation))
@@ -139,7 +139,7 @@ const app_mentions = (app, store) => {
 
         if (utils.rotationInList(rotation, rotaList)) {
           // If rotation exists, set staff to an empty array
-          store.saveStaff(rotation, []);
+          const save = await store.saveStaff(rotation, []);
           // Send message to confirm staff has been reset
           const result = await app.client.chat.postMessage(
             utils.msgConfig(botToken, channelID, msgText.resetStaffConfirm(rotation))
@@ -171,7 +171,7 @@ const app_mentions = (app, store) => {
 
         if (utils.rotationInList(rotation, rotaList)) {
           // If rotation exists, delete from store completely
-          store.deleteRotation(rotation);
+          const del = await store.deleteRotation(rotation);
           const result = await app.client.chat.postMessage(
             utils.msgConfig(botToken, channelID, msgText.deleteConfirm(rotation))
           );
@@ -202,7 +202,7 @@ const app_mentions = (app, store) => {
 
         if (utils.rotationInList(rotation, rotaList)) {
           // If rotation exists, display its information
-          const rotationObj = store.getRotation(rotation);
+          const rotationObj = await store.getRotation(rotation);
           const result = await app.client.chat.postMessage(
             utils.msgConfig(botToken, channelID, msgText.aboutReport(rotation, rotationObj))
           );
@@ -242,7 +242,7 @@ const app_mentions = (app, store) => {
 
         if (utils.rotationInList(rotation, rotaList)) {
           // Assign user in store
-          store.saveAssignment(rotation, usermention);
+          const save = await store.saveAssignment(rotation, usermention);
           // Confirm assignment in channel
           const result = await app.client.chat.postMessage(
             utils.msgConfig(botToken, channelID, msgText.assignConfirm(usermention, rotation))
@@ -290,10 +290,10 @@ const app_mentions = (app, store) => {
 
         if (utils.rotationInList(rotation, rotaList)) {
           // Rotation exists
-          const staffList = store.getStaffList(rotation);
+          const staffList = await store.getStaffList(rotation);
           if (staffList && staffList.length) {
             // Staff list exists and is not an empty array
-            const lastAssigned = store.getAssignment(rotation);
+            const lastAssigned = await store.getAssignment(rotation);
             const lastAssignedIndex = staffList.indexOf(lastAssigned);
             const lastIndex = staffList.length - 1; // last available position in staff list
             const firstUser = staffList[0];
@@ -313,7 +313,7 @@ const app_mentions = (app, store) => {
               usermention = firstUser;
             }
             // Save assignment
-            store.saveAssignment(rotation, usermention);
+            const save = await store.saveAssignment(rotation, usermention);
             // Send message to the channel about updated assignment
             const result = await app.client.chat.postMessage(
               utils.msgConfig(botToken, channelID, msgText.assignConfirm(usermention, rotation))
@@ -367,7 +367,7 @@ const app_mentions = (app, store) => {
 
         if (utils.rotationInList(rotation, rotaList)) {
           // If rotation exists, display its information
-          const rotationObj = store.getRotation(rotation);
+          const rotationObj = await store.getRotation(rotation);
           if (!!rotationObj.assigned) {
             // If someone is currently assigned, report who
             const result = await app.client.chat.postMessage(
@@ -405,11 +405,11 @@ const app_mentions = (app, store) => {
         const rotation = pCmd.rotation;
 
         if (utils.rotationInList(rotation, rotaList)) {
-          const rotationObj = store.getRotation(rotation);
+          const rotationObj = await store.getRotation(rotation);
           // If rotation exists, check if someone is assigned
           if (!!rotationObj.assigned) {
             // If someone is currently assigned, clear
-            store.saveAssignment(rotation, null);
+            const save = await store.saveAssignment(rotation, null);
             const result = await app.client.chat.postMessage(
               utils.msgConfig(botToken, channelID, msgText.unassignConfirm(rotation))
             );
@@ -493,7 +493,7 @@ const app_mentions = (app, store) => {
         const rotation = pCmd.rotation;
         // Check if rotation exists
         if (utils.rotationInList(rotation, rotaList)) {
-          const oncallUser = store.getAssignment(rotation);
+          const oncallUser = await store.getAssignment(rotation);
           
           if (!!oncallUser) {
             // If someone is assigned to concierge...
