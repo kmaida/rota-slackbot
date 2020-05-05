@@ -290,11 +290,11 @@ const app_mentions = (app, store) => {
 
         if (utils.rotationInList(rotation, rotaList)) {
           // Rotation exists; get rotation and staff list
-          const dbRotation = await store.getRotation(rotation);
-          const staffList = dbRotation.staff;
+          const rotationObj = await store.getRotation(rotation);
+          const staffList = rotationObj.staff;
           if (staffList && staffList.length) {
             // Staff list exists and is not an empty array
-            const lastAssigned = dbRotation.assigned;
+            const lastAssigned = rotationObj.assigned;
             const lastAssignedIndex = staffList.indexOf(lastAssigned);
             const lastIndex = staffList.length - 1; // last available position in staff list
             const firstUser = staffList[0];
@@ -494,7 +494,8 @@ const app_mentions = (app, store) => {
         const rotation = pCmd.rotation;
         // Check if rotation exists
         if (utils.rotationInList(rotation, rotaList)) {
-          const oncallUser = await store.getAssignment(rotation);
+          const rotationObj = await store.getRotation(rotation);
+          const oncallUser = rotationObj.assigned;
           
           if (!!oncallUser) {
             // If someone is assigned to concierge...

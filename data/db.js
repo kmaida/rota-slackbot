@@ -65,17 +65,6 @@ const store = {
     });
   },
   /*----
-    Get assigned user for a specific rotation
-    @Params: rotation
-    @Returns: assigned usermention
-  ----*/
-  async getAssignment(rotaname) {
-    return Rotation.findOne({ name: rotaname }, (err, rotation) => {
-      if (err) console.error(err.message);
-      return rotation.assigned;
-    });
-  },
-  /*----
     Get rotation object for a specific rotation
     @Params: rotation
     @Returns: rotation object
