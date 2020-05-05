@@ -144,37 +144,7 @@ const app_mentions = (app, store) => {
       Reports who the assigned user is for a rotation
     --*/
     else if (isWho) {
-      try {
-        const pCmd = utils.parseCmd('who', event, context);
-        const rotation = pCmd.rotation;
-
-        if (utils.rotationInList(rotation, rotaList)) {
-          // If rotation exists, display its information
-          const rotationObj = await store.getRotation(rotation);
-          if (!!rotationObj.assigned) {
-            // If someone is currently assigned, report who
-            const result = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.whoReport(rotationObj.assigned, rotation))
-            );
-          } else {
-            // If nobody is assigned
-            const result = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.nobodyAssigned(rotation))
-            );
-          }
-        } else {
-          // If rotation doesn't exist, send message saying nothing changed
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.whoError(rotation))
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      cmdWho(app, event, context, ec, utils, store, msgText);
     }
 
     /*--
