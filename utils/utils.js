@@ -63,15 +63,23 @@ const utils = {
   getUserID(usermention) {
     return [...usermention.matchAll(new RegExp(this.regex.userID))][0][1];
   },
-/*----
-  Remove |user.name from mentions
-  When bots like Slackbot or Gator issue commands, this is added :(
-  This was deprecated back in 2017 but apparently is still sticking around in some places
-  @Param: <@U324SDF> or <@U0435|some.user>
-  @Returns: <@U324SDF>
-----*/
+  /*----
+    Remove |user.name from mentions
+    When bots like Slackbot or Gator issue commands, this is added :(
+    This was deprecated back in 2017 but apparently is still sticking around in some places
+    @Param: <@U324SDF> or <@U0435|some.user>
+    @Returns: <@U324SDF>
+  ----*/
   cleanUser(usermention) {
     return usermention.includes('|') ? `${usermention.split('|')[0]}>` : usermention;
+  },
+  /*----
+    See if a rotation exists (by name)
+    @Params: rotation name, rotation list
+    @Returns: boolean
+  ----*/
+  rotationInList(rotaname, list) {
+    return list.filter(rotation => rotation.name === rotaname).length > 0;
   },
   /*----
     Test message to see if its format matches expectations for specific command
