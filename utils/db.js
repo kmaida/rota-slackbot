@@ -8,7 +8,7 @@ const store = {
   /*----
     Get rotations
   ----*/
-  getRotations() {
+  async getRotations() {
     return Rotation.find({}, (err, rotations) => {
       const arr = [];
       if (err) console.error(err.message);
@@ -22,7 +22,7 @@ const store = {
     Create new rotation
     @Params: rotation name, description
   ----*/
-  newRotation(rotaname, description) {
+  async newRotation(rotaname, description) {
     return Rotation.findOne({ name: rotaname }, (err) => {
       if (err) console.error(err.message);
       const rotation = new Rotation({
@@ -40,7 +40,7 @@ const store = {
     Save rotation staff to rotation store
     @Params: rotation name, staff array
   ----*/
-  saveStaff(rotaname, staffArr) {
+  async saveStaff(rotaname, staffArr) {
     return Rotation.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       rotation.staff = staffArr;
@@ -54,7 +54,7 @@ const store = {
     Save user assignment to rotation store
     @Params: rotation name, usermention to assign
   ----*/
-  saveAssignment(rotaname, usermention) {
+  async saveAssignment(rotaname, usermention) {
     return Rotation.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       rotation.assigned = usermention;
@@ -69,7 +69,7 @@ const store = {
     @Params: rotation
     @Returns: assigned usermention
   ----*/
-  getAssignment(rotaname) {
+  async getAssignment(rotaname) {
     return Rotation.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       return rotation.assigned;
@@ -80,7 +80,7 @@ const store = {
     @Params: rotation
     @Returns: staff list array (or undefined)
   ----*/
-  getStaffList(rotaname) {
+  async getStaffList(rotaname) {
     return Rotation.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       return rotation.staff;
@@ -90,7 +90,7 @@ const store = {
     Clears assigned user for a rotation (rotation value)
     @Params: rotation
   ----*/
-  clearAssignment(rotaname) {
+  async clearAssignment(rotaname) {
     return Rotation.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       rotation.assigned = null;
@@ -105,7 +105,7 @@ const store = {
     @Params: rotation
     @Returns: rotation object
   ----*/
-  getRotation(rotaname) {
+  async getRotation(rotaname) {
     return Rotation.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       return rotation;
@@ -115,7 +115,7 @@ const store = {
     Deletes a rotation entirely
     @Params: rotation
   ----*/
-  deleteRotation(rotaname) {
+  async deleteRotation(rotaname) {
     return Rotation.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       rotation.remove(err => {

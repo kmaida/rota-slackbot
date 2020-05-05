@@ -13,7 +13,7 @@ const app_mentions = (app, store) => {
     const channelID = event.channel;              // channel ID
     const botToken = context.botToken;
     // Get rotations list
-    const rotaList = store.getRotations();
+    const rotaList = await store.getRotations();
     // Decision logic establishing how to respond to mentions
     const isNew = utils.isCmd('new', text);
     const isStaff = utils.isCmd('staff', text);
@@ -63,7 +63,7 @@ const app_mentions = (app, store) => {
         const rotation = pCmd.rotation;
         const description = pCmd.description;
 
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           // Can't create a rotation that already exists
           const result = await app.client.chat.postMessage(
             utils.msgConfig(botToken, channelID, msgText.newError(rotation))
@@ -96,7 +96,7 @@ const app_mentions = (app, store) => {
         const rotation = pCmd.rotation;
         const staff = pCmd.staff;
 
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           if (!staff.length) {
             // If staff array is empty, send an error message
             // This is unlikely to happen but possible if there's a really malformed command
@@ -137,7 +137,7 @@ const app_mentions = (app, store) => {
         const pCmd = utils.parseCmd('reset staff', event, context);
         const rotation = pCmd.rotation;
 
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           // If rotation exists, set staff to an empty array
           store.saveStaff(rotation, []);
           // Send message to confirm staff has been reset
@@ -169,7 +169,7 @@ const app_mentions = (app, store) => {
         const pCmd = utils.parseCmd('delete', event, context);
         const rotation = pCmd.rotation;
 
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           // If rotation exists, delete from store completely
           store.deleteRotation(rotation);
           const result = await app.client.chat.postMessage(
@@ -200,7 +200,7 @@ const app_mentions = (app, store) => {
         const pCmd = utils.parseCmd('about', event, context);
         const rotation = pCmd.rotation;
 
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           // If rotation exists, display its information
           const rotationObj = store.getRotation(rotation);
           const result = await app.client.chat.postMessage(
@@ -240,7 +240,7 @@ const app_mentions = (app, store) => {
         const usermention = pCmd.user;
         const handoffMsg = pCmd.handoff;
 
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           // Assign user in store
           store.saveAssignment(rotation, usermention);
           // Confirm assignment in channel
@@ -288,7 +288,7 @@ const app_mentions = (app, store) => {
         const rotation = pCmd.rotation;
         const handoffMsg = pCmd.handoff;
 
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           // Rotation exists
           const staffList = store.getStaffList(rotation);
           if (staffList && staffList.length) {
@@ -365,7 +365,7 @@ const app_mentions = (app, store) => {
         const pCmd = utils.parseCmd('who', event, context);
         const rotation = pCmd.rotation;
 
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           // If rotation exists, display its information
           const rotationObj = store.getRotation(rotation);
           if (!!rotationObj.assigned) {
@@ -404,7 +404,7 @@ const app_mentions = (app, store) => {
         const pCmd = utils.parseCmd('unassign', event, context);
         const rotation = pCmd.rotation;
 
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           const rotationObj = store.getRotation(rotation);
           // If rotation exists, check if someone is assigned
           if (!!rotationObj.assigned) {
@@ -440,18 +440,11 @@ const app_mentions = (app, store) => {
       Lists all rotations, descriptions, and assignments
     --*/
     else if (isList) {
-      // store.getRotations().then(rotations => {
-      //   console.log(rotations);
-      // });
-
-      const rotaList = await store.getRotations();
-      console.log(rotaList);
-
       try {
         // If the store is not empty
         if (rotaList && rotaList.length) {
           const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.listReport(list))
+            utils.msgConfig(botToken, channelID, msgText.listReport(rotaList))
           );
         } else {
           // If store is empty
@@ -499,7 +492,7 @@ const app_mentions = (app, store) => {
         const pCmd = utils.parseCmd('message', event, context);
         const rotation = pCmd.rotation;
         // Check if rotation exists
-        if (utils.rotationInList(rotation, store.getRotations())) {
+        if (utils.rotationInList(rotation, rotaList)) {
           const oncallUser = store.getAssignment(rotation);
           
           if (!!oncallUser) {
