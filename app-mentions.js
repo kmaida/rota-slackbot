@@ -20,14 +20,7 @@ const cmdMessage = require('./app-mentions/message');
 ------------------*/
 const app_mentions = (app, store) => {
   app.event('app_mention', async({ event, context }) => {
-    // Gather event and context info
-    const text = event.text;                      // raw text from the mention
-    const sentByUserID = event.user;              // ID of user who sent the message
-    const channelID = event.channel;              // channel ID
-    const botToken = context.botToken;
-    // Get rotations list
-    const rotaList = await store.getRotations();
-
+    // Event and context data
     const ec = {
       text: event.text,                           // raw text from the mention
       sentByUserID: event.user,                   // ID of user who sent the message
@@ -35,24 +28,23 @@ const app_mentions = (app, store) => {
       botToken: context.botToken,                 // bot access token
       rotaList: await store.getRotations()        // rotations in db
     }
-
     // Decision logic establishing how to respond to mentions
-    const isNew = utils.isCmd('new', text);
-    const isStaff = utils.isCmd('staff', text);
-    const isResetStaff = utils.isCmd('reset staff', text);
-    const isAssign = utils.isCmd('assign', text);
-    const isAssignNext = utils.isCmd('assign next', text);
-    const isWho = utils.isCmd('who', text);
-    const isAbout = utils.isCmd('about', text);
-    const isUnassign = utils.isCmd('unassign', text);
-    const isDelete = utils.isCmd('delete', text);
-    const isHelp = utils.isCmd('help', text);
-    const isList = utils.isCmd('list', text);
-    const testMessage = utils.isCmd('message', text);
+    const isNew = utils.isCmd('new', ec.text);
+    const isStaff = utils.isCmd('staff', ec.text);
+    const isResetStaff = utils.isCmd('reset staff', ec.text);
+    const isAssign = utils.isCmd('assign', ec.text);
+    const isAssignNext = utils.isCmd('assign next', ec.text);
+    const isWho = utils.isCmd('who', ec.text);
+    const isAbout = utils.isCmd('about', ec.text);
+    const isUnassign = utils.isCmd('unassign', ec.text);
+    const isDelete = utils.isCmd('delete', ec.text);
+    const isHelp = utils.isCmd('help', ec.text);
+    const isList = utils.isCmd('list', ec.text);
+    const testMessage = utils.isCmd('message', ec.text);
     const isMessage =
       testMessage &&
       !isNew &&
-      !isStaff && !text.includes('" staff <@')  // catch malformed staff commands (less robust regex)
+      !isStaff && !ec.text.includes('" staff <@')  // catch malformed staff commands (less robust regex)
       !isResetStaff &&
       !isAssign &&
       !isAssignNext &&
@@ -60,193 +52,69 @@ const app_mentions = (app, store) => {
       !isAbout &&
       !isUnassign &&
       !isDelete;
-    const didntUnderstand =
-      !isNew &&
-      !isStaff && !text.includes('" staff <@')
-      !isResetStaff &&
-      !isAssign &&
-      !isAssignNext &&
-      !isWho &&
-      !isAbout &&
-      !isUnassign &&
-      !isDelete &&
-      !isHelp &&
-      !isList &&
-      !isMessage;
 
-    /*--
-      NEW
-      @rota new "[rotation-name]" [optional description]
-      Creates a new rotation with description
-    --*/
+    // @rota new "[rotation-name]" [optional description]
     if (isNew) {
       cmdNew(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      STAFF
-      @rota "[rotation-name]" staff [@user @user @user]
-      Staffs a rotation by passing a space-separated list of users
-      Also allows comma-separated lists; fairly robust against extra spaces/commas
-    --*/
+    // @rota "[rotation-name]" staff [@user @user @user]
     else if (isStaff) {
       cmdStaff(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      RESET STAFF
-      @rota "[rotation]" reset staff
-      Removes rotation staff
-    --*/
+    // @rota "[rotation]" reset staff
     else if (isResetStaff) {
       cmdResetStaff(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      DELETE
-      @rota "[rotation]" delete
-      Deletes an existing rotation
-    --*/
+    // @rota "[rotation]" delete
     else if (isDelete) {
       cmdDelete(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      ABOUT
-      @rota "[rotation]" about
-      Provides description and assignment for specified rotation
-    --*/
+    // @rota "[rotation]" about
     else if (isAbout) {
       cmdAbout(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      ASSIGN
-      @rota "[rotation]" assign [@user] [handoff message]
-      Assigns a user to specified rotation
-    --*/
+    // @rota "[rotation]" assign [@user] [handoff message]
     else if (isAssign) {
       cmdAssign(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      ASSIGN NEXT
-      @rota "[rotation]" assign next [handoff message]
-      Assigns next user in staff list to rotation
-    --*/
+    // @rota "[rotation]" assign next [handoff message]
     else if (isAssignNext) {
       cmdAssignNext(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      WHO
-      @rota "[rotation]" who
-      Reports who the assigned user is for a rotation
-    --*/
+    // @rota "[rotation]" who
     else if (isWho) {
       cmdWho(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      UNASSIGN
-      @rota "[rotation]" unassign
-      Clears the assignment for a rotation
-    --*/
+    // @rota "[rotation]" unassign
     else if (isUnassign) {
       cmdUnassign(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      LIST
-      @rota list
-      Lists all rotations, descriptions, and assignments
-    --*/
+    // @rota list
     else if (isList) {
       cmdList(app, ec, utils, msgText);
     }
-
-    /*--
-      HELP
-      @rota help
-      Provides instructions on how to use Rota
-    --*/
+    // @rota help
     else if (isHelp) {
       cmdHelp(app, ec, utils, helpBlocks, msgText);
     }
-
-    /*--
-      (MESSAGE)
-      @rota "[rotation]" free form message for on-call user
-      Send message to on-call user via DM with link to channel
-    --*/
+    // @rota "[rotation]" free form message for on-call user
     else if (isMessage) {
-      try {
-        const pCmd = utils.parseCmd('message', event, context);
-        const rotation = pCmd.rotation;
-        // Check if rotation exists
-        if (utils.rotationInList(rotation, rotaList)) {
-          const rotationObj = await store.getRotation(rotation);
-          const oncallUser = rotationObj.assigned;
-          
-          if (!!oncallUser) {
-            // If someone is assigned to concierge...
-            const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
-            const oncallUserDMChannel = utils.getUserID(oncallUser);
-            // Send DM to on-call user notifying them of the message that needs their attention
-            const sendDM = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, oncallUserDMChannel, msgText.dmToAssigned(rotation, sentByUserID, channelID, link))
-            );
-            // Send message to the channel where help was requested notifying that assigned user was contacted
-            const sendChannelMsg = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.confirmChannelMsg(rotation, sentByUserID))
-            );
-            if (sentByUserID !== 'USLACKBOT') {
-              // Send ephemeral message (only visible to sender) telling them what to do if urgent
-              // Do nothing if coming from a slackbot
-              const sendEphemeralMsg = await app.client.chat.postEphemeral(
-                utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.confirmEphemeralMsg(rotation))
-              );
-            }
-          } else {
-            // Rotation is not assigned; give instructions how to assign
-            const result = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.nobodyAssigned(rotation))
-            );
-          }
-        } else {
-          // Rotation doesn't exist
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.msgError(rotation))
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      cmdMessage(app, event, context, ec, utils, store, msgText);
     }
-
-    /*--
-      (OTHER)
-      @rota [other]
-      Rota didn't recognize the format of the mention text
-    --*/
-    else if (didntUnderstand) {
+    // @rota anything else
+    else {
       try {
         const result = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.didntUnderstand())
+          utils.msgConfig(ec.botToken, ec.channelID, msgText.didntUnderstand())
         );
       }
       catch (err) {
         console.error(err);
         const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
+          utils.msgConfig(ec.botToken, ec.channelID, msgText.error(err))
         );
       }
     }
   });
 }
-
 module.exports = app_mentions;
