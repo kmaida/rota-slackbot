@@ -5,6 +5,7 @@ const msgText = require('./bot-response/message-text');
 const cmdNew = require('./app-mentions/new');
 const cmdStaff = require('./app-mentions/staff');
 const cmdResetStaff = require('./app-mentions/reset-staff');
+const cmdDelete = require('./app-mentions/delete');
 
 /*------------------
     APP MENTIONS
@@ -99,29 +100,7 @@ const app_mentions = (app, store) => {
       Deletes an existing rotation
     --*/
     else if (isDelete) {
-      try {
-        const pCmd = utils.parseCmd('delete', event, context);
-        const rotation = pCmd.rotation;
-
-        if (utils.rotationInList(rotation, rotaList)) {
-          // If rotation exists, delete from store completely
-          const del = await store.deleteRotation(rotation);
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.deleteConfirm(rotation))
-          );
-        } else {
-          // If rotation doesn't exist, send message saying nothing changed
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.deleteError(rotation))
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      cmdDelete(app, event, context, ec, utils, store, msgText);
     }
 
     /*--
