@@ -90,6 +90,8 @@ If using Heroku, input your production environment variables in your Heroku app 
 
 Whatever deployment option you choose, once you have a public domain for your Slack app with SSL, go into your production Slack app settings and update the **Event Subscriptions** Request URL to `https://your-public-url/slack/events`.
 
+**Important:** Redeploying the app on Heroku _will_ erase the local storage file that contains the rotation data! This won't be the case on a VPS.
+
 ### Storage of Rotation Data
 
 Rota stores its rotation data in a simple JSON file on the server where the app is deployed. You'll need a new deployment of the app for every Slack workspace you want to use Rota in.
