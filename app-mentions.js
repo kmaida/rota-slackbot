@@ -153,38 +153,7 @@ const app_mentions = (app, store) => {
       Clears the assignment for a rotation
     --*/
     else if (isUnassign) {
-      try {
-        const pCmd = utils.parseCmd('unassign', event, context);
-        const rotation = pCmd.rotation;
-
-        if (utils.rotationInList(rotation, rotaList)) {
-          const rotationObj = await store.getRotation(rotation);
-          // If rotation exists, check if someone is assigned
-          if (!!rotationObj.assigned) {
-            // If someone is currently assigned, clear
-            const save = await store.saveAssignment(rotation, null);
-            const result = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.unassignConfirm(rotation))
-            );
-          } else {
-            // If nobody is assigned
-            const result = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.unassignNoAssignment(rotation))
-            );
-          }
-        } else {
-          // If rotation doesn't exist, send message saying nothing changed
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.unassignError(rotation))
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      cmdUnassign(app, event, context, ec, utils, store, msgText);
     }
 
     /*--
