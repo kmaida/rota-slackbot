@@ -31,12 +31,12 @@ db.once('open', function() {
 /*------------------
   APP HOME OPENED
 ------------------*/
-app_home_opened(app);
+require('./app-home-opened')(app);
 
 /*------------------
     APP MENTIONS
 ------------------*/
-app_mentions(app, store);
+require('./app-mentions')(app, store);
 
 /*------------------
      START APP

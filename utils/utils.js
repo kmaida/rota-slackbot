@@ -150,7 +150,7 @@ const utils = {
         return {
           rotation: res[3],
           command: res[2],
-          description: description ? description.trim() : '(no description provided)'
+          description: description ? description.trim() : '(_no description provided_)'
         };
       }
       // Command, rotation

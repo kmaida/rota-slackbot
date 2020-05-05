@@ -377,7 +377,7 @@ const app_mentions = (app, store) => {
           } else {
             // If nobody is assigned
             const result = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.whoUnassigned(rotation))
+              utils.msgConfig(botToken, channelID, msgText.nobodyAssigned(rotation))
             );
           }
         } else {
