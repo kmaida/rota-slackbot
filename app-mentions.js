@@ -7,6 +7,13 @@ const cmdStaff = require('./app-mentions/staff');
 const cmdResetStaff = require('./app-mentions/reset-staff');
 const cmdDelete = require('./app-mentions/delete');
 const cmdAbout = require('./app-mentions/about');
+const cmdAssign = require('./app-mentions/assign');
+const cmdAssignNext = require('./app-mentions/assign-next');
+const cmdWho = require('./app-mentions/who');
+const cmdUnassign = require('./app-mentions/unassign');
+const cmdList = require('./app-mentions/list');
+const cmdHelp = require('./app-mentions/help');
+const cmdMessage = require('./app-mentions/message');
 
 /*------------------
     APP MENTIONS
@@ -119,47 +126,7 @@ const app_mentions = (app, store) => {
       Assigns a user to specified rotation
     --*/
     else if (isAssign) {
-      try {
-        const pCmd = utils.parseCmd('assign', event, context);
-        const rotation = pCmd.rotation;
-        const usermention = pCmd.user;
-        const handoffMsg = pCmd.handoff;
-
-        if (utils.rotationInList(rotation, rotaList)) {
-          // Assign user in store
-          const save = await store.saveAssignment(rotation, usermention);
-          // Confirm assignment in channel
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.assignConfirm(usermention, rotation))
-          );
-          if (!!handoffMsg) {
-            // Send DM to newly assigned user notifying them of the handoff message
-            const oncallUserDMChannel = utils.getUserID(usermention);
-            const link = `https://${process.env.SLACK_TEAM}.slack.com/archives/${channelID}/p${event.ts.replace('.', '')}`;
-            // Send DM to on-call user notifying them of the message that needs their attention
-            const sendDM = await app.client.chat.postMessage(
-              utils.msgConfigBlocks(botToken, oncallUserDMChannel, msgText.assignDMHandoffBlocks(rotation, link, sentByUserID, channelID, handoffMsg))
-            );
-            if (sentByUserID !== 'USLACKBOT') {
-              // Send ephemeral message in channel notifying assigner their handoff message has been delivered via DM
-              const result = await app.client.chat.postEphemeral(
-                utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))
-              );
-            }
-          }
-        } else {
-          // If rotation doesn't exist, send message saying so
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.assignError(rotation))
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      cmdAssign(app, event, context, ec, utils, store, msgText);
     }
 
     /*--
