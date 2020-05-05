@@ -79,7 +79,10 @@ const utils = {
     @Returns: boolean
   ----*/
   rotationInList(rotaname, list) {
-    return list.filter(rotation => rotation.name === rotaname).length > 0;
+    if (list && list.length) {
+      return list.filter(rotation => rotation.name === rotaname).length > 0;
+    }
+    return false;
   },
   /*----
     Test message to see if its format matches expectations for specific command
