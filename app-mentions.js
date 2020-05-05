@@ -14,6 +14,15 @@ const app_mentions = (app, store) => {
     const botToken = context.botToken;
     // Get rotations list
     const rotaList = await store.getRotations();
+
+    const ec = {
+      text: event.text,                           // raw text from the mention
+      sentByUserID: event.user,                   // ID of user who sent the message
+      channelID: event.channel,                   // channel ID
+      botToken: context.botToken,                 // bot access token
+      rotaList: await store.getRotations()        // rotations in db
+    }
+
     // Decision logic establishing how to respond to mentions
     const isNew = utils.isCmd('new', text);
     const isStaff = utils.isCmd('staff', text);
@@ -58,30 +67,7 @@ const app_mentions = (app, store) => {
       Creates a new rotation with description
     --*/
     if (isNew) {
-      try {
-        const pCmd = utils.parseCmd('new', event, context);
-        const rotation = pCmd.rotation;
-        const description = pCmd.description;
-
-        if (utils.rotationInList(rotation, rotaList)) {
-          // Can't create a rotation that already exists
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.newError(rotation))
-          );
-        } else {
-          // Initialize a new rotation with description
-          const save = await store.newRotation(rotation, description);
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.newConfirm(rotation))
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      require('./app-mentions/new')(app, event, context, ec, utils, store, msgText);
     }
 
     /*--
@@ -91,40 +77,7 @@ const app_mentions = (app, store) => {
       Also allows comma-separated lists; fairly robust against extra spaces/commas
     --*/
     else if (isStaff) {
-      try {
-        const pCmd = utils.parseCmd('staff', event, context);
-        const rotation = pCmd.rotation;
-        const staff = pCmd.staff;
-
-        if (utils.rotationInList(rotation, rotaList)) {
-          if (!staff.length) {
-            // If staff array is empty, send an error message
-            // This is unlikely to happen but possible if there's a really malformed command
-            const result = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.staffEmpty())
-            );
-          } else {
-            // Rotation exists and parameter staff list isn't empty
-            // Save to store
-            const save = await store.saveStaff(rotation, staff);
-            // Confirm in channel with message about using assign next
-            const result = await app.client.chat.postMessage(
-              utils.msgConfig(botToken, channelID, msgText.staffConfirm(rotation))
-            );
-          }
-        } else {
-          // Rotation doesn't exist; prompt to create it first
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.staffError(rotation))
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      require('./app-mentions/staff')(app, event, context, ec, utils, store, msgText);
     }
 
     /*--
