@@ -289,11 +289,12 @@ const app_mentions = (app, store) => {
         const handoffMsg = pCmd.handoff;
 
         if (utils.rotationInList(rotation, rotaList)) {
-          // Rotation exists
-          const staffList = await store.getStaffList(rotation);
+          // Rotation exists; get rotation and staff list
+          const dbRotation = await store.getRotation(rotation);
+          const staffList = dbRotation.staff;
           if (staffList && staffList.length) {
             // Staff list exists and is not an empty array
-            const lastAssigned = await store.getAssignment(rotation);
+            const lastAssigned = dbRotation.assigned;
             const lastAssignedIndex = staffList.indexOf(lastAssigned);
             const lastIndex = staffList.length - 1; // last available position in staff list
             const firstUser = staffList[0];

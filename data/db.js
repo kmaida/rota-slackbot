@@ -76,17 +76,6 @@ const store = {
     });
   },
   /*----
-    Get staff list for a rotation
-    @Params: rotation
-    @Returns: staff list array (or undefined)
-  ----*/
-  async getStaffList(rotaname) {
-    return Rotation.findOne({ name: rotaname }, (err, rotation) => {
-      if (err) console.error(err.message);
-      return rotation.staff;
-    });
-  },
-  /*----
     Get rotation object for a specific rotation
     @Params: rotation
     @Returns: rotation object
