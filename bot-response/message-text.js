@@ -94,7 +94,8 @@ const msgText = {
       return !!item.assigned ? ' (`' + item.assigned + '`)' : ' (_unassigned_)';
     };
     for (const rotation in list) {
-      msgStr = msgStr + `• *${rotation}*: ${list[rotation].description}${assignment(list[rotation])}\n`;
+      const rota = list[rotation];
+      msgStr = msgStr + `• *${rota.name}*: ${rota.description}${assignment(rota)}\n`;
     }
     return `:clipboard: Here are all the rotations I know about:\n${msgStr}`;
   },
