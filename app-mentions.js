@@ -6,6 +6,7 @@ const cmdNew = require('./app-mentions/new');
 const cmdStaff = require('./app-mentions/staff');
 const cmdResetStaff = require('./app-mentions/reset-staff');
 const cmdDelete = require('./app-mentions/delete');
+const cmdAbout = require('./app-mentions/about');
 
 /*------------------
     APP MENTIONS
@@ -109,36 +110,7 @@ const app_mentions = (app, store) => {
       Provides description and assignment for specified rotation
     --*/
     else if (isAbout) {
-      try {
-        const pCmd = utils.parseCmd('about', event, context);
-        const rotation = pCmd.rotation;
-
-        if (utils.rotationInList(rotation, rotaList)) {
-          // If rotation exists, display its information
-          const rotationObj = await store.getRotation(rotation);
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.aboutReport(rotation, rotationObj))
-          );
-          if (sentByUserID !== 'USLACKBOT') {
-            // Send ephemeral message with staff (to save notifications)
-            // Do nothing if coming from a slackbot
-            const ephStaffResult = await app.client.chat.postEphemeral(
-              utils.msgConfigEph(botToken, channelID, sentByUserID, msgText.aboutStaffEph(rotation, rotationObj.staff))
-            );
-          }
-        } else {
-          // If rotation doesn't exist, send message saying nothing changed
-          const result = await app.client.chat.postMessage(
-            utils.msgConfig(botToken, channelID, msgText.aboutError(rotation))
-          );
-        }
-      }
-      catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(botToken, channelID, msgText.error(err))
-        );
-      }
+      cmdAbout(app, event, context, ec, utils, store, msgText);
     }
 
     /*--
