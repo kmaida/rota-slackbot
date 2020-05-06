@@ -6,6 +6,7 @@ Rota is a Slack app + bot I wrote for internal team use at [Gatsby](https://gats
 
 * `@rota new "[new-rotation-name]" [description]` creates a new rotation; rotation names can contain _only_ lowercase letters, numbers, and hyphens. Technically the description is optional, but everyone will benefit if you provide one.
 * `@rota delete "[rotation]"` deletes the rotation completely (use with caution!).
+* `@rota "[rotation]" description [new description]` updates the description for a rotation.
 * `@rota "[rotation]" staff [@user1 @user2 @user3]` adds staff to a rotation; a space-separated list of usernames is expected as a parameter with usernames in the order of desired rotation (rotations with a staff list can be assigned using `assign next`).
 * `@rota "[rotation]" reset staff` clears a rotation's staff list (use with caution!).
 * `@rota "[rotation]" assign [@user] [optional handoff message]` assigns someone to the rotation and, optionally, sends a DM to them with handoff information.
