@@ -53,7 +53,7 @@ _(In a #channel)_
 ### Slack App Initial Setup
 
 1. [Create a new Slack app](https://api.slack.com/apps/new).
-2. Name your app `concierge` and select your preferred development Slack workspace.
+2. Name your app `rota` and select your preferred development Slack workspace.
 3. Under **App Home**, make sure your bot and app's name are `rota`.
   * Toggle on "Always Show My Bot as Online".
   * Enable the Home Tab.
