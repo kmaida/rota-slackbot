@@ -8,6 +8,15 @@ const msgText = {
   newError: (rotation) => {
     return ':mag_right: The *' + rotation + '* rotation already exists. You can assign someone to be on-call with `@rota "' + rotation + '" assign [@user]`.';
   },
+  descConfirm: (rotation, description) => {
+    return `:writing_hand: The *${rotation}* description has been updated to "${description}"`;
+  },
+  descEmpty: (rotation) => {
+    return `:disappointed: I couldn't update the description for *${rotation}* because it looks like you didn't provide one.`;
+  },
+  descError: (rotation) => {
+    return ':shrug: I couldn\'t update the description for "' + rotation + '" because it does not exist. When you create a new rotation, you can include the description: `@rota new "' + rotation + '" [description]`.';
+  },
   staffConfirm: (rotation) => {
     return ':busts_in_silhouette: The *' + rotation + '* rotation staff list has been saved! You can now use `@rota "' + rotation + '" assign next` to rotate assignments.\nWhen using `next`, if the currently on-call person is not in the staff list, the assignment will default to the _first person_ in the rotation.\n_(Note: I remove duplicates. If you want someone to do additional shifts, you\'ll need to do a username assignment.)_';
   },

@@ -36,6 +36,20 @@ const store = {
     });
   },
   /*----
+    Update description for existing rotation
+    @Params: rotation name, description
+  ----*/
+  async updateDescription(rotaname, description) {
+    return Rota.findOne({ name: rotaname }, (err, rotation) => {
+      if (err) console.error(err.message);
+      rotation.description = description;
+      rotation.save((err) => {
+        if (err) console.error(err.message);
+        return rotation;
+      });
+    });
+  },
+  /*----
     Save rotation staff to rotation store
     @Params: rotation name, staff array
   ----*/

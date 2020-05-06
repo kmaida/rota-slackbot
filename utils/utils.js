@@ -6,6 +6,9 @@ const utils = {
     // @rota new "[new-rotation-name]" [optional description]
     // Create a new rotation
     new: /^<@(U[A-Za-z0-9|._\-]+?)> (new) "([a-z0-9\-]+?)"(.*)$/g,
+    // @rota "[rotation]" description [description]
+    // Update description for an existing rotation
+    description: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (description)(.*)$/g,
     // @rota "[rotation]" staff [@username, @username, @username]
     // Accepts a space-separated list of usernames to staff a rotation
     // List of mentions has to start with <@U and end with > but can contain spaces, commas, multiple user mentions
@@ -157,6 +160,14 @@ const utils = {
         return {
           rotation: res[3],
           command: res[2]
+        };
+      }
+      // Rotation, command
+      else if (cmd === 'description') {
+        return {
+          rotation: res[2],
+          command: res[3],
+          description: res[4].trim()
         };
       }
       // Rotation, command

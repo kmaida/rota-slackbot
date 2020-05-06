@@ -3,6 +3,7 @@ const helpBlocks = require('./bot-response/blocks-help');
 const msgText = require('./bot-response/message-text');
 // Commands
 const cmdNew = require('./app-mentions/new');
+const cmdDescription = require('./app-mentions/description');
 const cmdStaff = require('./app-mentions/staff');
 const cmdResetStaff = require('./app-mentions/reset-staff');
 const cmdDelete = require('./app-mentions/delete');
@@ -30,6 +31,7 @@ const app_mentions = (app, store) => {
     }
     // Decision logic establishing how to respond to mentions
     const isNew = utils.isCmd('new', ec.text);
+    const isDescription = utils.isCmd('description', ec.text);
     const isStaff = utils.isCmd('staff', ec.text);
     const isResetStaff = utils.isCmd('reset staff', ec.text);
     const isAssign = utils.isCmd('assign', ec.text);
@@ -44,6 +46,7 @@ const app_mentions = (app, store) => {
     const isMessage =
       testMessage &&
       !isNew &&
+      !isDescription &&
       !isStaff && !ec.text.includes('" staff <@')  // catch malformed staff commands (less robust regex)
       !isResetStaff &&
       !isAssign &&
@@ -53,11 +56,15 @@ const app_mentions = (app, store) => {
       !isUnassign &&
       !isDelete;
 
-    // @rota new "[rotation-name]" [optional description]
+    // @rota new "[rotation]" [optional description]
     if (isNew) {
       cmdNew(app, event, context, ec, utils, store, msgText);
     }
-    // @rota "[rotation-name]" staff [@user @user @user]
+    // @rota "[rotation]" description [new description]
+    else if (isDescription) {
+      cmdDescription(app, event, context, ec, utils, store, msgText);
+    }
+    // @rota "[rotation]" staff [@user @user @user]
     else if (isStaff) {
       cmdStaff(app, event, context, ec, utils, store, msgText);
     }
