@@ -130,7 +130,7 @@ const utils = {
       // Proofed to accommodate use of comma+space separation and minor whitespace typos
       else if (cmd === 'staff') {
         const getStaffArray = (staffStr) => {
-          const cleanStr = staffStr.replace(/,/g, '').trim();
+          const cleanStr = staffStr.replace(/,/g, '').replace(/></g, '> <').trim();
           const arr = cleanStr.split(' ');
           const noEmpty = arr.filter(item => !!item !== false);   // Remove falsey values
           const noDupes = new Set(noEmpty);                       // Remove duplicates
