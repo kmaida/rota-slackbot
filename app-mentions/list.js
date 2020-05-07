@@ -3,7 +3,7 @@
   @rota list
   Lists all rotations, descriptions, and assignments
 ------------------*/
-module.exports = async (app, ec, utils, msgText) => {
+module.exports = async (app, ec, utils, msgText, errHandler) => {
   try {
     // If the store is not empty
     if (ec.rotaList && ec.rotaList.length) {
@@ -18,9 +18,6 @@ module.exports = async (app, ec, utils, msgText) => {
     }
   }
   catch (err) {
-    console.error(err);
-    const errResult = await app.client.chat.postMessage(
-      utils.msgConfig(ec.botToken, ec.channelID, msgText.error(err))
-    );
+    errHandler(app, ec, utils, err, msgText);
   }
 };

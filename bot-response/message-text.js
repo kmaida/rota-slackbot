@@ -144,7 +144,7 @@ const msgText = {
     return ":thinking_face: I'm sorry, I didn't understand that. To see my full capabilities and learn how to format commands, type `@rota help`.";
   },
   error: (err) => {
-    return "An error occurred:\n```" + JSON.stringify(err) + "```";
+    return ":cry: I'm sorry, I couldn't do that because an error occurred:\n```" + err + "```";
   }
 }
 

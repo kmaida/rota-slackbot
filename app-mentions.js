@@ -15,6 +15,8 @@ const cmdUnassign = require('./app-mentions/unassign');
 const cmdList = require('./app-mentions/list');
 const cmdHelp = require('./app-mentions/help');
 const cmdMessage = require('./app-mentions/message');
+// Error handling
+const errHandler = require('./utils/error');
 
 /*------------------
     APP MENTIONS
@@ -58,55 +60,55 @@ const app_mentions = (app, store) => {
 
     // @rota new "[rotation]" [optional description]
     if (isNew) {
-      cmdNew(app, event, context, ec, utils, store, msgText);
+      cmdNew(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota "[rotation]" description [new description]
     else if (isDescription) {
-      cmdDescription(app, event, context, ec, utils, store, msgText);
+      cmdDescription(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota "[rotation]" staff [@user @user @user]
     else if (isStaff) {
-      cmdStaff(app, event, context, ec, utils, store, msgText);
+      cmdStaff(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota "[rotation]" reset staff
     else if (isResetStaff) {
-      cmdResetStaff(app, event, context, ec, utils, store, msgText);
+      cmdResetStaff(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota "[rotation]" delete
     else if (isDelete) {
-      cmdDelete(app, event, context, ec, utils, store, msgText);
+      cmdDelete(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota "[rotation]" about
     else if (isAbout) {
-      cmdAbout(app, event, context, ec, utils, store, msgText);
+      cmdAbout(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota "[rotation]" assign [@user] [handoff message]
     else if (isAssign) {
-      cmdAssign(app, event, context, ec, utils, store, msgText);
+      cmdAssign(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota "[rotation]" assign next [handoff message]
     else if (isAssignNext) {
-      cmdAssignNext(app, event, context, ec, utils, store, msgText);
+      cmdAssignNext(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota "[rotation]" who
     else if (isWho) {
-      cmdWho(app, event, context, ec, utils, store, msgText);
+      cmdWho(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota "[rotation]" unassign
     else if (isUnassign) {
-      cmdUnassign(app, event, context, ec, utils, store, msgText);
+      cmdUnassign(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota list
     else if (isList) {
-      cmdList(app, ec, utils, msgText);
+      cmdList(app, ec, utils, msgText, errHandler);
     }
     // @rota help
     else if (isHelp) {
-      cmdHelp(app, ec, utils, helpBlocks, msgText);
+      cmdHelp(app, ec, utils, helpBlocks, msgText, errHandler);
     }
     // @rota "[rotation]" free form message for on-call user
     else if (isMessage) {
-      cmdMessage(app, event, context, ec, utils, store, msgText);
+      cmdMessage(app, event, context, ec, utils, store, msgText, errHandler);
     }
     // @rota anything else
     else {
@@ -116,10 +118,7 @@ const app_mentions = (app, store) => {
         );
       }
       catch (err) {
-        console.error(err);
-        const errResult = await app.client.chat.postMessage(
-          utils.msgConfig(ec.botToken, ec.channelID, msgText.error(err))
-        );
+        errHandler(app, ec, utils, err, msgText);
       }
     }
   });

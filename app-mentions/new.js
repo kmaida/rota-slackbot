@@ -3,7 +3,7 @@
   @rota new "[rotation-name]" [optional description]
   Creates a new rotation with description
 ------------------*/
-module.exports = async (app, event, context, ec, utils, store, msgText) => {
+module.exports = async (app, event, context, ec, utils, store, msgText, errHandler) => {
   try {
     const pCmd = utils.parseCmd('new', event, context);
     const rotation = pCmd.rotation;
@@ -23,9 +23,6 @@ module.exports = async (app, event, context, ec, utils, store, msgText) => {
     }
   }
   catch (err) {
-    console.error(err);
-    const errResult = await app.client.chat.postMessage(
-      utils.msgConfig(ec.botToken, ec.channelID, msgText.error(err))
-    );
+    errHandler(app, ec, utils, err, msgText);
   }
 };
