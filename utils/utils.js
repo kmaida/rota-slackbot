@@ -101,8 +101,6 @@ const utils = {
     // Match text using regex associated with the passed command
     const res = [...cleanText.matchAll(new RegExp(this.regex[cmd]))][0];
 
-    console.log(e, cleanText);
-
     // Regex returned expected match appropriate for the command
     // Command begins with rota bot mention
     if (res && res[1].includes(ct.botUserId)) {

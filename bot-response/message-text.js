@@ -39,7 +39,7 @@ const msgText = {
     return `:shrug: There is no rotation called "${rotation}." Nothing changed.`;
   },
   aboutReport: (rotation, rotationObj) => {
-    const assignment = rotationObj.assigned ? ' (`' + rotationObj.assigned + '`)' : '';
+    const assignment = rotationObj.assigned ? ' (`' + rotationObj.assigned + '`)' : ' (_unassigned_)';
     return `:information_source: *${rotation}*: ${rotationObj.description}${assignment}`;
   },
   aboutStaffEph: (rotation, staff) => {
