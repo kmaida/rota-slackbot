@@ -5,49 +5,49 @@ const utils = {
   regex: {
     // @rota new "[new-rotation-name]" [optional description]
     // Create a new rotation
-    new: /^<@(U[A-Za-z0-9|._\-]+?)> (new) "([a-z0-9\-]+?)"(.*)$/g,
+    new: /^<@(U[A-Z0-9]+?)> (new) "([a-z0-9\-]+?)"(.*)$/g,
     // @rota "[rotation]" description [description]
     // Update description for an existing rotation
-    description: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (description)(.*)$/g,
+    description: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (description)(.*)$/g,
     // @rota "[rotation]" staff [@username, @username, @username]
     // Accepts a space-separated list of usernames to staff a rotation
     // List of mentions has to start with <@U and end with > but can contain spaces, commas, multiple user mentions
-    staff: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (staff) (<@U[<@>A-Za-z0-9|._,\s\-]+?>)$/g,
+    staff: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (staff) (<@U[<@>A-Z0-9,\s]+?>)$/g,
     // @rota "[rotation]" reset staff
     // Removes rotation staff list
-    'reset staff': /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (reset staff)$/g,
+    'reset staff': /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (reset staff)$/g,
     // Capture user ID only from
     // <@U03LKJ> or <@U0345|name>
     userID: /^<@([A-Z0-9]+?)[a-z|._\-]*?>$/g,
     // @rota "[rotation]" assign [@username] [optional handoff message]
     // Assigns a user to a rotation
-    assign: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Za-z0-9|._\-]+?>)(.*)$/g,
+    assign: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (assign) (<@U[A-Z0-9]+?>)(.*)$/g,
     // @rota "[rotation]" assign next [optional handoff message]
     // Assigns a user to a rotation
-    'assign next': /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (assign next)(.*)$/g,
+    'assign next': /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (assign next)(.*)$/g,
     // @rota "[rotation]" who
     // Responds stating who is on-call for a rotation
-    who: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (who)$/g,
+    who: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (who)$/g,
     // @rota "[rotation]" about
     // Responds with description and mention of on-call for a rotation
     // Sends ephemeral staff list (to save everyone's notifications)
-    about: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (about)$/g,
+    about: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (about)$/g,
     // @rota "[rotation]" unassign
     // Unassigns rotation
-    unassign: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (unassign)$/g,
+    unassign: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (unassign)$/g,
     // @rota delete "[rotation]"
     // Removes the rotation completely
-    delete: /^<@(U[A-Za-z0-9|._\-]+?)> (delete) "([a-z0-9\-]+?)"$/g,
+    delete: /^<@(U[A-Z0-9]+?)> (delete) "([a-z0-9\-]+?)"$/g,
     // @rota help
     // Post help messaging
-    help: /^<@(U[A-Za-z0-9|._\-]+?)> (help)$/g,
+    help: /^<@(U[A-Z0-9]+?)> (help)$/g,
     // @rota list
     // List all rotations in store
-    list: /^<@(U[A-Za-z0-9|._\-]+?)> (list)$/g,
+    list: /^<@(U[A-Z0-9]+?)> (list)$/g,
     // @rota "[rotation]" any other message
     // Message does not contain a command
     // Sends message text
-    message: /^<@(U[A-Za-z0-9|._\-]+?)> "([a-z0-9\-]+?)" (.*)$/g
+    message: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (.*)$/g
   },
   /*----
     Clean up message text so it can be tested / parsed
@@ -55,17 +55,11 @@ const utils = {
     @Returns: string
   ----*/
   cleanText(msg) {
-    return msg.replace('Reminder: ', '').replace("_(sent with '/gator')_", '').trim();
-  },
-  /*----
-    Remove |user.name from mentions
-    When bots like Slackbot or Gator issue commands, this is added :(
-    This was deprecated back in 2017 but apparently is still sticking around in some places
-    @Param: <@U324SDF> or <@U0435|some.user>
-    @Returns: <@U324SDF>
-  ----*/
-  cleanUser(usermention) {
-    return usermention.includes('|') ? `${usermention.split('|')[0]}>` : usermention;
+    return msg
+      .replace('Reminder: ', '')
+      .replace("_(sent with '/gator')_", '')
+      .replace(/\|[a-z0-9._\-]+?>/g, '>')   // Remove username if present in mentions
+      .trim();
   },
   /*----
     Get user ID from mention
@@ -103,9 +97,12 @@ const utils = {
     @Returns: object or null
   ----*/
   parseCmd(cmd, e, ct) {
-    const safeText = this.cleanText(e.text);
+    const cleanText = this.cleanText(e.text);
     // Match text using regex associated with the passed command
-    const res = [...safeText.matchAll(new RegExp(this.regex[cmd]))][0];
+    const res = [...cleanText.matchAll(new RegExp(this.regex[cmd]))][0];
+
+    console.log(e, cleanText);
+
     // Regex returned expected match appropriate for the command
     // Command begins with rota bot mention
     if (res && res[1].includes(ct.botUserId)) {
@@ -114,7 +111,7 @@ const utils = {
         return {
           rotation: res[2],
           command: res[3],
-          user: this.cleanUser(res[4]),
+          user: res[4],
           handoff: res[5].trim()
         }
       }
@@ -135,10 +132,7 @@ const utils = {
           const noEmpty = arr.filter(item => !!item !== false);   // Remove falsey values
           const noDupes = new Set(noEmpty);                       // Remove duplicates
           const cleanArr = [...noDupes];                          // Convert set back to array
-          // Clean any |user.name out of user staff (this happens when a bot issues the command)
-          const userCleanArr = [];
-          cleanArr.forEach(user => userCleanArr.push(this.cleanUser(user)));
-          return userCleanArr || [];
+          return cleanArr || [];
         };
         return {
           rotation: res[2],
@@ -230,7 +224,7 @@ const utils = {
     return {
       token: botToken,
       channel: channelID,
-      user: user.split('|')[0],
+      user: user,
       text: text
     }
   }
