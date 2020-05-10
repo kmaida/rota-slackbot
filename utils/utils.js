@@ -55,11 +55,13 @@ const utils = {
     @Returns: string
   ----*/
   cleanText(msg) {
-    return msg
+    const cleanMsg = msg
       .replace('Reminder: ', '')
       .replace("_(sent with '/gator')_", '')
-      .replace(/\|[a-z0-9._\-]+?>/g, '>')   // Remove username if present in mentions
+      .replace(/\|[a-z0-9._\-]+?>/g, '>')     // Remove username if present in mentions
+      .replace(/“/g, '"').replace(/”/g, '"')  // Slack decided to use smart quotes (ugh)
       .trim();
+    return cleanMsg;
   },
   /*----
     Get user ID from mention
@@ -89,6 +91,7 @@ const utils = {
   isCmd(cmd, input) {
     const msg = this.cleanText(input);
     const regex = new RegExp(this.regex[cmd]);
+    console.log(msg, regex.test(msg));
     return regex.test(msg);
   },
   /*----
