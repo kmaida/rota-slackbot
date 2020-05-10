@@ -49,7 +49,7 @@ const app_mentions = (app, store) => {
       testMessage &&
       !isNew &&
       !isDescription &&
-      !isStaff && !ec.text.includes('" staff <@')  // catch malformed staff commands (less robust regex)
+      !isStaff &&
       !isResetStaff &&
       !isAssign &&
       !isAssignNext &&

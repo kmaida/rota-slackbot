@@ -91,7 +91,6 @@ const utils = {
   isCmd(cmd, input) {
     const msg = this.cleanText(input);
     const regex = new RegExp(this.regex[cmd]);
-    console.log(msg, regex.test(msg));
     return regex.test(msg);
   },
   /*----
