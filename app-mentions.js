@@ -113,6 +113,7 @@ const app_mentions = (app, store) => {
     // @rota anything else
     else {
       try {
+        console.log('Event: ', event, 'Clean Text: ', utils.cleanText(ec.text));
         const result = await app.client.chat.postMessage(
           utils.msgConfig(ec.botToken, ec.channelID, msgText.didntUnderstand())
         );
