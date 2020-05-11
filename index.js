@@ -1,7 +1,5 @@
 require('dotenv').config();
 const { App } = require('@slack/bolt');
-const app_home_opened = require('./app-home-opened');
-const app_mentions = require('./app-mentions');
 // MongoDB
 const mongoose = require('mongoose');
 const store = require('./data/db');
