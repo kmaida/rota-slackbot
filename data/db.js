@@ -4,9 +4,10 @@ const Rota = require('./Rota');
   DATABASE / STORE
 ------------------*/
 const store = {
-  /*----
-    Get rotations
-  ----*/
+  /**
+   * Get rotations
+   * @return {object[]} array of existing rotation objects
+   */
   async getRotations() {
     return Rota.find({}, (err, rotations) => {
       const arr = [];
@@ -17,10 +18,12 @@ const store = {
       return arr;
     });
   },
-  /*----
-    Create new rotation
-    @Params: rotation name, description
-  ----*/
+  /**
+   * Create new rotation
+   * @param {string} rotaname name of new rotation
+   * @param {string} description description of new rotation
+   * @return {object} newly saved rotation
+   */
   async newRotation(rotaname, description) {
     return Rota.findOne({ name: rotaname }, (err) => {
       if (err) console.error(err.message);
@@ -35,10 +38,12 @@ const store = {
       });
     });
   },
-  /*----
-    Update description for existing rotation
-    @Params: rotation name, description
-  ----*/
+  /**
+   * Update description for existing rotation
+   * @param {string} rotaname updated name of rotation
+   * @param {string} description updated description of rotation
+   * @return {object} newly updated, saved rotation
+   */
   async updateDescription(rotaname, description) {
     return Rota.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
@@ -49,10 +54,12 @@ const store = {
       });
     });
   },
-  /*----
-    Save rotation staff to rotation store
-    @Params: rotation name, staff array
-  ----*/
+  /**
+   * Save rotation staff to rotation store
+   * @param {string} rotaname rotation name
+   * @param {string[]} staffArr array of staff user IDs
+   * 
+   */
   async saveStaff(rotaname, staffArr) {
     return Rota.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
@@ -63,10 +70,12 @@ const store = {
       });
     });
   },
-  /*----
-    Save user assignment to rotation store
-    @Params: rotation name, usermention to assign
-  ----*/
+  /**
+   * Save user assignment to rotation store
+   * @param {string} rotaname rotation name
+   * @param {string} usermention user mention string <@UXXXXX>
+   * @return {object} saved rotation with new assignment
+   */
   async saveAssignment(rotaname, usermention) {
     return Rota.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
@@ -77,21 +86,21 @@ const store = {
       });
     });
   },
-  /*----
-    Get rotation object for a specific rotation
-    @Params: rotation
-    @Returns: rotation object
-  ----*/
+  /**
+   * Get rotation object for a specific rotation
+   * @param {string} rotaname rotation name
+   * @return {object} rotation object
+   */
   async getRotation(rotaname) {
     return Rota.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
       return rotation;
     });
   },
-  /*----
-    Deletes a rotation entirely
-    @Params: rotation
-  ----*/
+  /**
+   * Deletes a rotation entirely
+   * @param {string} rotaname rotation name
+   */
   async deleteRotation(rotaname) {
     return Rota.findOne({ name: rotaname }, (err, rotation) => {
       if (err) console.error(err.message);
