@@ -49,11 +49,11 @@ const utils = {
     // Sends message text
     message: /^<@(U[A-Z0-9]+?)> "([a-z0-9\-]+?)" (.*)$/g
   },
-  /*----
-    Clean up message text so it can be tested / parsed
-    @Params: mention event message
-    @Returns: string
-  ----*/
+  /**
+   * Clean up message text so it can be tested / parsed
+   * @param {string} msg original message text
+   * @return {string} trimmed and cleaned message text
+   */
   cleanText(msg) {
     const cleanMsg = msg
       .replace('Reminder: ', '')
@@ -63,41 +63,45 @@ const utils = {
       .trim();
     return cleanMsg;
   },
-  /*----
-    Get user ID from mention
-    @Param: <@U324SDF> or <@U0435|some.user>
-    @Returns: U324SDF
-  ----*/
+  /**
+   * Get user ID from mention
+   * @param {string} usermention user mention <@U324SDF> or <@U0435|some.user>
+   * @return {string} user ID U324SDF
+   */
   getUserID(usermention) {
     return [...usermention.matchAll(new RegExp(this.regex.userID))][0][1];
   },
-  /*----
-    See if a rotation exists (by name)
-    @Params: rotation name, rotation list
-    @Returns: boolean
-  ----*/
+  /**
+   * See if a rotation exists (by name)
+   * @param {string} rotaname name of rotation to check if exists
+   * @param {string[]} list of existing rotation names
+   * @return {boolean} does the rotation exist?
+   */
   rotationInList(rotaname, list) {
     if (list && list.length) {
       return list.filter(rotation => rotation.name === rotaname).length > 0;
     }
     return false;
   },
-  /*----
-    Test message to see if its format matches expectations for specific command
-    Need to new RegExp to execute on runtime
-    @Params: command, mention event message
-    @Returns: boolean
-  ----*/
+  /**
+   * Test message to see if its format matches expectations for specific command
+   * Need to new RegExp to execute on runtime
+   * @param {string} cmd command
+   * @param {string} input mention text
+   * @return {boolean} does text match an existing command?
+   */
   isCmd(cmd, input) {
     const msg = this.cleanText(input);
     const regex = new RegExp(this.regex[cmd]);
     return regex.test(msg);
   },
-  /*----
-    Parse commands
-    @Params: command, event, context
-    @Returns: object or null
-  ----*/
+  /**
+   * Parse app mention command text
+   * @param {string} cmd text command
+   * @param {object} e event object
+   * @param {object} ct context object
+   * @return {object} object containing rotation, command, user, data
+   */
   parseCmd(cmd, e, ct) {
     const cleanText = this.cleanText(e.text);
     // Match text using regex associated with the passed command
@@ -191,11 +195,13 @@ const utils = {
     // This should trigger error messaging
     return null;
   },
-  /*----
-    Config object for Slack messages
-    @Params: botToken, channelID, text
-    @Returns: object
-  ----*/
+  /**
+   * Config object for Slack messages
+   * @param {string} botToken for Slack access
+   * @param {string} channelID to post message in
+   * @param {string} text message text
+   * @return {object} configuration object
+   */
   msgConfig(botToken, channelID, text) {
     return {
       token: botToken,
@@ -203,11 +209,13 @@ const utils = {
       text: text
     }
   },
-  /*----
-    Config object for Slack messages
-    @Params: botToken, channelID, blocks array
-    @Returns: object
-  ----*/
+  /**
+   * Config object for Slack messages using block kit UI
+   * @param {string} botToken for Slack access
+   * @param {string} channelID to post message in
+   * @param {object[]} blocks composed message array
+   * @return {object} configuration object
+   */
   msgConfigBlocks(botToken, channelID, blocks) {
     return {
       token: botToken,
@@ -215,11 +223,14 @@ const utils = {
       blocks: blocks
     }
   },
-  /*----
-    Config object for ephemeral Slack messages
-    @Params: botToken, channelID, user, text
-    @Returns: object
-  ----*/
+  /**
+   * Config object for ephemeral Slack messages
+   * @param {string} botToken for Slack access
+   * @param {string} channelID to post message in
+   * @param {string} user to show ephemeral message to
+   * @param {string} text message text
+   * @return {object} configuration object
+   */
   msgConfigEph(botToken, channelID, user, text) {
     return {
       token: botToken,
@@ -227,6 +238,15 @@ const utils = {
       user: user,
       text: text
     }
+  },
+  /**
+   * Ignore certain messages
+   * @param {string} subtype message subtype
+   * @return {boolean} should this message be ignored?
+   */
+  ignoreMention(subtype) {
+    const disallowedSubtypes = ['channel_topic', 'message_changed'];
+    return disallowedSubtypes.indexOf(subtype) > -1;
   }
 };
 
