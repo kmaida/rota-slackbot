@@ -24,7 +24,7 @@ const errHandler = require('./utils/error');
 const app_mentions = (app, store) => {
   app.event('app_mention', async({ event, context }) => {
     // Ignore channel topic and message edits
-    if (utils.ignoreMention(event.subtype)) return;
+    if (utils.ignoreMention(event)) return;
     // Event and context data
     const ec = {
       text: event.text,                           // raw text from the mention
