@@ -22,9 +22,7 @@ const errHandler = require('./utils/error');
     APP MENTIONS
 ------------------*/
 const app_mentions = (app, store) => {
-  app.event('app_mention', async({ event, context }) => {
-    // Ignore channel topic and message edits
-    if (utils.ignoreMention(event)) return;
+  app.event('app_mention', utils.ignoreMention, async({ event, context }) => {
     // Event and context data
     const ec = {
       text: event.text,                           // raw text from the mention
@@ -115,7 +113,7 @@ const app_mentions = (app, store) => {
     // @rota anything else
     else {
       try {
-        console.log('Event: ', event, 'Clean Text: ', utils.cleanText(ec.text));
+        // console.log('Event: ', event, 'Clean Text: ', utils.cleanText(ec.text));
         const result = await app.client.chat.postMessage(
           utils.msgConfig(ec.botToken, ec.channelID, msgText.didntUnderstand())
         );
