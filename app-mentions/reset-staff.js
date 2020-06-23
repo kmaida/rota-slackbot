@@ -5,7 +5,7 @@
 ------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText, errHandler) => {
   try {
-    const pCmd = utils.parseCmd('reset staff', event, context);
+    const pCmd = await utils.parseCmd('reset staff', event, context);
     const rotation = pCmd.rotation;
 
     if (utils.rotationInList(rotation, ec.rotaList)) {

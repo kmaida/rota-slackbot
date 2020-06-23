@@ -5,7 +5,7 @@
 ------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText, errHandler) => {
   try {
-    const pCmd = utils.parseCmd('new', event, context);
+    const pCmd = await utils.parseCmd('new', event, context);
     const rotation = pCmd.rotation;
     const description = pCmd.description;
 

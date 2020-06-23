@@ -69,7 +69,7 @@ const utils = {
    * @return {string} user ID U324SDF
    */
   getUserID(usermention) {
-    return [...usermention.matchAll(new RegExp(this.regex.userID))][0][1];
+    return [...usermention.matchAll(new RegExp(utils.regex.userID))][0][1];
   },
   /**
    * See if a rotation exists (by name)
@@ -88,11 +88,11 @@ const utils = {
    * Need to new RegExp to execute on runtime
    * @param {string} cmd command
    * @param {string} input mention text
-   * @return {boolean} does text match an existing command?
+   * @return {Promise<boolean>} does text match an existing command?
    */
-  isCmd(cmd, input) {
-    const msg = this.cleanText(input);
-    const regex = new RegExp(this.regex[cmd]);
+  async isCmd(cmd, input) {
+    const msg = utils.cleanText(input);
+    const regex = new RegExp(utils.regex[cmd]);
     return regex.test(msg);
   },
   /**
@@ -100,12 +100,12 @@ const utils = {
    * @param {string} cmd text command
    * @param {object} e event object
    * @param {object} ct context object
-   * @return {object} object containing rotation, command, user, data
+   * @return {Promise<object>} object containing rotation, command, user, data
    */
-  parseCmd(cmd, e, ct) {
-    const cleanText = this.cleanText(e.text);
+  async parseCmd(cmd, e, ct) {
+    const cleanText = utils.cleanText(e.text);
     // Match text using regex associated with the passed command
-    const res = [...cleanText.matchAll(new RegExp(this.regex[cmd]))][0];
+    const res = [...cleanText.matchAll(new RegExp(utils.regex[cmd]))][0];
 
     // Regex returned expected match appropriate for the command
     // Command begins with rota bot mention

@@ -5,7 +5,7 @@
 ------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText, errHandler) => {
   try {
-    const pCmd = utils.parseCmd('assign', event, context);
+    const pCmd = await utils.parseCmd('assign', event, context);
     const rotation = pCmd.rotation;
     const usermention = pCmd.user;
     const handoffMsg = pCmd.handoff;

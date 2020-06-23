@@ -32,19 +32,19 @@ const app_mentions = (app, store) => {
       rotaList: await store.getRotations()        // rotations in db
     }
     // Decision logic establishing how to respond to mentions
-    const isNew = utils.isCmd('new', ec.text);
-    const isDescription = utils.isCmd('description', ec.text);
-    const isStaff = utils.isCmd('staff', ec.text);
-    const isResetStaff = utils.isCmd('reset staff', ec.text);
-    const isAssign = utils.isCmd('assign', ec.text);
-    const isAssignNext = utils.isCmd('assign next', ec.text);
-    const isWho = utils.isCmd('who', ec.text);
-    const isAbout = utils.isCmd('about', ec.text);
-    const isUnassign = utils.isCmd('unassign', ec.text);
-    const isDelete = utils.isCmd('delete', ec.text);
-    const isHelp = utils.isCmd('help', ec.text);
-    const isList = utils.isCmd('list', ec.text);
-    const testMessage = utils.isCmd('message', ec.text);
+    const isNew = await utils.isCmd('new', ec.text);
+    const isDescription = await utils.isCmd('description', ec.text);
+    const isStaff = await utils.isCmd('staff', ec.text);
+    const isResetStaff = await utils.isCmd('reset staff', ec.text);
+    const isAssign = await utils.isCmd('assign', ec.text);
+    const isAssignNext = await utils.isCmd('assign next', ec.text);
+    const isWho = await utils.isCmd('who', ec.text);
+    const isAbout = await utils.isCmd('about', ec.text);
+    const isUnassign = await utils.isCmd('unassign', ec.text);
+    const isDelete = await utils.isCmd('delete', ec.text);
+    const isHelp = await utils.isCmd('help', ec.text);
+    const isList = await utils.isCmd('list', ec.text);
+    const testMessage = await utils.isCmd('message', ec.text);
     const isMessage =
       testMessage &&
       !isNew &&

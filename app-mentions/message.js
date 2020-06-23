@@ -5,7 +5,7 @@
 ------------------*/
 module.exports = async (app, event, context, ec, utils, store, msgText, errHandler) => {
   try {
-    const pCmd = utils.parseCmd('message', event, context);
+    const pCmd = await utils.parseCmd('message', event, context);
     const rotation = pCmd.rotation;
     // Check if rotation exists
     if (utils.rotationInList(rotation, ec.rotaList)) {
