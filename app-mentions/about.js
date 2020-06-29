@@ -14,7 +14,7 @@ module.exports = async (app, event, context, ec, utils, store, msgText, errHandl
       const result = await app.client.chat.postMessage(
         utils.msgConfig(ec.botToken, ec.channelID, msgText.aboutReport(rotation, rotationObj))
       );
-      if (ec.sentByUserID !== 'USLACKBOT') {
+      if (!!ec.sentByUserID && ec.sentByUserID !== 'USLACKBOT') {
         // Send ephemeral message with staff (to save notifications)
         // Do nothing if coming from a slackbot
         const ephStaffResult = await app.client.chat.postEphemeral(

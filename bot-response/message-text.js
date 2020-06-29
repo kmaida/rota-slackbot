@@ -129,13 +129,21 @@ const msgText = {
     return ':shrug: I couldn\'t clear this assignment because "' + rotation + '" does not exist. To create it, use `@rota new "' + rotation + '" [description]`.';
   },
   confirmChannelMsg: (rotation, sentByUserID) => {
-    return `:speech_balloon: The on-call user for *${rotation}* has been notified about <@${sentByUserID}>'s message.`;
+    if (sentByUserID) {
+      return `:speech_balloon: The on-call user for *${rotation}* has been notified about <@${sentByUserID}>'s message.`;
+    } else {
+      return `:speech_balloon: The on-call user for *${rotation}* has been notified.`;
+    }
   },
   confirmEphemeralMsg: (rotation) => {
     return ':mantelpiece_clock: The person currently on-call for *' + rotation + '* will respond at their earliest convenience. Keep in mind: they might be busy or outside working hours.\n:rotating_light: If it\'s *very urgent* and nobody replies within 15 minutes, ping the appropriate `[@usergroup]`.';
   },
   dmToAssigned: (rotation, sentByUserID, channelID, link) => {
-    return `Hi there! <@${sentByUserID}> needs your attention in <#${channelID}> (${link}) because you're on-call for the *${rotation}* rotation.\n\n`;
+    if (sentByUserID) {
+      return `Hi there! <@${sentByUserID}> needs your attention in <#${channelID}> (${link}) because you're on-call for the *${rotation}* rotation.\n\n`;
+    } else {
+      return `Hi there! You've received a message in <#${channelID}> (${link}) because you're on-call for the *${rotation}* rotation.\n\n`;
+    }
   },
   msgError: (rotation) => {
     return ':shrug: I couldn\'t tell anyone about the message because "' + rotation + '" does not exist. To create it, use `@rota new "' + rotation + '" [description]`.';

@@ -49,7 +49,7 @@ module.exports = async (app, event, context, ec, utils, store, msgText, errHandl
           const sendDM = await app.client.chat.postMessage(
             utils.msgConfigBlocks(ec.botToken, oncallUserDMChannel, msgText.assignDMHandoffBlocks(rotation, link, ec.sentByUserID, ec.channelID, handoffMsg))
           );
-          if (ec.sentByUserID !== 'USLACKBOT') {
+          if (!!ec.sentByUserID && ec.sentByUserID !== 'USLACKBOT') {
             // Send ephemeral message notifying assigner their handoff message was delivered via DM
             const result = await app.client.chat.postEphemeral(
               utils.msgConfigEph(ec.botToken, ec.channelID, ec.sentByUserID, msgText.assignHandoffConfirm(usermention, rotation))

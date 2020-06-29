@@ -24,7 +24,7 @@ module.exports = async (app, event, context, ec, utils, store, msgText, errHandl
         const sendChannelMsg = await app.client.chat.postMessage(
           utils.msgConfig(ec.botToken, ec.channelID, msgText.confirmChannelMsg(rotation, ec.sentByUserID))
         );
-        if (ec.sentByUserID !== 'USLACKBOT') {
+        if (!!ec.sentByUserID && ec.sentByUserID !== 'USLACKBOT') {
           // Send ephemeral message (only visible to sender) telling them what to do if urgent
           // Do nothing if coming from a slackbot
           const sendEphemeralMsg = await app.client.chat.postEphemeral(
