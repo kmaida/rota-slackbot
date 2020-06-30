@@ -241,17 +241,22 @@ const utils = {
   },
   /**
    * Message middleware: ignore some kinds of messages
+   * A bit hacky to catch inconsistencies in Slack API
+   * (Customer service was contacted; unreliable behavior confirmed)
    * @param {object} event event object
    * @return {Promise<void>} continue if not ignored message type
-   */
-  async ignoreMention({ event, next }) {
+  */
+  async ignoreMention({ message, event, next }) {
     const disallowedSubtypes = ['channel_topic', 'message_changed'];
-    const ignoreSubtype = disallowedSubtypes.indexOf(event.subtype) > -1;
-    const messageChanged = !!event.edited;
-    // If not ignored subtype and not an edited message event, proceed
-    if (!ignoreSubtype && !messageChanged) {
-      await next();
+    const ignoreSubtypeEvent = disallowedSubtypes.indexOf(event.subtype) > -1;
+    const ignoreSubtypeMessage = message && message.subtype && disallowedSubtypes.indexOf(message.subtype) > -1;
+    const ignoreEdited = !!event.edited;
+    // If mention should be ignored, return
+    if (ignoreSubtypeEvent || ignoreSubtypeMessage || ignoreEdited) {
+      return;
     }
+    // If mention should be processed, continue
+    await next();
   }
 };
 
