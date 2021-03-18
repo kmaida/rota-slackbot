@@ -1,6 +1,6 @@
 # rota-slackbot
 
-Rota is a Slack app + bot I wrote for internal team use at [Gatsby](https://gatsbyjs.com) to manage team rotations. This app was built with the [Bolt JavaScript Slack app framework](https://github.com/slackapi/bolt).
+Rota is a Slack app + bot I wrote for internal company use to manage team rotations. This app was built with the [Bolt JavaScript Slack app framework](https://github.com/slackapi/bolt).
 
 ## Commands
 
@@ -60,7 +60,7 @@ _(In a #channel)_
   * Enable the Home Tab.
   * Enable the Messages Tab.
 5. Under **Incoming Webhooks**, click the toggle to switch "Activate Incoming Webhooks" `On`.
-6. Under **Install App**, click the "Install App" button to install to your team workspace. When prompted, choose a channel to install to (it can be any channel.) This will generate a "Bot User OAuth Access Token" (which you will need in order to configure your local environment variables). The token will be displayed after you've installed your app. _Note that if you update any Scopes later, you'll have to reinstall your app._
+6. Under **Install App**, click the "Install to Workspace" button to install to your team workspace. When prompted, choose a channel to install to (it can be any channel.) This will generate a "Bot User OAuth Access Token" (which you will need in order to configure your local environment variables). The token will be displayed after you've installed your app. _Note that if you update any Scopes later, you'll have to reinstall your app._
 
 ### Database Setup
 
@@ -82,7 +82,7 @@ _(In a #channel)_
 5. Download and use [ngrok](https://ngrok.com) to expose a public URL for your local web server.
 6. Once you have ngrok pointing to your Slack app's local development environment and the server is running, go to your **Slack App settings** and in the **Event Subscriptions** section, toggle `On` "Enable Events."
 7. For the "Request URL," enter `https://your-ngrok-url/slack/events`.
-8. In "Subscribe to bot events," add `app_mentions` and `app_home_opened`.
+8. In "Subscribe to bot events," add `app_mention` and `app_home_opened`.
 
 ## Deployment
 
