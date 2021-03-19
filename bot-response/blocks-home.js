@@ -119,7 +119,7 @@ const homeBlocks = (userID, storeList) => {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": '```/remind [#channel] @rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign next` every Monday at 9am```'
+        "text": '```/remind [#channel] "@rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign next`" every Monday at 9am```'
       }
     },
     {
