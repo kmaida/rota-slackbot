@@ -24,18 +24,20 @@ Rota does **not** handle _message scheduling_ or _automate_ rotation assignments
 
 ### Rotation Reminders
 
-You can set a recurring reminder with Slack's `/remind` slash command to remind a rotation's on-call user to assign the next person in the rotation at some regular interval. For example:
+You can set a recurring reminder with Slack's `/remind` slash command to remind a rotation's on-call user to assign the next person in the rotation at some regular interval. This must be done at the channel level. You must ensure that Rota has been added to the channel you're setting the reminder in, also. For example:
 
-_(In a #channel)_
+_(With Rota present in a #channel)_
 ```
-/remind [#channel] @rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign next` every Monday at 9am
+/remind [#channel] "@rota "[rotation]" assign the next user in the rotation using `@rota "[rotation]" assign next"` every Monday at 9am
 ```
 
-**Note:** You _can't_ directly remind the `@rota` bot to do something. For instance, `/remind @rota "[rotation]" some message in 5 minutes` will _not_ work because it will try to send a direct message to the _bot user_, not a rotation's _assigned human user_. When using `/remind`, you need to set the reminder _in a channel_. Reminders come from Slackbot, and Rota and Slackbot can't talk to each other.
+Use quotes as shown in the snippet above to avoid unexpected behavior.
+
+**Note:** You _can't_ directly remind the `@rota` _bot_ to do anything. For instance, `/remind @rota "[rotation]" some message in 5 minutes` will _not_ work because it will try to send a direct message to the _bot user_, not a rotation's _assigned human user_. Slack cannot do this, and it will tell you so. When using `/remind`, you need to set the reminder _in a channel_. Reminders come from Slackbot, and Rota and Slackbot can't talk to each other.
 
 ### Scheduling Messages
 
-You can schedule messages to be delivered later. This is particularly useful in case the on-call user is outside of hours. This works with both the built-in `/remind` slash task (similar to above), and also with third party Slack apps like [Gator](https://www.gator.works/). Schedule the message _in a channel_ that the `@rota` bot has been added to. Like so:
+You can schedule messages to be delivered later. This is useful in case the on-call user is outside of hours. This works with both the built-in `/remind` slash task (similar to above), and also with third party Slack apps like [Gator](https://www.gator.works/). Schedule the message _in a channel_ that the `@rota` bot has been added to. Like so:
 
 _(In a #channel)_
 ```
@@ -44,7 +46,7 @@ _(In a #channel)_
 
 **Note:** Keep in mind that if you use `/remind`, the message will come from `@Slackbot`, _not from your username_. If you need the person on rotation to know the message was from _you_, either include your username in the reminder when you set it up, or use a third-party app that delivers the message later from your account (e.g., Gator does this).
 
-**Caveat:** Because the company I work at uses [Gator](https://www.gator.works/), Rota  has been tested with `/remind` (which is part of Slack's core) and `/gator`. If you use a different third-party scheduling Slack app, keep in mind that its interactions with Rota are _untested_ and I make _no guarantees_ the integrations will work well together. (If you want to submit issues requesting additional third party integration support, you may, but their maintenance will likely be up to the community. Please feel free to fork this repo, add support, and then [submit a PR](https://github.com/kmaida/rota-slackbot/pull/new/master).)
+**Caveat:** Because the company I work(ed) at used [Gator](https://www.gator.works/), Rota has been tested with `/remind` (which is part of Slack's core) and `/gator` (this testing occurred a while back, so it may be out of date if Gator has made significant updates to their API). If you use a different third-party scheduling Slack app, keep in mind that its interactions with Rota are _untested_ and I make _no guarantees_ the integrations will work together. (If you want to submit issues requesting additional third party integration support, you may use the `help wanted` label because their maintenance will be up to the community. Please feel free to fork this repo, add support, and then [submit a PR](https://github.com/kmaida/rota-slackbot/pull/new/master).)
 
 ## Development
 
@@ -102,9 +104,9 @@ If you want fast, easy deployments with CI/CD features and don't want to deal wi
 
 If using DigitalOcean (or a similar VPS), input your production environment variables in a `.env` file on your server.
 
-If using Heroku, input your production environment variables in your Heroku app settings.
+If using Heroku, set up an app, push to your Heroku app using Git, then input your production environment variables in your Heroku app Settings (Heroku will not use your `.env` file).
 
-Whatever deployment option you choose, once you have a public domain for your Slack app with SSL, go into your production Slack app settings and update the **Event Subscriptions** Request URL to `https://your-public-url/slack/events`.
+**Important:** Whatever deployment option you choose, once you have a public domain for your Slack app with SSL, go into your production Slack app settings and update the **Event Subscriptions** Request URL to `https://your-public-url/slack/events`.
 
 ---
 
