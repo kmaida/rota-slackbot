@@ -49,6 +49,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/rota-slackbot:${{ env.GITHUB_REF_NAME }}
   helm:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
