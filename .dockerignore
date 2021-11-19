@@ -1,0 +1,7 @@
+.git
+.env_sample
+Jenkinsfile
+node_modules
+.data
+charts
+docker-compose.yml
