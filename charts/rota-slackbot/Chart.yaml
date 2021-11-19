@@ -1,12 +1,12 @@
 apiVersion: v2
 name: rota-slackbot
-description: A Helm chart for Kubernetes
+description: A Helm chart to run rota-slackbot in kubernetes
 
 type: application
 
-version: 1.0.0
+version: 1.0.1
 
-appVersion: "0.1.0"
+appVersion: "0.2.0"
 
 dependencies:
   - name: mongodb
