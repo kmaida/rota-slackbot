@@ -16,12 +16,18 @@ spec:
     - host: {{ required "A valid ingress hostname entry required!" .Values.ingress.hostname }}
       http:
         paths:
-          - path: /*
+          - path: /
+            pathType: "Prefix"
             backend:
-              serviceName: ssl-redirect
-              servicePort: use-annotation
-          - path: /*
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation
+          - path: /
+            pathType: "Prefix"
             backend:
-              serviceName: {{ include "rota-slackbot.fullname" . }}
-              servicePort: {{ .Values.service.port }}
+              service:
+                name: {{ include "rota-slackbot.fullname" . }}
+                port:
+                  number: 80
 {{- end -}}
