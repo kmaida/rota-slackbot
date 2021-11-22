@@ -12,7 +12,7 @@
     "mongoose": "^5.12.1"
   },
   "engines": {
-    "node": "12.x"
+    "node": ">=12.x"
   },
   "author": "Kim Maida",
   "repository": {

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "rota-slackbot.fullname" . }}-test-connection"
+  labels:
+    {{- include "rota-slackbot.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "rota-slackbot.fullname" . }}:{{ .Values.service.port }}/health-check']
+  restartPolicy: Never

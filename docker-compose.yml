@@ -1,0 +1,15 @@
+services:
+  rota-slackbot:
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - .env:/app/.env
+    links:
+      - mongodb
+  mongodb:
+    image: mongo
+    volumes:
+      - ./.data:/data/db
+
+

@@ -1,0 +1,15 @@
+apiVersion: v2
+name: rota-slackbot
+description: A Helm chart to run rota-slackbot in kubernetes
+
+type: application
+
+version: 1.0.2
+
+appVersion: "1.0.0"
+
+dependencies:
+  - name: mongodb
+    condition: mongodb.enabled
+    version: 10.29.2
+    repository: https://charts.bitnami.com/bitnami

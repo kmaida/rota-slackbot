@@ -2,3 +2,5 @@
 node_modules
 .vscode
 *.afphoto
+.data
+.DS_Store
