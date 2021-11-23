@@ -4,9 +4,9 @@ description: A Helm chart to run rota-slackbot in kubernetes
 
 type: application
 
-version: 1.0.2
+version: 1.0.3
 
-appVersion: "1.0.0"
+appVersion: "v1.0.1"
 
 dependencies:
   - name: mongodb
