@@ -60,6 +60,7 @@ const utils = {
       .replace("_(sent with '/gator')_", '')
       .replace(/\|[a-z0-9._\-]+?>/g, '>')     // Remove username if present in mentions
       .replace(/“/g, '"').replace(/”/g, '"')  // Slack decided to use smart quotes (ugh)
+      .replace(/\.$/, '')                     // Remove trailing period
       .trim();
     return cleanMsg;
   },
