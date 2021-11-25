@@ -1,5 +1,8 @@
 require('dotenv').config();
-const { App } = require('@slack/bolt');
+const { App, ExpressReceiver } = require('@slack/bolt');
+
+const receiver = new ExpressReceiver({ signingSecret: process.env.SLACK_SIGNING_SECRET });
+
 // MongoDB
 const mongoose = require('mongoose');
 const store = require('./data/db');
@@ -10,19 +13,16 @@ const store = require('./data/db');
 // Create Bolt app
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  customRoutes: [
-    {
-      path: '/health-check',
-      method: ['GET'],
-      handler: (req, res) => {
-        res.writeHead(200);
-        res.end('App is ready!');
-      },
-    },
-  ],
+  receiver,
 });
 const port = process.env.PORT || 3000;
+
+/*------------------
+    Health Check
+------------------*/
+receiver.router.get('/health-check', (req, res) => {
+  res.send('App is running!');
+});
 
 /*------------------
       MONGODB

@@ -86,6 +86,10 @@ _(In a #channel)_
 7. For the "Request URL," enter `https://your-ngrok-url/slack/events`.
 8. In "Subscribe to bot events," add `app_mention` and `app_home_opened`.
 
+### Deploying as a helm chart
+
+There is also a helm chart available. You can install it by running `$ helm install charts/rota-slackbot` from your cloned directory. The chart comes with mondoDB dependency, so to enable use `--set mongodb.enabled=true` when deploying the chart.
+
 ## Deployment
 
 Follow the [development instructions again](#development) to create a new Slack app, but **in your production workspace**.

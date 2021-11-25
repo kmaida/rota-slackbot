@@ -7,9 +7,9 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@slack/bolt": "^3.8.1",
-    "dotenv": "^8.6.0",
-    "mongoose": "^5.13.13"
+    "@slack/bolt": "^3.3.0",
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.12.11"
   },
   "engines": {
     "node": ">=12.x"
