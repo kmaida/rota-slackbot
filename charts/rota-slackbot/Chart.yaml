@@ -4,7 +4,7 @@ description: A Helm chart to run rota-slackbot in kubernetes
 
 type: application
 
-version: 1.0.6
+version: 1.0.7
 
 appVersion: "v1.0.2"
 

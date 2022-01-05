@@ -57,8 +57,5 @@ spec:
               servicePort: {{ $svcPort }}
               {{- end }}
           {{- end }}
-          {{- if $.Values.ingress.extraPaths }}
-          {{- toYaml $.Values.ingress.extraPaths | nindent 10 }}
-          {{- end }}
     {{- end }}
 {{- end }}
