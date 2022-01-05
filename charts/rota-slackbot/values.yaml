@@ -64,6 +64,14 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+  # extraPaths:
+  #   - path: /
+  #     pathType: "Prefix"
+  #     backend:
+  #       service:
+  #         name: ssl-redirect
+  #         port:
+  #           name: use-annotation
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -85,3 +93,9 @@ affinity: {}
 
 autoscaling:
   enabled: false
+
+# Values used for local testing of the Helm template output.
+# slackbot:
+#   token: test-value
+#   signingSecret: test-value
+#   team: test-value
